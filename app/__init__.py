@@ -11,7 +11,6 @@ from app import routes
 
 
 def main():
-
     app.run()
 
 

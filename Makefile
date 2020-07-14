@@ -86,7 +86,7 @@ lint: .venv/build.timestamp
 # Serve targets. Using these will run the application on your local machine. You can either serve with a wsgi front (like it would be within the container), or without.
 .PHONY: serve
 serve: .venv/build.timestamp
-		FLASK_APP=service_name FLASK_DEBUG=1 ${FLASK_CMD} run --host=0.0.0.0 --port=${SERVICE_QR_CODE_HTTP_PORT}
+		FLASK_APP=service_launcher FLASK_DEBUG=1 ${FLASK_CMD} run --host=0.0.0.0 --port=${HTTP_PORT}
 
 .PHONY: gunicornserve
 gunicornserve: .venv/build.timestamp
