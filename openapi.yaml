@@ -1,0 +1,65 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: Service Name
+paths:
+  /rest/checker:
+    get:
+      summary: route to check if the service is up.
+      operationId: checker
+      tags:
+        - checker
+      responses:
+        '200':
+          description: Returning OK
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "OK"
+        '500':
+          description: Internal Error
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "The server encountered an internal error"
+
+
+  /rest/example:
+    get:
+      summary: this is a simple example of an endpoint.
+      operationId: getLegend
+      tags:
+        - generation
+      parameters:
+        - name: url
+          in: query
+          required: true
+          description: The url our example need to proceed
+          schema:
+            type: string
+            example: "https://example.admin.ch"
+      responses:
+        '200':
+          description: This is where the description should go
+          content:
+            image/png:
+              schema:
+                 type: string
+                 example: "look, we are at https://example.admin.ch,. such a good example."
+        '400':
+          description: This describe another possible result. in this case, a bad request http status
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "The parameter 'url' is missing from the request"
+
+        '500':
+          description: unexpected error
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "An internal error occured during the example"

@@ -1,0 +1,21 @@
+# Git
+.git
+.gitignore
+.gitmodules
+**/*.md
+
+# Docker
+docker-compose.yml
+docker-compose.yml.in
+.docker
+
+# Python
+*.pyc
+__pycache__
+
+# Files not used within docker
+./tests/*
+Makefile
+.venv
+lib-makefiles/*
+buildspec.yml

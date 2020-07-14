@@ -1,0 +1,38 @@
+version: 0.2
+
+env:
+  variables:
+    IMAGE_BASE_NAME: 'swisstopo/service-name'
+    SHELL: /bin/bash
+    AWS_DEFAULT_REGION: eu-central-1
+    USER: "aws_code_build"
+  parameter-store:
+    CI_DOCKERHUB_USER: "/dockerhub/user"
+    CI_DOCKERHUB_PASSWORD: "/dockerhub/password"
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+    commands:
+      - echo "Installing necessary softwares"
+      - docker login -u ${CI_DOCKERHUB_USER} -p ${CI_DOCKERHUB_PASSWORD}
+      - apt-get update && apt-get install -y docker-compose python3-pip
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - GITHUB_BRANCH=${CODEBUILD_WEBHOOK_HEAD_REF#refs/heads/*}
+  pre_build:
+    commands:
+      - echo "export of the image tag for build and push purposes"
+      - export IMAGE_TAG="${GITHUB_BRANCH}.${COMMIT_HASH}"
+      - echo "creating a clean environment"
+      - make clean setup
+  build:
+    commands:
+      - echo "we need to tag the image correctly, and this should depend on the branch it's from, and / or the branch"
+      - echo "it's merged into."
+      - docker build -t ${IMAGE_BASE_NAME}:${IMAGE_TAG} .
+  post_build:
+    commands:
+      - .venv/bin/nose2 -s tests/
+      - docker push ${IMAGE_BASE_NAME}:${IMAGE_TAG}
+
