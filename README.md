@@ -1,7 +1,7 @@
-# service-name
+# service-color
 
 ## Summary of the project
-A simple description of the service should go here
+A simple REST microservice for colorizing symbols, using Flask and Gunicorn with docker containers as a mean of deployment.
 
 ## How to run locally
 
@@ -13,7 +13,7 @@ The **Make** targets assume you have **bash**, **curl**, **tar**, **docker** and
 
 First, you'll need to clone the repo
 
-    git clone git@github.com:geoadmin/service-name
+    git clone git@github.com:geoadmin/service-color.git
 
 Then, you can run the setup target to ensure you have everything needed to develop, test and serve locally
 
@@ -63,6 +63,27 @@ None
 **Success**
 
     "OK", 200
+
+
+### /color/ [GET]
+
+#### description of the route
+this route takes integer values between 0 and 255 for the red, green and blue channel and a filename for the symbol that is to be colored.
+
+#### parameters ####
+
+r, integer, mandatory
+g, integer, mandatory
+b, integer, mandatory
+filename, string, mandatory
+
+#### expected results
+
+**Success**
+
+    png file with colorized symbol
+
+
 
     
 ## Deploying the project and continuous integration
