@@ -75,7 +75,7 @@ this route takes integer values between 0 and 255 for the red, green and blue ch
 r, integer, mandatory\
 g, integer, mandatory\
 b, integer, mandatory\
-filename, string, mandatory\
+filename, string, mandatory
 
 #### expected results
 
