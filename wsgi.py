@@ -1,19 +1,17 @@
 import os
-import multiprocessing
 from gunicorn.app.base import BaseApplication
 from app import app as application
 
 
-class StandaloneApplication(BaseApplication):
+class StandaloneApplication(BaseApplication):  # pylint: disable=abstract-method
 
-    def __init__(self, app, options=None):
+    def __init__(self, app, options=None):  # pylint: disable=redefined-outer-name
         self.options = options or {}
         self.application = app
         super(StandaloneApplication, self).__init__()
 
     def load_config(self):
-        config = dict([(key, value) for key, value in self.options.items()
-                       if key in self.cfg.settings and value is not None])
+        config = {key: value for key, value in self.options.items() if key in self.cfg.settings and value is not None}
         for key, value in config.items():
             self.cfg.set(key.lower(), value)
 
