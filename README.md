@@ -22,6 +22,17 @@ Then, you can run the setup target to ensure you have everything needed to devel
 
 That's it, you're ready to work.
 
+### Linting and formatting your work
+
+In order to have a consistent code style the code should be formatted using `yapf`. Also to avoid syntax errors and non
+pythonic idioms code, the project uses the `pylint` linter. Both formatting and linter can be manually run using the
+following command:
+
+    make lint
+
+**Formatting and linting should be at best integrated inside the IDE, for this look at
+[Integrate yapf and pylint into IDE](https://github.com/geoadmin/doc-guidelines/blob/master/PYTHON.md#yapf-and-pylint-ide-integration)**
+
 ### Test your work
 
 Testing if what you developed work is made simple. You have four targets at your disposal. **test, serve, gunicornserve, dockerrun**
