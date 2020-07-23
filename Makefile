@@ -19,6 +19,7 @@ PYTHON_CMD := $(INSTALL_DIR)/bin/python3
 PIP_CMD := $(INSTALL_DIR)/bin/pip3
 FLASK_CMD := $(INSTALL_DIR)/bin/flask
 YAPF_CMD := $(INSTALL_DIR)/bin/yapf
+NOSE_CMD := $(INSTALL_DIR)/bin/nose2
 all: help
 
 # This bit check define the build/python "target": if the system has an acceptable version of python, there will be no need to install python locally.
@@ -48,6 +49,7 @@ help:
 	@echo "- setup              Create the python virtual environment"
 	@echo -e " \033[1mLINTING TOOLS TARGETS\033[0m "
 	@echo "- lint               Lint and format the python source code"
+	@echo "- test               Run the tests"
 	@echo -e " \033[1mLOCAL SERVER TARGETS\033[0m "
 	@echo "- serve              Run the project using the flask debug server. Port can be set by Env variable HTTP_PORT (default: 8080)"
 	@echo "- gunicornserve      Run the project using the gunicorn WSGI server. Port can be set by Env variable HTTP_PORT (default: 8080)"
@@ -83,6 +85,10 @@ $(PYTHON_LOCAL_DIR)/bin/python3.7:
 .PHONY: lint
 lint: .venv/build.timestamp
 	$(YAPF_CMD) -i --style .style.yapf $(PYTHON_FILES)
+
+.PHONY: test
+test: .venv/build.timestamp
+	$(NOSE_CMD) -s tests/
 
 # Serve targets. Using these will run the application on your local machine. You can either serve with a wsgi front (like it would be within the container), or without.
 .PHONY: serve
