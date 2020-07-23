@@ -1,4 +1,4 @@
-class ReverseProxied(object):
+class ReverseProxies(object):
     """
     Reverse proxies can cause some problems within applications, as they change routes, redirect traffic, and
     applications might have errors because of that. This piece of middlewar make sure everything runs smoothly.
