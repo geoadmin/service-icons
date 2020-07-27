@@ -22,4 +22,4 @@ dedent_closing_brackets=True
 # (unless needed).
 split_all_top_level_comma_separated_values=True
 
-column_limit=120
+column_limit=100
