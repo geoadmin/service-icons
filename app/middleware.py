@@ -14,9 +14,9 @@ class ReverseProxied(object):
 
     def __call__(self, environ, start_response):
         """
-        This function modifies the environment received by the WSGI, mostly making sure we serve the
-        right routes and that the application answers as if it were the initial host (for example,
-        an error should say that the site at reverse-proxied.admin.ch/generic_name/generate
+        This function modifies the environment received by the WSGI, mostly making sure we serve
+        the right routes and that the application answers as if it were the initial host (for
+        example, an error should say that the site at reverse-proxied.admin.ch/generic_name/generate
         encountered a problem, not that it was at internal.server/generate
 
         :param environ: the WSGI environment
