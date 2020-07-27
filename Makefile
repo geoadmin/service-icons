@@ -20,6 +20,7 @@ PIP_CMD := $(INSTALL_DIR)/bin/pip3
 FLASK_CMD := $(INSTALL_DIR)/bin/flask
 YAPF_CMD := $(INSTALL_DIR)/bin/yapf
 NOSE_CMD := $(INSTALL_DIR)/bin/nose2
+PYLINT_CMD := $(INSTALL_DIR)/bin/pylint
 all: help
 
 # This bit check define the build/python "target": if the system has an acceptable version of python, there will be no need to install python locally.
@@ -84,7 +85,8 @@ $(PYTHON_LOCAL_DIR)/bin/python3.7:
 
 .PHONY: lint
 lint: .venv/build.timestamp
-	$(YAPF_CMD) -i --style .style.yapf $(PYTHON_FILES)
+	$(YAPF_CMD) -p -i --style .style.yapf $(PYTHON_FILES)
+	$(PYLINT_CMD) $(PYTHON_FILES)
 
 .PHONY: test
 test: .venv/build.timestamp

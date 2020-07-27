@@ -33,6 +33,7 @@ phases:
       - docker build -t ${IMAGE_BASE_NAME}:${IMAGE_TAG} .
   post_build:
     commands:
+      - .venv/bin/pylint $(find ./* -type f -name "*.py" -print)
       - .venv/bin/nose2 -s tests/
       - docker push ${IMAGE_BASE_NAME}:${IMAGE_TAG}
 

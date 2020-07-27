@@ -21,3 +21,5 @@ dedent_closing_brackets=True
 # Split before arguments, but do not split all subexpressions recursively
 # (unless needed).
 split_all_top_level_comma_separated_values=True
+
+column_limit=100
