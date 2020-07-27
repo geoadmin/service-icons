@@ -11,11 +11,15 @@ PYTHON_FILES := $(shell find ./* -type f -name "*.py" -print)
 PYTHON_VERSION := 3.7.4
 SYSTEM_PYTHON_CMD := $(shell ./getPythonCmd.sh ${PYTHON_VERSION} ${PYTHON_LOCAL_DIR})
 
+# default configuration
+HTTP_PORT ?= 8080
+
 # Commands
 PYTHON_CMD := $(INSTALL_DIR)/bin/python3
 PIP_CMD := $(INSTALL_DIR)/bin/pip3
 FLASK_CMD := $(INSTALL_DIR)/bin/flask
 YAPF_CMD := $(INSTALL_DIR)/bin/yapf
+NOSE_CMD := $(INSTALL_DIR)/bin/nose2
 PYLINT_CMD := $(INSTALL_DIR)/bin/pylint
 all: help
 
@@ -43,17 +47,18 @@ help:
 	@echo
 	@echo "Possible targets:"
 	@echo -e " \033[1mBUILD TARGETS\033[0m "
-	@echo "- setup			Create the python virtual environment"
+	@echo "- setup              Create the python virtual environment"
 	@echo -e " \033[1mLINTING TOOLS TARGETS\033[0m "
-	@echo "- lint			Lint the python source code"
+	@echo "- lint               Lint and format the python source code"
+	@echo "- test               Run the tests"
 	@echo -e " \033[1mLOCAL SERVER TARGETS\033[0m "
-	@echo "- serve			Run the project using the flask debug server"
-	@echo "- gunicornserve		Run the project using the gunicorn WSGI server"
-	@echo "- dockerrun		Run the project using the gunicorn WSGI server inside a container. Env variable HTTP_PORT should be set"
-	@echo "- shutdown		Stop the aforementioned container"
+	@echo "- serve              Run the project using the flask debug server. Port can be set by Env variable HTTP_PORT (default: 8080)"
+	@echo "- gunicornserve      Run the project using the gunicorn WSGI server. Port can be set by Env variable HTTP_PORT (default: 8080)"
+	@echo "- dockerrun          Run the project using the gunicorn WSGI server inside a container (port: 8080)"
+	@echo "- shutdown           Stop the aforementioned container"
 	@echo -e " \033[1mCLEANING TARGETS\033[0m "
-	@echo "- clean			Clean genereated files"
-	@echo "- clean_venv		Clean python venv"
+	@echo "- clean              Clean genereated files"
+	@echo "- clean_venv         Clean python venv"
 
 # Build targets. Calling setup is all that is needed for the local files to be installed as needed. Bundesnetz may cause problem.
 
@@ -83,14 +88,18 @@ lint: .venv/build.timestamp
 	$(YAPF_CMD) -p -i --style .style.yapf $(PYTHON_FILES)
 	$(PYLINT_CMD) $(PYTHON_FILES)
 
+.PHONY: test
+test: .venv/build.timestamp
+	$(NOSE_CMD) -s tests/
+
 # Serve targets. Using these will run the application on your local machine. You can either serve with a wsgi front (like it would be within the container), or without.
 .PHONY: serve
 serve: .venv/build.timestamp
-	FLASK_APP=service_launcher FLASK_DEBUG=1 ${FLASK_CMD} run --host=0.0.0.0 --port=${HTTP_PORT}
+	FLASK_APP=service_launcher FLASK_DEBUG=1 $(FLASK_CMD) run --host=0.0.0.0 --port=$(HTTP_PORT)
 
 .PHONY: gunicornserve
 gunicornserve: .venv/build.timestamp
-	${SYSTEM_PYTHON_CMD} wsgi.py
+	${PYTHON_CMD} wsgi.py
 
 # Docker related functions.
 
