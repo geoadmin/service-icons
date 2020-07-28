@@ -1,8 +1,8 @@
-# service-name
+# service-color
 
 ## Summary of the project
 
-A simple description of the service should go here
+A simple REST microservice meant to take a symbol (defined by a filename), to colorized it with a color defined by r, g and b values and to return the colorized symbol.
 
 ## How to run locally
 
@@ -14,7 +14,7 @@ The **Make** targets assume you have **bash**, **curl**, **tar**, **docker** and
 
 First, you'll need to clone the repo
 
-    git clone git@github.com:geoadmin/service-name
+    git clone git@github.com:geoadmin/service-color
 
 Then, you can run the setup target to ensure you have everything needed to develop, test and serve locally
 
@@ -77,6 +77,37 @@ None
 ##### Success
 
     "OK", 200
+
+### /color/ [GET]
+
+#### description of the route
+
+This route takes a color (defined by r, g and b values) and the name of a file containing a symbol to be colorized and returns the colorized symbol.
+
+#### parameters
+
+r, g, b, **Integer**, Mandatory
+filename, **String**, Mandatory
+
+#### expected results
+
+##### Success
+
+    a file containing the colorized symbol, 200
+
+##### Failures
+
+r, g or b value is non-integer or not in the range of 0 to 255
+
+    "The <red/green/blue> channel must be an integer value in the range of 0 to 255.", 400
+
+The file containing the symbol to be colorized specified by filename does not exist.
+
+    "The image to be colorized doesn't exist", 400
+
+Hostname or Domain not part of authorised hosts or domains
+
+    "service-color can only be used for [ list of allowed domains ] domains or [ list of allowed hosts ] hosts.", 400
 
 ## Deploying the project and continuous integration
 
