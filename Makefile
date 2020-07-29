@@ -9,7 +9,10 @@ PYTHON_FILES := $(shell find ./* -type f -name "*.py" -print)
 
 #FIXME: put this variable in config file
 PYTHON_VERSION := 3.7.4
+PYTHON_VERSION_SPLITED := $(subst ., ,$(PYTHON_VERSION))
+PYTHON_MAJOR_MINOR_VERSION := $(word 1,$(PYTHON_VERSION_SPLITED)).$(word 2,$(PYTHON_VERSION_SPLITED))
 SYSTEM_PYTHON_CMD := $(shell ./getPythonCmd.sh ${PYTHON_VERSION} ${PYTHON_LOCAL_DIR})
+LOCAL_PYTHON_CMD := $(PYTHON_LOCAL_DIR)/bin/python$(PYTHON_MAJOR_MINOR_VERSION)
 
 # default configuration
 HTTP_PORT ?= 8080
@@ -32,11 +35,11 @@ build/python:
 	mkdir -p build
 	touch build/python
 else
-build/python: $(PYTHON_LOCAL_DIR)/bin/python3.7
+build/python: $(LOCAL_PYTHON_CMD)
 	@echo "Using local" $(shell $(SYSTEM_PYTHON_CMD) --version 2>&1)
 	@echo $(shell $(SYSTEM_PYTHON_CMD) -c "print('OK')")
 
-SYSTEM_PYTHON_CMD := $(PYTHON_LOCAL_DIR)/bin/python3.7
+SYSTEM_PYTHON_CMD := $(LOCAL_PYTHON_CMD)
 endif
 
 
@@ -69,7 +72,7 @@ python: build/python
 setup: python .venv/build.timestamp
 
 
-$(PYTHON_LOCAL_DIR)/bin/python3.7:
+$(LOCAL_PYTHON_CMD):
 	@echo "Building a local python..."
 	mkdir -p $(PYTHON_LOCAL_DIR);
 	curl -z $(PYTHON_LOCAL_DIR)/Python-$(PYTHON_VERSION).tar.xz https://www.python.org/ftp/python/$(PYTHON_VERSION)/Python-$(PYTHON_VERSION).tar.xz -o $(PYTHON_LOCAL_DIR)/Python-$(PYTHON_VERSION).tar.xz;
