@@ -1,5 +1,3 @@
-import re
-
 # Definition of the allowed domains for CORS implementation in ../app/__init.py__
 ALLOWED_DOMAINS = [
     r'.*\.geo\.admin\.ch',
