@@ -15,7 +15,7 @@ SYSTEM_PYTHON_CMD := $(shell ./getPythonCmd.sh ${PYTHON_VERSION} ${PYTHON_LOCAL_
 LOCAL_PYTHON_CMD := $(PYTHON_LOCAL_DIR)/bin/python$(PYTHON_MAJOR_MINOR_VERSION)
 
 # default configuration
-HTTP_PORT ?= 8080
+HTTP_PORT ?= 5000
 
 # Commands
 PYTHON_CMD := $(INSTALL_DIR)/bin/python3
@@ -55,8 +55,8 @@ help:
 	@echo "- lint               Lint and format the python source code"
 	@echo "- test               Run the tests"
 	@echo -e " \033[1mLOCAL SERVER TARGETS\033[0m "
-	@echo "- serve              Run the project using the flask debug server. Port can be set by Env variable HTTP_PORT (default: 8080)"
-	@echo "- gunicornserve      Run the project using the gunicorn WSGI server. Port can be set by Env variable HTTP_PORT (default: 8080)"
+	@echo "- serve              Run the project using the flask debug server. Port can be set by Env variable HTTP_PORT (default: 5000)"
+	@echo "- gunicornserve      Run the project using the gunicorn WSGI server. Port can be set by Env variable HTTP_PORT (default: 5000)"
 	@echo "- dockerrun          Run the project using the gunicorn WSGI server inside a container (port: 8080)"
 	@echo "- shutdown           Stop the aforementioned container"
 	@echo -e " \033[1mCLEANING TARGETS\033[0m "
