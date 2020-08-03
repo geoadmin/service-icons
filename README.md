@@ -60,54 +60,15 @@ Is the command you're looking for.
 
 ## Endpoints
 
-all trailing slashes are optionals
-
-### /checker/ [GET]
-
-#### description of the route
+### /checker [GET]
 
 this is a simple route meant to test if the server is up.
 
-#### parameters
-
-None
-
-#### expected results
-
-##### Success
-
-    "OK", 200
-
-### /color/ [GET]
-
-#### description of the route
+### /color [GET]
 
 This route takes a color (defined by r, g and b values) and the name of a file containing a symbol to be colorized and returns the colorized symbol.
 
-#### parameters
-
-r, g, b, **Integer**, Mandatory
-filename, **String**, Mandatory
-
-#### expected results
-
-##### Success
-
-    a file containing the colorized symbol, 200
-
-##### Failures
-
-r, g or b value is non-integer or not in the range of 0 to 255
-
-    "The <red/green/blue> channel must be an integer value in the range of 0 to 255.", 400
-
-The file containing the symbol to be colorized specified by filename does not exist.
-
-    "The image to be colorized doesn't exist", 400
-
-Hostname or Domain not part of authorised hosts or domains
-
-    "service-color can only be used for [ list of allowed domains ] domains or [ list of allowed hosts ] hosts.", 400
+For more information about endpoints look at the [OpenAPI Spec](openapi.yaml)
 
 ## Deploying the project and continuous integration
 

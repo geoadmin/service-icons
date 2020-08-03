@@ -1,65 +1,117 @@
 openapi: "3.0.0"
 info:
   version: "1.0.0"
-  title: Service Name
+  title: Service Color
+
 paths:
-  /rest/checker:
+  /v4/qrcode/checker:
     get:
-      summary: route to check if the service is up.
+      summary: Route to check if the service is up.
       operationId: checker
       tags:
         - checker
       responses:
-        '200':
+        "200":
           description: Returning OK
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
-                example: "OK"
-        '500':
-          description: Internal Error
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Always true for 200 response
+                  message:
+                    type: string
+                example:
+                  success: true
+                  message: "OK"
+        "500":
+          description: unexpected error
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
-                example: "The server encountered an internal error"
+                $ref: "#/components/schemas/error"
+                example:
+                  success: false
+                  error:
+                    code: 500
+                    message: "An internal error occured"
 
-
-  /rest/example:
+  /v4/color/{r},{g},{b},{filename}:
     get:
-      summary: this is a simple example of an endpoint.
-      operationId: getLegend
+      summary: Colorized the specified symbol with the specified color.
+      operationId: color
       tags:
-        - generation
+        - color
       parameters:
-        - name: url
-          in: query
+        - in: path
+          name: r
+          schema:
+            type: integer
           required: true
-          description: The url our example need to proceed
+          description: The value of the red color channel
+        - in: path
+          name: g
+          schema:
+            type: integer
+          required: true
+          description: The value of the greeb color channel
+        - in: path
+          name: b
+          schema:
+            type: integer
+          required: true
+          description: The value of the blue color channel
+        - in: path
+          name: filename
           schema:
             type: string
-            example: "https://example.admin.ch"
+          required: true
+          description: Filename of the symbol to be colorized
       responses:
-        '200':
-          description: This is where the description should go
+        "200":
+          description: Returns the symbol colorized in the specified colors.
           content:
             image/png:
               schema:
-                 type: string
-                 example: "look, we are at https://example.admin.ch,. such a good example."
-        '400':
-          description: This describe another possible result. in this case, a bad request http status
+                type: string
+                format: binary
+
+        "400":
+          description: Bad Requests. This can be caused by ill defined parameters, or the host/the domain is/are not part of the authorised hosts/domains.
           content:
             text/html:
               schema:
                 type: string
-                example: "The parameter 'url' is missing from the request"
+                example: "Color channel values must be integers in the range of 0 to 255."
 
-        '500':
+        "500":
           description: unexpected error
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
-                example: "An internal error occured during the example"
+                $ref: "#/components/schemas/error"
+                example:
+                  success: false
+                  error:
+                    code: 500
+                    message: "An internal error occured in service color."
+
+components:
+  schemas:
+    error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Always false in case of error
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              description: Error code
+            message:
+              type: string
+              description: Description of the error
