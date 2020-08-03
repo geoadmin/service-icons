@@ -44,5 +44,6 @@ def color(r, g, b, filename):
         img = Image.composite(Image.new("RGB", mask.size, (r, g, b)), mask, mask)
         output = BytesIO()
         img.save(output, format='PNG')
+        img.close()
 
     return Response(output.getvalue(), mimetype='image/png')
