@@ -43,5 +43,8 @@ local/
 */pip-selfcheck.json
 */pyvenv.cfg
 
+# Visual Studio generated files
+.vscode/
+
 #vim
 *.swp
