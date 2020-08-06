@@ -4,7 +4,7 @@ info:
   title: Service Color
 
 paths:
-  /v4/qrcode/checker:
+  /v4/color/checker:
     get:
       summary: Route to check if the service is up.
       operationId: checker
@@ -38,7 +38,7 @@ paths:
                     code: 500
                     message: "An internal error occured"
 
-  /v4/color/{r},{g},{b},{filename}:
+  /v4/color/{r},{g},{b}/{filename}:
     get:
       summary: Colorized the specified symbol with the specified color.
       operationId: color
