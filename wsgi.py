@@ -22,9 +22,9 @@ class StandaloneApplication(BaseApplication):  # pylint: disable=abstract-method
         return self.application
 
 
-# We use the port 8080 as default, otherwise we set the HTTP_PORT env variable within the container.
+# We use the port 5000 as default, otherwise we set the HTTP_PORT env variable within the container.
 if __name__ == '__main__':
-    HTTP_PORT = str(os.environ.get('HTTP_PORT', "8080"))
+    HTTP_PORT = str(os.environ.get('HTTP_PORT', "5000"))
     # Bind to 0.0.0.0 to let your app listen to all network interfaces.
     options = {
         'bind': '%s:%s' % ('0.0.0.0', HTTP_PORT),

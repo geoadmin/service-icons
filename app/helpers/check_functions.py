@@ -2,7 +2,7 @@ from flask import abort
 from app.helpers import make_error_msg
 
 
-def check_color_channels(r, g, b):
+def check_color_channels(r, g, b): # pylint: disable=invalid-name
     """
     This function checks if a given color channel value is an integer and lies in the range of 0 to
     255. This function will be invoked from routes.py.

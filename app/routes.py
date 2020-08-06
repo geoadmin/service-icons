@@ -21,7 +21,7 @@ def checker_page():
 
 
 @app.route('/<int:r>,<int:g>,<int:b>/<string:filename>', methods=['GET'])
-def color(r, g, b, filename):
+def color(r, g, b, filename): # pylint: disable=invalid-name
     """
     This endpoint verifies the parameters of the request.
     BadRequests errors will be raised in case of not properly defined parameters.
