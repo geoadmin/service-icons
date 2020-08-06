@@ -1,5 +1,10 @@
 # service-name
 
+| Branch | Status |
+|--------|-----------|
+| develop | ![Build Status](<codebuild-badge>) |
+| master | ![Build Status](<codebuild-badge>) |
+
 ## Summary of the project
 
 A simple description of the service should go here

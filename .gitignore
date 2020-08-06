@@ -36,6 +36,9 @@ local/
 # mypy
 .mypy_cache/
 
+# unittest report
+nose2-junit.xml
+
 # PyCharm generated files
 *.idea
 */bin/
@@ -43,8 +46,11 @@ local/
 */pip-selfcheck.json
 */pyvenv.cfg
 
-# Visual Studio generated files
-.vscode/
-
 #vim
 *.swp
+
+# git generate files
+*.orig
+
+# visual studio code config
+.vscode
