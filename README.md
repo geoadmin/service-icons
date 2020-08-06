@@ -47,7 +47,7 @@ This will serve the application through Flask without any wsgi in front.
 
     make gunicornserve
 
-This is an simple example of how to test the service after serving on localhost:5000 (`out.dat` will either contain be a PNG file or contain an error message.)
+This is a simple example of how to test the service after serving on localhost:5000 (`out.dat` will either contain be a PNG file or contain an error message.)
 
     curl -H "Origin: https://map.geo.admin.ch/" http://localhost:5000/v4/color/255,133,133/marker-24@2x.png --output out.dat
 
