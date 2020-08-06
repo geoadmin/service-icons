@@ -1,7 +1,11 @@
 from io import BytesIO
 import os.path
-from flask import Response, make_response, jsonify, abort
+from flask import Response
+from flask import make_response
+from flask import jsonify
+from flask import abort
 from PIL import Image
+
 from app import app
 from app.helpers.check_functions import check_color_channels
 from app.helpers.route import prefix_route
@@ -21,7 +25,7 @@ def checker_page():
 
 
 @app.route('/<int:r>,<int:g>,<int:b>/<string:filename>', methods=['GET'])
-def color(r, g, b, filename): # pylint: disable=invalid-name
+def color(r, g, b, filename):  # pylint: disable=invalid-name
     """
     This endpoint verifies the parameters of the request.
     BadRequests errors will be raised in case of not properly defined parameters.
