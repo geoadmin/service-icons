@@ -4,7 +4,7 @@ info:
   title: Service Color
 
 paths:
-  /v4/color/checker:
+  /v{ver}/color/checker:
     get:
       summary: Route to check if the service is up.
       operationId: checker
@@ -26,6 +26,17 @@ paths:
                 example:
                   success: true
                   message: "OK"
+        "400":
+          description: Bad Requests. Caused when unsupported versions of the service are called.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+                example:
+                  success: false
+                  error:
+                    code: 400
+                    message: "unsupported version of sercive"
         "500":
           description: unexpected error
           content:
@@ -38,7 +49,7 @@ paths:
                     code: 500
                     message: "An internal error occured"
 
-  /v4/color/{r},{g},{b}/{filename}:
+  /v{ver}/color/{r},{g},{b}/{filename}:
     get:
       summary: Colorized the specified symbol with the specified color.
       operationId: color
@@ -79,7 +90,7 @@ paths:
                 format: binary
 
         "400":
-          description: Bad Requests. This can be caused by ill defined parameters, or the host/the domain is/are not part of the authorised hosts/domains.
+          description: Bad Requests. This can be caused by ill defined parameters, or the host/the domain is/are not part of the authorised hosts/domains or the version is not supported.
           content:
             text/html:
               schema:
