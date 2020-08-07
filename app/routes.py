@@ -4,6 +4,7 @@ from flask import Response
 from flask import make_response
 from flask import jsonify
 from flask import abort
+from flask import current_app as capp
 from PIL import Image
 
 from app import app
@@ -48,6 +49,7 @@ def color(ver, r, g, b, filename):  # pylint: disable=invalid-name
 
     path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../static/images/', filename))
     if not os.path.isfile(path):
+        capp.logger.error("The image to colorize doesn\'t exist.")
         abort(make_error_msg(400, "The image to colorize doesn\'t exist."))
 
     with Image.open(path) as mask:

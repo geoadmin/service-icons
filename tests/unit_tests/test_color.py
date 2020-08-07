@@ -56,7 +56,7 @@ class ColorTests(unittest.TestCase):
         response = self.app.get(
             "/v999/color/255,0,0/marker-24@2x.png", headers={"Origin": "map.geo.admin.ch"}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 400, msg="unsupported service version.")
         self.assertEqual(response.content_type, "application/json")
         self.assertEqual(
             response.json, {
@@ -71,7 +71,7 @@ class ColorTests(unittest.TestCase):
             f"{self.route_prefix}/255,0,0/non_existent_dummy_file.png",
             headers={"Origin": "map.geo.admin.ch"}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 400, msg="File not found")
         self.assertEqual(response.content_type, "application/json")
         self.assertEqual(
             response.json,
@@ -96,7 +96,7 @@ class ColorTests(unittest.TestCase):
             content_type="application/json",
             headers={"Origin": "map.geo.admin.ch"}
         )
-        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.status_code, 405, msg="POST method is not allowed")
         self.assertEqual(
             response.json,
             {
@@ -111,7 +111,7 @@ class ColorTests(unittest.TestCase):
         response = self.app.get(
             "/v4/color/255,0,0/marker-24@2x.png", headers={"Origin": "www.dummy.com"}
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 403, msg="ORIGIN must be set")
         self.assertEqual(
             response.json, {
                 "error": {

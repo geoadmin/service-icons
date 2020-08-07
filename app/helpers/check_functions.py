@@ -1,4 +1,5 @@
 from flask import abort
+from flask import current_app as capp
 from app.helpers import make_error_msg
 
 
@@ -14,6 +15,7 @@ def check_color_channels(r, g, b):  # pylint: disable=invalid-name
     :return:  verified r, g and b values.
     """
     if not ((0 <= r <= 255) and (0 <= g <= 255) and (0 <= b <= 255)):
+        capp.logger.error("Color channel values must be integers in the range of 0 to 255.")
         abort(
             make_error_msg(400, "Color channel values must be integers in the range of 0 to 255.")
         )
