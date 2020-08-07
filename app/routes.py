@@ -23,7 +23,7 @@ def checker_page(ver):
     :return: OK with a 200 status code or raise error in case of unsupported version.
     """
     if ver > 4:
-        abort(make_error_msg(400, "unsupported version of sercive"))
+        abort(make_error_msg(400, "unsupported version of service."))
 
     return make_response(jsonify({'success': True, 'message': 'OK'}))
 
@@ -42,13 +42,13 @@ def color(ver, r, g, b, filename):  # pylint: disable=invalid-name
     :return:
     """
     if ver > 4:
-        abort(make_error_msg(400, "unsupported version of service"))
+        abort(make_error_msg(400, "unsupported version of service."))
 
     r, g, b = check_color_channels(r, g, b)
 
     path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../static/images/', filename))
     if not os.path.isfile(path):
-        abort(make_error_msg(400, "The image to colorize doesn\'t exist"))
+        abort(make_error_msg(400, "The image to colorize doesn\'t exist."))
 
     with Image.open(path) as mask:
         if mask.mode == 'P':
