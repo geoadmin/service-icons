@@ -19,7 +19,7 @@ app.route = prefix_route(app.route, '/v<int:ver>/color')
 def checker_page(ver):
     """
     Just a route for the health check.
-    :param v: integer value of the service's version (inherited from prefix_route).
+    :param ver: integer value of the service's version (inherited from prefix_route).
     :return: OK with a 200 status code or raise error in case of unsupported version.
     """
     if ver > 4:
@@ -34,7 +34,7 @@ def color(ver, r, g, b, filename):  # pylint: disable=invalid-name
     This endpoint verifies the parameters of the request.
     BadRequests errors will be raised in case of not properly defined parameters.
     If all parameters are well defined, the colored image (symbol) is returned.
-    :param v: integer value of the service's version (inherited from prefix_route).
+    :param ver: integer value of the service's version (inherited from prefix_route).
     :param r: integer value in the range between 0 and 255 for the red channel.
     :param g: integer value in the range between 0 and 255 for the green channel.
     :param b: integer value in the range between 0 and 255 for the blue channel.
