@@ -10,6 +10,13 @@ paths:
       operationId: checker
       tags:
         - checker
+      parameters:
+        - in: path
+          name: ver
+          schema:
+            type: integer
+          required: true
+          description: Version number of the service
       responses:
         "200":
           description: Returning OK
@@ -56,6 +63,12 @@ paths:
       tags:
         - color
       parameters:
+        - in: path
+          name: ver
+          schema:
+            type: integer
+          required: true
+          description: Version number of the service
         - in: path
           name: r
           schema:

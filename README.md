@@ -47,11 +47,11 @@ This will serve the application through Flask without any wsgi in front.
 
     make gunicornserve
 
-This is a simple example of how to test the service after serving on localhost:5000 (`out.dat` will either contain a PNG image or contain an error message.)
+This will serve the application with the Gunicorn layer in front of the application
 
     curl -H "Origin: https://map.geo.admin.ch/" http://localhost:5000/v4/color/255,133,133/marker-24@2x.png --output out.dat
 
-This will serve the application with the Gunicorn layer in front of the application
+This is a simple example of how to test the service after serving on localhost:5000 (`out.dat` will either contain a PNG image or contain an error message.)
 
     make dockerrun
 
