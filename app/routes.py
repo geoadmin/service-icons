@@ -9,6 +9,7 @@ from PIL import Image
 
 from app import app
 from app.helpers.check_functions import check_color_channels
+from app.helpers.check_functions import check_version
 from app.helpers.route import prefix_route
 from app.helpers import make_error_msg
 
@@ -23,8 +24,7 @@ def checker_page(ver):
     :param ver: integer value of the service's version (inherited from prefix_route).
     :return: OK with a 200 status code or raise error in case of unsupported version.
     """
-    if ver > 4:
-        abort(make_error_msg(400, "unsupported version of service."))
+    check_version(ver)
 
     return make_response(jsonify({'success': True, 'message': 'OK'}))
 
@@ -42,8 +42,7 @@ def color(ver, r, g, b, filename):  # pylint: disable=invalid-name
     :param filename: name of the file containing the image/symbol to be colored.
     :return:
     """
-    if ver > 4:
-        abort(make_error_msg(400, "unsupported version of service."))
+    check_version(ver)
 
     r, g, b = check_color_channels(r, g, b)
 
