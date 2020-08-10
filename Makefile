@@ -6,6 +6,7 @@ CURRENT_DIR := $(shell pwd)
 INSTALL_DIR := $(CURRENT_DIR)/.venv
 PYTHON_LOCAL_DIR := $(CURRENT_DIR)/build/local
 PYTHON_FILES := $(shell find ./* -type f -name "*.py" -print)
+TEST_REPORT_DIR := $(CURRENT_DIR)/tests/report
 
 #FIXME: put this variable in config file
 PYTHON_VERSION := 3.7.4
@@ -15,7 +16,7 @@ SYSTEM_PYTHON_CMD := $(shell ./getPythonCmd.sh ${PYTHON_VERSION} ${PYTHON_LOCAL_
 LOCAL_PYTHON_CMD := $(PYTHON_LOCAL_DIR)/bin/python$(PYTHON_MAJOR_MINOR_VERSION)
 
 # default configuration
-HTTP_PORT ?= 8080
+HTTP_PORT ?= 5000
 
 # Commands
 PYTHON_CMD := $(INSTALL_DIR)/bin/python3
@@ -55,8 +56,8 @@ help:
 	@echo "- lint               Lint and format the python source code"
 	@echo "- test               Run the tests"
 	@echo -e " \033[1mLOCAL SERVER TARGETS\033[0m "
-	@echo "- serve              Run the project using the flask debug server. Port can be set by Env variable HTTP_PORT (default: 8080)"
-	@echo "- gunicornserve      Run the project using the gunicorn WSGI server. Port can be set by Env variable HTTP_PORT (default: 8080)"
+	@echo "- serve              Run the project using the flask debug server. Port can be set by Env variable HTTP_PORT (default: 5000)"
+	@echo "- gunicornserve      Run the project using the gunicorn WSGI server. Port can be set by Env variable HTTP_PORT (default: 5000)"
 	@echo "- dockerrun          Run the project using the gunicorn WSGI server inside a container (port: 8080)"
 	@echo "- shutdown           Stop the aforementioned container"
 	@echo -e " \033[1mCLEANING TARGETS\033[0m "
@@ -93,7 +94,8 @@ lint: .venv/build.timestamp
 
 .PHONY: test
 test: .venv/build.timestamp
-	$(NOSE_CMD) -s tests/
+	mkdir -p $(TEST_REPORT_DIR)
+	$(NOSE_CMD) --plugin nose2.plugins.junitxml --junit-xml --junit-xml-path $(TEST_REPORT_DIR)/nose2-junit.xml -s tests/
 
 # Serve targets. Using these will run the application on your local machine. You can either serve with a wsgi front (like it would be within the container), or without.
 .PHONY: serve
