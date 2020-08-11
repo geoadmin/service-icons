@@ -45,3 +45,6 @@ local/
 
 #vim
 *.swp
+
+# VS editor
+.vscode/

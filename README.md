@@ -1,8 +1,8 @@
-# service-name
+# service-color
 
 ## Summary of the project
 
-A simple description of the service should go here
+A simple REST microservice meant to take a symbol (defined by a filename), to colorized it with a color defined by r, g and b values and to return the colorized symbol.
 
 ## How to run locally
 
@@ -14,7 +14,7 @@ The **Make** targets assume you have **bash**, **curl**, **tar**, **docker** and
 
 First, you'll need to clone the repo
 
-    git clone git@github.com:geoadmin/service-name
+    git clone git@github.com:geoadmin/service-color
 
 Then, you can run the setup target to ensure you have everything needed to develop, test and serve locally
 
@@ -49,6 +49,10 @@ This will serve the application through Flask without any wsgi in front.
 
 This will serve the application with the Gunicorn layer in front of the application
 
+    curl -H "Origin: https://map.geo.admin.ch/" http://localhost:5000/v4/color/255,133,133/marker-24@2x.png --output out.dat
+
+This is a simple example of how to test the service after serving on localhost:5000 (`out.dat` will either contain a PNG image or contain an error message.)
+
     make dockerrun
 
 This will serve the application with the wsgi server, inside a container.
@@ -60,23 +64,15 @@ Is the command you're looking for.
 
 ## Endpoints
 
-all trailing slashes are optionals
-
-### /checker/ [GET]
-
-#### description of the route
+### /checker [GET]
 
 this is a simple route meant to test if the server is up.
 
-#### parameters
+### /color [GET]
 
-None
+This route takes a color (defined by r, g and b values) and the name of a file containing a symbol to be colorized and returns the colorized symbol.
 
-#### expected results
-
-##### Success
-
-    "OK", 200
+For more information about endpoints look at the [OpenAPI Spec](openapi.yaml)
 
 ## Deploying the project and continuous integration
 

@@ -1,6 +1,6 @@
 version: '2'
 services:
   app:
-    image: swisstopo/service-name:local
+    image: swisstopo/service-color:local
     ports:
       - '8080:8080'
