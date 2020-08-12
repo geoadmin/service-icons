@@ -25,6 +25,8 @@ phases:
       - echo "export of the image tag for build and push purposes"
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - GITHUB_BRANCH=${CODEBUILD_WEBHOOK_HEAD_REF#refs/heads/*}
+      # Manual build don't have the CODEBUILD_WEBHOOK_HEAD_REF variable set, therefore use the source version set during the manual build
+      - GITHUB_BRANCH=${GITHUB_BRANCH:-${CODEBUILD_SOURCE_VERSION}}
       - export IMAGE_TAG="${GITHUB_BRANCH}.${COMMIT_HASH}"
       - echo "creating a clean environment"
       - make clean setup
