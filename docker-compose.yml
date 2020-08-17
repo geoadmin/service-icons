@@ -1,6 +1,6 @@
-version: '2'
+version: "2"
 services:
   app:
     image: swisstopo/service-name:local
     ports:
-      - '8080:8080'
+      - "${HTTP_PORT}:8080"
