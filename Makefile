@@ -6,6 +6,8 @@ CURRENT_DIR := $(shell pwd)
 INSTALL_DIR := $(CURRENT_DIR)/.venv
 PYTHON_LOCAL_DIR := $(CURRENT_DIR)/build/local
 PYTHON_FILES := $(shell find ./* -type f -name "*.py" -print)
+TEST_REPORT_DIR := $(CURRENT_DIR)/tests/report
+TEST_REPORT_FILE := nose2-junit.xml
 
 #FIXME: put this variable in config file
 PYTHON_VERSION := 3.7.4
@@ -53,8 +55,9 @@ help:
 	@echo "- test               Run the tests"
 	@echo -e " \033[1mLOCAL SERVER TARGETS\033[0m "
 	@echo "- serve              Run the project using the flask debug server. Port can be set by Env variable HTTP_PORT (default: 5000)"
-	@echo "- gunicornserve      Run the project using the gunicorn WSGI server. Port can be set by Env variable HTTP_PORT (default: 5000)"
-	@echo "- dockerrun          Run the project using the gunicorn WSGI server inside a container (port: 8080)"
+	@echo "- gunicornserve      Run the project using the gunicorn WSGI server. Port can be set by Env variable DEBUG_HTTP_PORT (default: 5000)"
+	@echo "- dockerbuild        Build the project localy using the gunicorn WSGI server inside a container"
+	@echo "- dockerrun          Run the project using the gunicorn WSGI server inside a container (exposed port: 5000)"
 	@echo "- shutdown           Stop the aforementioned container"
 	@echo -e " \033[1mCLEANING TARGETS\033[0m "
 	@echo "- clean              Clean genereated files"
@@ -90,12 +93,13 @@ lint: .venv/build.timestamp
 
 .PHONY: test
 test: .venv/build.timestamp
-	$(NOSE_CMD) -s tests/
+	mkdir -p $(TEST_REPORT_DIR)
+	$(NOSE_CMD) -c tests/unittest.cfg --plugin nose2.plugins.junitxml --junit-xml --junit-xml-path $(TEST_REPORT_DIR)/$(TEST_REPORT_FILE) -s tests/
 
 # Serve targets. Using these will run the application on your local machine. You can either serve with a wsgi front (like it would be within the container), or without.
 .PHONY: serve
 serve: .venv/build.timestamp
-	FLASK_APP=service_launcher FLASK_DEBUG=1 $(FLASK_CMD) run --host=0.0.0.0 --port=$(HTTP_PORT)
+	FLASK_APP=service_color FLASK_DEBUG=1 $(FLASK_CMD) run --host=0.0.0.0 --port=$(HTTP_PORT)
 
 .PHONY: gunicornserve
 gunicornserve: .venv/build.timestamp
@@ -103,13 +107,20 @@ gunicornserve: .venv/build.timestamp
 
 # Docker related functions.
 
+.PHONY: dockerbuild
+dockerbuild:
+	docker build -t swisstopo/service-color:local .
+
+export-http-port:
+	@export HTTP_PORT=$(HTTP_PORT)
+
 .PHONY: dockerrun
-dockerrun:
+dockerrun: export-http-port
 	docker-compose up -d;
 	sleep 10
 
 .PHONY: shutdown
-shutdown:
+shutdown: export-http-port
 	docker-compose down
 
 # Cleaning functions. clean_venv will only remove the virtual environment, while clean will also remove the local python installation.
