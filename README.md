@@ -1,5 +1,10 @@
 # service-color
 
+| Branch | Status |
+|--------|-----------|
+| develop | ![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoicXJCdkRTRUhuY28yU0N5ZXJVM1hjSnc0Tk5ZWjV3Z25RYWNWOURTeWx2QkpOYXFQRk8wMkZ3a3BJMVZJU2h5bTcyMGtkY29UYWxiNENNVERhUUl2Tjh3PSIsIml2UGFyYW1ldGVyU3BlYyI6InF0ZXJIb0doTERqcndTamoiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=develop) |
+| master | ![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoicXJCdkRTRUhuY28yU0N5ZXJVM1hjSnc0Tk5ZWjV3Z25RYWNWOURTeWx2QkpOYXFQRk8wMkZ3a3BJMVZJU2h5bTcyMGtkY29UYWxiNENNVERhUUl2Tjh3PSIsIml2UGFyYW1ldGVyU3BlYyI6InF0ZXJIb0doTERqcndTamoiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master) |
+
 ## Summary of the project
 
 A simple REST microservice meant to take a symbol (defined by a filename), to colorized it with a color defined by r, g and b values and to return the colorized symbol.
