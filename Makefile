@@ -99,7 +99,7 @@ format-lint: format lint
 # Test target
 
 .PHONY: test
-test: $(REQUIREMENTS_TIMESTAMP)
+test: $(DEV_REQUIREMENTS_TIMESTAMP)
 	mkdir -p $(TEST_REPORT_DIR)
 	$(NOSE) -c tests/unittest.cfg --plugin nose2.plugins.junitxml --junit-xml --junit-xml-path $(TEST_REPORT_DIR)/$(TEST_REPORT_FILE) -s tests/
 
