@@ -1,6 +1,9 @@
 import os
+
 from gunicorn.app.base import BaseApplication
+
 from app import app as application
+from app.helpers import init_logging
 
 
 class StandaloneApplication(BaseApplication):  # pylint: disable=abstract-method
@@ -19,6 +22,9 @@ class StandaloneApplication(BaseApplication):  # pylint: disable=abstract-method
             self.cfg.set(key.lower(), value)
 
     def load(self):
+        # we need here to do the init logging here in order to apply the configuration for flask
+        # gunicorn
+        init_logging()
         return self.application
 
 

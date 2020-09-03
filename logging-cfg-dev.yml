@@ -1,0 +1,81 @@
+version: 1
+disable_existing_loggers: False # this allow to get logger at module level
+
+root:
+  handlers:
+    - console
+  level: DEBUG
+  propagate: True
+
+# Remove all handlers for werkzeug log entries - prevents duplicated logging
+loggers:
+  werkzeug:
+    handlers: []
+  gunicorn.error:
+    level: DEBUG
+    handlers:
+      - console
+  gunicorn.access:
+    level: DEBUG
+    handlers:
+      - console
+
+filters:
+  application:
+    (): logging_utilities.filters.ConstAttribute
+    application: service-qrcode
+  isotime:
+    (): logging_utilities.filters.TimeAttribute
+    isotime: True
+  flask:
+    (): logging_utilities.filters.flask_attribute.FlaskRequestAttribute
+    attributes:
+      - url
+      - method
+      - headers
+      - remote_addr
+      - json
+
+formatters:
+  standard:
+    format: "[%(asctime)s] %(levelname)-8s - %(name)-26s : %(message)s"
+  verbose:
+    format: "[%(asctime)s] %(levelname)-8s - %(name)-26s : %(message)s : url=%(request_url)s headers=%(request_headers)s payload=%(request_json)s"
+  json:
+    (): logging_utilities.formatters.json_formatter.JsonFormatter
+    add_always_extra: True
+    filter_attributes:
+      - application
+      - request_url
+      - request_method
+      - request_headers
+      - request_json
+      - request_remote_addr
+    remove_empty: True
+    fmt:
+      time: isotime
+      level: levelname
+      app: application
+      logger: name
+      module: module
+      function: funcName
+      process: process
+      thread: thread
+      request:
+        url: flask_request_url
+        method: flask_request_method
+        headers: flask_request_headers
+        data: flask_request_json
+        remote: flask_request_remote_addr
+      exc_info: exc_info
+      message: message
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: json
+    stream: ext://sys.stdout
+    filters:
+      - application
+      - isotime
+      - flask

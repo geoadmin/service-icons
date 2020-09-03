@@ -108,7 +108,7 @@ test: $(DEV_REQUIREMENTS_TIMESTAMP)
 
 .PHONY: serve
 serve: $(REQUIREMENTS_TIMESTAMP)
-	FLASK_APP=$(subst -,_,$(SERVICE_NAME)) FLASK_DEBUG=1 $(FLASK) run --host=0.0.0.0 --port=$(HTTP_PORT)
+	FLASK_APP=service_launcher FLASK_DEBUG=1 $(FLASK) run --host=0.0.0.0 --port=$(HTTP_PORT)
 
 
 .PHONY: gunicornserve
@@ -124,13 +124,13 @@ dockerbuild: $(DOCKER_BUILD_TIMESTAMP)
 
 .PHONY: dockerrun
 dockerrun: $(DOCKER_BUILD_TIMESTAMP)
-	export HTTP_PORT=$(HTTP_PORT); export SERVICE_NAME=$(SERVICE_NAME); docker-compose up -d
+	HTTP_PORT=$(HTTP_PORT) SERVICE_NAME=$(SERVICE_NAME) docker-compose up -d
 	sleep 10
 
 
 .PHONY: shutdown
 shutdown:
-	export HTTP_PORT=$(HTTP_PORT); export SERVICE_NAME=$(SERVICE_NAME); docker-compose down
+	HTTP_PORT=$(HTTP_PORT) SERVICE_NAME=$(SERVICE_NAME) docker-compose down
 
 
 .PHONY: clean_venv
@@ -151,6 +151,7 @@ clean: clean_venv
 
 $(TIMESTAMPS):
 	mkdir -p $(TIMESTAMPS)
+
 
 $(VENV_TIMESTAMP): $(SYSTEM_PYTHON_TIMESTAMP)
 	test -d $(VENV) || $(SYSTEM_PYTHON) -m venv $(VENV) && $(PIP) install --upgrade pip setuptools

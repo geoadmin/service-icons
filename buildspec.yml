@@ -23,26 +23,39 @@ phases:
   pre_build:
     commands:
       - echo "export of the image tag for build and push purposes"
+      # Reading git branch (the utility in the deploy script is unable to read it automatically on CodeBuild)
+      # see https://stackoverflow.com/questions/47657423/get-github-git-branch-for-aws-codebuild
+      - export GITHUB_BRANCH="$(git symbolic-ref HEAD --short 2>/dev/null)"
+      - |
+        if [ "${GITHUB_BRANCH}" = "" ] ; then
+          GITHUB_BRANCH="$(git branch -a --contains HEAD | sed -n 2p | awk '{ printf $1 }')";
+          export GITHUB_BRANCH=${GITHUB_BRANCH#remotes/origin/};
+        fi
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - GITHUB_BRANCH=${CODEBUILD_WEBHOOK_HEAD_REF#refs/heads/*}
-      # Manual build don't have the CODEBUILD_WEBHOOK_HEAD_REF variable set, therefore use the source version set during the manual build
-      - GITHUB_BRANCH=${GITHUB_BRANCH:-${CODEBUILD_SOURCE_VERSION}}
       - export IMAGE_TAG="${GITHUB_BRANCH}.${COMMIT_HASH}"
+      - echo "GITHUB_BRANCH=${GITHUB_BRANCH} COMMIT_HASH=${COMMIT_HASH} IMAGE_TAG=${IMAGE_TAG}"
       - echo "creating a clean environment"
       - make clean setup
   build:
     commands:
-      - echo "we need to tag the image correctly, and this should depend on the branch it's from, and / or the branch"
-      - echo "it's merged into."
-      - docker build -t ${IMAGE_BASE_NAME}:${IMAGE_TAG} .
+      - echo Build started on $(date)
+      - export DOCKER_IMG_TAG_BASE=${IMAGE_BASE_NAME}:${GITHUB_BRANCH}
+      - export DOCKER_IMG_TAG_HASH=${DOCKER_IMG_TAG_BASE}.${COMMIT_HASH}
+      - export DOCKER_IMG_TAG_LATEST=${DOCKER_IMG_TAG_BASE}.latest
+      - echo "Building docker image with tags ${DOCKER_IMG_TAG_HASH} and ${DOCKER_IMG_TAG_LATEST}"
+      - docker build -t ${DOCKER_IMG_TAG_HASH} -t ${DOCKER_IMG_TAG_LATEST} .
+
   post_build:
     commands:
       - make lint
       - mkdir -p ${TEST_REPORT_DIR}
-      - export TEST_REPORT_DIR=${TEST_REPORT_DIR}
-      - export TEST_REPORT_FILE=${TEST_REPORT_FILE}
-      - make test
-      - docker push ${IMAGE_BASE_NAME}:${IMAGE_TAG}
+      - TEST_REPORT_DIR=${TEST_REPORT_DIR} TEST_REPORT_FILE=${TEST_REPORT_FILE} make test
+      # Only push image to dockerhub for merge to develop and master
+      - |
+        if [ "${GITHUB_BRANCH}" = "master" -o "${GITHUB_BRANCH}" = "develop" ]; then
+          docker push ${DOCKER_IMG_TAG_HASH}
+          docker push ${DOCKER_IMG_TAG_LATEST}
+        fi
 
 reports:
   nose2_reports:
