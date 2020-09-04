@@ -77,7 +77,7 @@ this is a simple route meant to test if the server is up.
 
 This route takes a color (defined by r, g and b values) and the name of a file containing a symbol to be colorized and returns the colorized symbol.
 
-For more information about endpoints look at the [OpenAPI Spec](openapi.yaml)
+For more information about endpoints look at the [OpenAPI Spec](openapi.yml)
 
 ## Deploying the project and continuous integration
 
