@@ -30,6 +30,10 @@ wheels/
 *.egg
 local/
 
+# makefile
+.local
+.timestamps
+
 # virtualenv
 .venv
 
@@ -49,5 +53,8 @@ nose2-junit.xml
 #vim
 *.swp
 
-# VS editor
-.vscode/
+# git generate files
+*.orig
+
+# visual studio code config
+.vscode
