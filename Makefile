@@ -8,8 +8,10 @@ CURRENT_DIR := $(shell pwd)
 VENV := $(CURRENT_DIR)/.venv
 REQUIREMENTS = $(CURRENT_DIR)/requirements.txt
 DEV_REQUIREMENTS = $(CURRENT_DIR)/dev_requirements.txt
-TEST_REPORT_DIR := $(CURRENT_DIR)/tests/report
-TEST_REPORT_FILE := nose2-junit.xml
+
+# Test report configuration
+TEST_REPORT_DIR ?= $(CURRENT_DIR)/tests/report
+TEST_REPORT_FILE ?= nose2-junit.xml
 
 # Python local build directory
 PYTHON_LOCAL_DIR := $(CURRENT_DIR)/.local
