@@ -1,6 +1,9 @@
 import os
+
 from gunicorn.app.base import BaseApplication
+
 from app import app as application
+from app.helpers import init_logging
 
 
 class StandaloneApplication(BaseApplication):  # pylint: disable=abstract-method
@@ -19,10 +22,13 @@ class StandaloneApplication(BaseApplication):  # pylint: disable=abstract-method
             self.cfg.set(key.lower(), value)
 
     def load(self):
+        # we need here to do the init logging here in order to apply the configuration for flask
+        # gunicorn
+        init_logging()
         return self.application
 
 
-# We use the port 5000 as default, otherwise we set the HTTP_PORT env variable within the container.
+# We use the port 8080 as default, otherwise we set the HTTP_PORT env variable within the container.
 if __name__ == '__main__':
     HTTP_PORT = str(os.environ.get('HTTP_PORT', "5000"))
     # Bind to 0.0.0.0 to let your app listen to all network interfaces.
