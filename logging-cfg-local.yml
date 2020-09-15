@@ -46,11 +46,12 @@ formatters:
     add_always_extra: True
     filter_attributes:
       - application
-      - request_url
-      - request_method
-      - request_headers
-      - request_json
-      - request_remote_addr
+      - isotime
+      - flask_request_url
+      - flask_request_method
+      - flask_request_headers
+      - flask_request_json
+      - flask_request_remote_addr
     remove_empty: True
     fmt:
       time: isotime
