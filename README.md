@@ -90,3 +90,11 @@ When creating a PR, terraform should run a codebuild job to test, build and push
 This service is to be delployed to the Kubernetes cluster once it is merged.
 
 TO DO: give instructions to deploy to kubernetes.
+
+### Deployment configuration
+
+The service is configured by Environment Variable:
+
+| Env         | Default               | Description                            |
+|-------------|-----------------------|----------------------------------------|
+| LOGGING_CFG | logging-cfg-local.yml | Logging configuration file             |
