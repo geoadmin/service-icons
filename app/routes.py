@@ -1,10 +1,11 @@
+import logging
+
 from io import BytesIO
 import os.path
 from flask import Response
 from flask import make_response
 from flask import jsonify
 from flask import abort
-from flask import current_app as capp
 from PIL import Image
 
 from app import app
@@ -12,6 +13,8 @@ from app.helpers.check_functions import check_color_channels
 from app.helpers.check_functions import check_version
 from app.helpers.route import prefix_route
 from app.helpers import make_error_msg
+
+logger = logging.getLogger(__name__)
 
 # add route prefix
 app.route = prefix_route(app.route, '/v<int:ver>/color')
@@ -42,13 +45,15 @@ def color(ver, r, g, b, filename):  # pylint: disable=invalid-name
     :param filename: name of the file containing the image/symbol to be colored.
     :return:
     """
+    logger.debug('GET color (%d, %d, %d) for %s', r, g, b, filename)
+
     check_version(ver)
 
     r, g, b = check_color_channels(r, g, b)
 
     path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../static/images/', filename))
     if not os.path.isfile(path):
-        capp.logger.error("The image to colorize doesn\'t exist.")
+        logger.error("The image to colorize doesn\'t exist.")
         abort(make_error_msg(400, "The image to colorize doesn\'t exist."))
 
     with Image.open(path) as mask:

@@ -1,6 +1,9 @@
+import logging
+
 from flask import abort
-from flask import current_app as capp
 from app.helpers import make_error_msg
+
+logger = logging.getLogger(__name__)
 
 MAX_ALLOWED_VERSION = 4
 
@@ -17,7 +20,7 @@ def check_color_channels(r, g, b):  # pylint: disable=invalid-name
     :return:  verified r, g and b values.
     """
     if not ((0 <= r <= 255) and (0 <= g <= 255) and (0 <= b <= 255)):
-        capp.logger.error("Color channel values must be integers in the range of 0 to 255.")
+        logger.error("Color channel values must be integers in the range of 0 to 255.")
         abort(
             make_error_msg(400, "Color channel values must be integers in the range of 0 to 255.")
         )
@@ -31,4 +34,5 @@ def check_version(ver):
     :param vers: version number as defined in the route.
     """
     if ver > MAX_ALLOWED_VERSION:
+        logger.error("Unsupported version of service: %d", ver)
         abort(make_error_msg(400, "unsupported version of service."))
