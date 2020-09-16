@@ -46,6 +46,7 @@ formatters:
     add_always_extra: True
     filter_attributes:
       - application
+      - isotime
       - flask_request_url
       - flask_request_method
       - flask_request_headers
