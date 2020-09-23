@@ -23,10 +23,11 @@ loggers:
 filters:
   application:
     (): logging_utilities.filters.ConstAttribute
-    application: service-qrcode
+    application: template-service-flask
   isotime:
     (): logging_utilities.filters.TimeAttribute
-    isotime: True
+    isotime: False
+    utc_isotime: True
   flask:
     (): logging_utilities.filters.flask_attribute.FlaskRequestAttribute
     attributes:
@@ -46,7 +47,7 @@ formatters:
     add_always_extra: True
     filter_attributes:
       - application
-      - isotime
+      - utc_isotime
       - flask_request_url
       - flask_request_method
       - flask_request_headers
@@ -54,7 +55,7 @@ formatters:
       - flask_request_remote_addr
     remove_empty: True
     fmt:
-      time: isotime
+      time: utc_isotime
       level: levelname
       app: application
       logger: name
