@@ -1,18 +1,20 @@
 import logging
-
-from io import BytesIO
 import os.path
-from flask import Response
-from flask import make_response
-from flask import jsonify
-from flask import abort
+from io import BytesIO
+
 from PIL import Image
 
+from flask import Response
+from flask import abort
+from flask import jsonify
+from flask import make_response
+
 from app import app
+from app.helpers import make_error_msg
 from app.helpers.check_functions import check_color_channels
 from app.helpers.check_functions import check_version
 from app.helpers.route import prefix_route
-from app.helpers import make_error_msg
+from app.version import APP_VERSION
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +31,7 @@ def checker_page(ver):
     """
     check_version(ver)
 
-    return make_response(jsonify({'success': True, 'message': 'OK'}))
+    return make_response(jsonify({'success': True, 'message': 'OK', 'version': APP_VERSION}))
 
 
 @app.route('/<int:r>,<int:g>,<int:b>/<string:filename>', methods=['GET'])

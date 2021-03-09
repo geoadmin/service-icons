@@ -1,7 +1,8 @@
-import unittest
 import json
+import unittest
 
 from app import app
+from app.version import APP_VERSION
 
 
 class ColorTests(unittest.TestCase):
@@ -20,7 +21,7 @@ class ColorTests(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, "application/json")
-        self.assertEqual(response.json, {"message": "OK", "success": True})
+        self.assertEqual(response.json, {"message": "OK", "success": True, "version": APP_VERSION})
 
         response = self.app.get("/v999/color/checker", headers={"Origin": "map.geo.admin.ch"})
         self.assertEqual(response.status_code, 400)

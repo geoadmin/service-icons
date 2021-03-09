@@ -1,18 +1,19 @@
 # service-color
 
-| Branch | Status |
-|--------|-----------|
+| Branch  | Status                                                                                                                                                                                                                                                                                                                      |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | develop | ![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoicXJCdkRTRUhuY28yU0N5ZXJVM1hjSnc0Tk5ZWjV3Z25RYWNWOURTeWx2QkpOYXFQRk8wMkZ3a3BJMVZJU2h5bTcyMGtkY29UYWxiNENNVERhUUl2Tjh3PSIsIml2UGFyYW1ldGVyU3BlYyI6InF0ZXJIb0doTERqcndTamoiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=develop) |
-| master | ![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoicXJCdkRTRUhuY28yU0N5ZXJVM1hjSnc0Tk5ZWjV3Z25RYWNWOURTeWx2QkpOYXFQRk8wMkZ3a3BJMVZJU2h5bTcyMGtkY29UYWxiNENNVERhUUl2Tjh3PSIsIml2UGFyYW1ldGVyU3BlYyI6InF0ZXJIb0doTERqcndTamoiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master) |
+| master  | ![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoicXJCdkRTRUhuY28yU0N5ZXJVM1hjSnc0Tk5ZWjV3Z25RYWNWOURTeWx2QkpOYXFQRk8wMkZ3a3BJMVZJU2h5bTcyMGtkY29UYWxiNENNVERhUUl2Tjh3PSIsIml2UGFyYW1ldGVyU3BlYyI6InF0ZXJIb0doTERqcndTamoiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)  |
 
 ## Table of content
 
 - [Description](#description)
 - [Dependencies](#dependencies)
 - [Service API](#service-api)
+- [Versioning](#versioning)
 - [Local Development](#local-development)
+- [Docker](#docker)
 - [Deployment](#deployment)
-
 
 ## Description
 
@@ -31,39 +32,42 @@ This service has two endpoints:
 
 A detailed descriptions of the endpoints can be found in the [OpenAPI Spec](openapi.yaml).
 
-
 ### Staging Environments
 
-| Environments | URL |
-|--------------|-----|
+| Environments | URL                                                                                                                   |
+| ------------ | --------------------------------------------------------------------------------------------------------------------- |
 | DEV          | [https://service-color.bgdi-dev.swisstopo.cloud/v4/color/](https://service-color.bgdi-dev.swisstopo.cloud/v4/color/)  |
 | INT          | [https://service-color.bgdi-int.swisstopo.cloud/v4/color/](https://service-color.bgdi-int.swisstopo.cloud/v4/color/)  |
 | PROD         | [https://service-color.bgdi-prod.swisstopo.cloud/v4/color/](https://service-color.bgdi-int.swisstopo.cloud/v4/color/) |
-
 
 ### checker GET
 
 This is a simple route meant to test if the server is up.
 
-| Path | Method | Argument | Response Type |
-|------|--------|----------|---------------|
-| /v4/color/checker | GET | - | application/json |
+| Path              | Method | Argument | Response Type    |
+| ----------------- | ------ | -------- | ---------------- |
+| /v4/color/checker | GET    | -        | application/json |
 
 ### color GET
 
 This route takes a color (defined by r, g and b values) and the name of a file containing a symbol to be colorized
 and returns the colorized symbol.
 
-| Path | Method | Argument | Response Type |
-|------|--------|----------|---------------|
-| /v4/color | GET | r, g, b, filename | image/png |
+| Path      | Method | Argument          | Response Type |
+| --------- | ------ | ----------------- | ------------- |
+| /v4/color | GET    | r, g, b, filename | image/png     |
 
+## Versioning
+
+This service uses [SemVer](https://semver.org/) as versioning scheme. The versioning is automatically handled by `.github/workflows/main.yml` file.
+
+See also [Git Flow - Versioning](https://github.com/geoadmin/doc-guidelines/blob/master/GIT_FLOW.md#versioning) for more information on the versioning guidelines.
 
 ## Local Development
 
 ### Make Dependencies
 
-The **Make** targets assume you have **bash**, **curl**, **tar**, **docker** and **docker-compose** installed.
+The **Make** targets assume you have **python3.7**, **pipenv**, **bash**, **curl**, **tar**, **docker** and **docker-compose** installed.
 
 ### Setting up to work
 
@@ -108,6 +112,38 @@ This will serve the application with the Gunicorn layer in front of the applicat
 
 This is a simple example of how to test the service after serving on localhost:5000 (`out.dat` will either contain a PNG image or contain an error message.)
 
+## Docker
+
+The service is encapsulated in a Docker image. Images are pushed on the public [Dockerhub](https://hub.docker.com/r/swisstopo/service-color/tags) registry. From each github PR that is merged into develop branch, one Docker image is built and pushed with the following tags:
+
+- `develop.latest`
+- `develop.CURRENT_VERSION-beta.INCREMENTAL_NUMBER`
+
+From each github PR that is merged into master, one Docker image is built an pushed with the following tag:
+
+- `master.VERSION`
+
+Each image contains the following metadata:
+
+- author
+- git.branch
+- git.hash
+- git.dirty
+- version
+
+These metadata can be seen directly on the dockerhub registry in the image layers or can be read with the following command
+
+```bash
+# NOTE: jq is only used for pretty printing the json output,
+# you can install it with `apt install jq` or simply enter the command without it
+docker image inspect --format='{{json .Config.Labels}}' swisstopo/service-color:develop.latest | jq
+```
+
+You can also check these metadata on a running container as follows
+
+```bash
+docker ps --format="table {{.ID}}\t{{.Image}}\t{{.Labels}}"
+```
 
 ## Deployment
 
@@ -119,6 +155,6 @@ TO DO: give instructions to deploy to kubernetes.
 
 The service is configured by Environment Variable:
 
-| Env         | Default               | Description                            |
-|-------------|-----------------------|----------------------------------------|
-| LOGGING_CFG | logging-cfg-local.yml | Logging configuration file             |
+| Env         | Default               | Description                |
+| ----------- | --------------------- | -------------------------- |
+| LOGGING_CFG | logging-cfg-local.yml | Logging configuration file |
