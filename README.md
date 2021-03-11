@@ -10,8 +10,15 @@
 - [Description](#description)
 - [Dependencies](#dependencies)
 - [Service API](#service-api)
+  - [Staging Environments](#staging-environments)
+  - [checker GET](#checker-get)
+  - [color GET](#color-get)
 - [Versioning](#versioning)
 - [Local Development](#local-development)
+  - [Make Dependencies](#make-dependencies)
+  - [Setting up to work](#setting-up-to-work)
+  - [Linting and formatting your work](#linting-and-formatting-your-work)
+  - [Test your work](#test-your-work)
 - [Docker](#docker)
 - [Deployment](#deployment)
 
@@ -117,11 +124,11 @@ This is a simple example of how to test the service after serving on localhost:5
 The service is encapsulated in a Docker image. Images are pushed on the public [Dockerhub](https://hub.docker.com/r/swisstopo/service-color/tags) registry. From each github PR that is merged into develop branch, one Docker image is built and pushed with the following tags:
 
 - `develop.latest`
-- `develop.CURRENT_VERSION-beta.INCREMENTAL_NUMBER`
+- `CURRENT_VERSION-beta.INCREMENTAL_NUMBER`
 
 From each github PR that is merged into master, one Docker image is built an pushed with the following tag:
 
-- `master.VERSION`
+- `VERSION`
 
 Each image contains the following metadata:
 
