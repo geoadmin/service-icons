@@ -1,12 +1,12 @@
 import logging
 import re
 
+from werkzeug.exceptions import HTTPException
+
 from flask import Flask
-from flask import request
 from flask import abort
 from flask import json
-
-from werkzeug.exceptions import HTTPException
+from flask import request
 
 from app.helpers import make_error_msg
 from app.helpers.url import ALLOWED_DOMAINS_PATTERN

@@ -30,9 +30,13 @@ paths:
                     description: Always true for 200 response
                   message:
                     type: string
+                  version:
+                    type: string
+                    description: Application version string (SemVer 2.0)
                 example:
                   success: true
                   message: "OK"
+                  version: "v0.2.0-beta.1"
         "400":
           description: Bad Requests. Caused when unsupported versions of the service are called.
           content:

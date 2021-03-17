@@ -1,6 +1,7 @@
 import logging
 
 from flask import abort
+
 from app.helpers import make_error_msg
 
 logger = logging.getLogger(__name__)
