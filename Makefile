@@ -2,7 +2,7 @@ SHELL = /bin/bash
 
 .DEFAULT_GOAL := help
 
-SERVICE_NAME := service-color
+SERVICE_NAME := service-icons
 
 CURRENT_DIR := $(shell pwd)
 

@@ -23,7 +23,7 @@ loggers:
 filters:
   application:
     (): logging_utilities.filters.ConstAttribute
-    application: service-color
+    application: service-icons
   isotime:
     (): logging_utilities.filters.TimeAttribute
     isotime: False
