@@ -1,4 +1,4 @@
-# service-color
+# service-icons
 
 | Branch  | Status                                                                                                                                                                                                                                                                                                                      |
 | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -43,9 +43,9 @@ A detailed descriptions of the endpoints can be found in the [OpenAPI Spec](open
 
 | Environments | URL                                                                                                                   |
 | ------------ | --------------------------------------------------------------------------------------------------------------------- |
-| DEV          | [https://service-color.bgdi-dev.swisstopo.cloud/v4/color/](https://service-color.bgdi-dev.swisstopo.cloud/v4/color/)  |
-| INT          | [https://service-color.bgdi-int.swisstopo.cloud/v4/color/](https://service-color.bgdi-int.swisstopo.cloud/v4/color/)  |
-| PROD         | [https://service-color.bgdi-prod.swisstopo.cloud/v4/color/](https://service-color.bgdi-int.swisstopo.cloud/v4/color/) |
+| DEV          | [https://service-icons.bgdi-dev.swisstopo.cloud/v4/color/](https://service-icons.bgdi-dev.swisstopo.cloud/v4/color/)  |
+| INT          | [https://service-icons.bgdi-int.swisstopo.cloud/v4/color/](https://service-icons.bgdi-int.swisstopo.cloud/v4/color/)  |
+| PROD         | [https://service-icons.bgdi-prod.swisstopo.cloud/v4/color/](https://service-icons.bgdi-int.swisstopo.cloud/v4/color/) |
 
 ### checker GET
 
@@ -80,7 +80,7 @@ The **Make** targets assume you have **python3.7**, **pipenv**, **bash**, **curl
 
 First, you'll need to clone the repo
 
-    git clone git@github.com:geoadmin/service-color
+    git clone git@github.com:geoadmin/service-icons
 
 Then, you can run the setup target to ensure you have everything needed to develop, test and serve locally
 
@@ -121,7 +121,7 @@ This is a simple example of how to test the service after serving on localhost:5
 
 ## Docker
 
-The service is encapsulated in a Docker image. Images are pushed on the public [Dockerhub](https://hub.docker.com/r/swisstopo/service-color/tags) registry. From each github PR that is merged into develop branch, one Docker image is built and pushed with the following tags:
+The service is encapsulated in a Docker image. Images are pushed on the public [Dockerhub](https://hub.docker.com/r/swisstopo/service-icons/tags) registry. From each github PR that is merged into develop branch, one Docker image is built and pushed with the following tags:
 
 - `develop.latest`
 - `CURRENT_VERSION-beta.INCREMENTAL_NUMBER`
@@ -143,7 +143,7 @@ These metadata can be seen directly on the dockerhub registry in the image layer
 ```bash
 # NOTE: jq is only used for pretty printing the json output,
 # you can install it with `apt install jq` or simply enter the command without it
-docker image inspect --format='{{json .Config.Labels}}' swisstopo/service-color:develop.latest | jq
+docker image inspect --format='{{json .Config.Labels}}' swisstopo/service-icons:develop.latest | jq
 ```
 
 You can also check these metadata on a running container as follows

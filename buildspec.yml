@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    IMAGE_BASE_NAME: "swisstopo/service-color"
+    IMAGE_BASE_NAME: "swisstopo/service-icons"
     SHELL: /bin/bash
     AWS_DEFAULT_REGION: eu-central-1
     USER: "aws_code_build"
