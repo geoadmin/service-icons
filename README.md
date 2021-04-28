@@ -43,9 +43,9 @@ A detailed descriptions of the endpoints can be found in the [OpenAPI Spec](open
 
 | Environments | URL                                                                                                                   |
 | ------------ | --------------------------------------------------------------------------------------------------------------------- |
-| DEV          | [https://service-icons.bgdi-dev.swisstopo.cloud/v4/color/](https://service-icons.bgdi-dev.swisstopo.cloud/v4/color/)  |
-| INT          | [https://service-icons.bgdi-int.swisstopo.cloud/v4/color/](https://service-icons.bgdi-int.swisstopo.cloud/v4/color/)  |
-| PROD         | [https://service-icons.bgdi-prod.swisstopo.cloud/v4/color/](https://service-icons.bgdi-int.swisstopo.cloud/v4/color/) |
+| DEV          | [https://service-icons.bgdi-dev.swisstopo.cloud/v4/icons/](https://service-icons.bgdi-dev.swisstopo.cloud/v4/icons/)  |
+| INT          | [https://service-icons.bgdi-int.swisstopo.cloud/v4/icons/](https://service-icons.bgdi-int.swisstopo.cloud/v4/icons/)  |
+| PROD         | [https://service-icons.bgdi-prod.swisstopo.cloud/v4/icons/](https://service-icons.bgdi-int.swisstopo.cloud/v4/icons/) |
 
 ### checker GET
 
@@ -53,7 +53,7 @@ This is a simple route meant to test if the server is up.
 
 | Path              | Method | Argument | Response Type    |
 | ----------------- | ------ | -------- | ---------------- |
-| /v4/color/checker | GET    | -        | application/json |
+| /v4/icons/checker | GET    | -        | application/json |
 
 ### color GET
 
@@ -62,7 +62,7 @@ and returns the colorized symbol.
 
 | Path      | Method | Argument          | Response Type |
 | --------- | ------ | ----------------- | ------------- |
-| /v4/color | GET    | r, g, b, filename | image/png     |
+| /v4/icons | GET    | r, g, b, filename | image/png     |
 
 ## Versioning
 
@@ -115,7 +115,7 @@ This will serve the application through Flask without any wsgi in front.
 
 This will serve the application with the Gunicorn layer in front of the application
 
-    curl -H "Origin: https://map.geo.admin.ch/" http://localhost:5000/v4/color/255,133,133/marker-24@2x.png --output out.dat
+    curl -H "Origin: https://map.geo.admin.ch/" http://localhost:5000/v4/icons/255,133,133/marker-24@2x.png --output out.dat
 
 This is a simple example of how to test the service after serving on localhost:5000 (`out.dat` will either contain a PNG image or contain an error message.)
 

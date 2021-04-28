@@ -19,7 +19,7 @@ from app.version import APP_VERSION
 logger = logging.getLogger(__name__)
 
 # add route prefix
-app.route = prefix_route(app.route, '/v<int:ver>/color')
+app.route = prefix_route(app.route, '/v<int:ver>/icons')
 
 
 @app.route('/checker')

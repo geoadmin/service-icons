@@ -10,7 +10,7 @@ class ColorTests(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
         self.assertEqual(app.debug, False)
-        self.route_prefix = "/v4/color"
+        self.route_prefix = "/v4/icons"
 
     def tearDown(self):
         pass
@@ -23,7 +23,7 @@ class ColorTests(unittest.TestCase):
         self.assertEqual(response.content_type, "application/json")
         self.assertEqual(response.json, {"message": "OK", "success": True, "version": APP_VERSION})
 
-        response = self.app.get("/v999/color/checker", headers={"Origin": "map.geo.admin.ch"})
+        response = self.app.get("/v999/icons/checker", headers={"Origin": "map.geo.admin.ch"})
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.content_type, "application/json")
         self.assertEqual(
@@ -55,7 +55,7 @@ class ColorTests(unittest.TestCase):
         )
 
         response = self.app.get(
-            "/v999/color/255,0,0/marker-24@2x.png", headers={"Origin": "map.geo.admin.ch"}
+            "/v999/icons/255,0,0/marker-24@2x.png", headers={"Origin": "map.geo.admin.ch"}
         )
         self.assertEqual(response.status_code, 400, msg="unsupported service version.")
         self.assertEqual(response.content_type, "application/json")
@@ -86,7 +86,7 @@ class ColorTests(unittest.TestCase):
 
     def test_color_domain_restriction(self):
         response = self.app.get(
-            "/v4/color/255,0,0/marker-24@2x.png", headers={"Origin": "map.geo.admin.ch"}
+            "/v4/icons/255,0,0/marker-24@2x.png", headers={"Origin": "map.geo.admin.ch"}
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, "image/png")
@@ -110,7 +110,7 @@ class ColorTests(unittest.TestCase):
         )
 
         response = self.app.get(
-            "/v4/color/255,0,0/marker-24@2x.png", headers={"Origin": "www.dummy.com"}
+            "/v4/icons/255,0,0/marker-24@2x.png", headers={"Origin": "www.dummy.com"}
         )
         self.assertEqual(response.status_code, 403, msg="ORIGIN must be set")
         self.assertEqual(
