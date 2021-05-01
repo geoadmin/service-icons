@@ -5,8 +5,8 @@ from os import path
 
 import yaml
 
-from flask import make_response
 from flask import jsonify
+from flask import make_response
 
 logger = logging.getLogger(__name__)
 

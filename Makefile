@@ -5,27 +5,15 @@ SHELL = /bin/bash
 SERVICE_NAME := template
 
 CURRENT_DIR := $(shell pwd)
-VENV := $(CURRENT_DIR)/.venv
-REQUIREMENTS = $(CURRENT_DIR)/requirements.txt
-DEV_REQUIREMENTS = $(CURRENT_DIR)/dev_requirements.txt
 
 # Test report configuration
 TEST_REPORT_DIR ?= $(CURRENT_DIR)/tests/report
 TEST_REPORT_FILE ?= nose2-junit.xml
 
-# Python local build directory
-PYTHON_LOCAL_DIR := $(CURRENT_DIR)/.local
-
-# venv targets timestamps
-VENV_TIMESTAMP = $(VENV)/.timestamp
-REQUIREMENTS_TIMESTAMP = $(VENV)/.requirements.timestamp
-DEV_REQUIREMENTS_TIMESTAMP = $(VENV)/.dev-requirements.timestamp
-
 # general targets timestamps
 TIMESTAMPS = .timestamps
-SYSTEM_PYTHON_TIMESTAMP = $(TIMESTAMPS)/.python-system.timestamp
-PYTHON_LOCAL_BUILD_TIMESTAMP = $(TIMESTAMPS)/.python-build.timestamp
-DOCKER_BUILD_TIMESTAMP = $(TIMESTAMPS)/.dockerbuild.timestamp
+REQUIREMENTS_TIMESTAMP = $(TIMESTAMPS)/.requirements.timestamp
+DEV_REQUIREMENTS_TIMESTAMP = $(TIMESTAMPS)/.dev-requirements.timestamps
 
 # Docker variables
 DOCKER_IMG_LOCAL_TAG = swisstopo/$(SERVICE_NAME):local
@@ -33,19 +21,29 @@ DOCKER_IMG_LOCAL_TAG = swisstopo/$(SERVICE_NAME):local
 # Find all python files that are not inside a hidden directory (directory starting with .)
 PYTHON_FILES := $(shell find ./* -type f -name "*.py" -print)
 
-PYTHON_VERSION := 3.7.4
-SYSTEM_PYTHON := $(shell ./getPythonCmd.sh ${PYTHON_VERSION} ${PYTHON_LOCAL_DIR})
+# PIPENV files
+PIP_FILE = Pipfile
+PIP_FILE_LOCK = Pipfile.lock
 
 # default configuration
 HTTP_PORT ?= 5000
 
 # Commands
-PYTHON := $(VENV)/bin/python3
-PIP := $(VENV)/bin/pip3
-FLASK := $(VENV)/bin/flask
-YAPF := $(VENV)/bin/yapf
-NOSE := $(VENV)/bin/nose2
-PYLINT := $(VENV)/bin/pylint
+PIPENV_RUN := pipenv run
+PYTHON := $(PIPENV_RUN) python3
+PIP := $(PIPENV_RUN) pip3
+FLASK := $(PIPENV_RUN) flask
+YAPF := $(PIPENV_RUN) yapf
+ISORT := $(PIPENV_RUN) isort
+NOSE := $(PIPENV_RUN) nose2
+PYLINT := $(PIPENV_RUN) pylint
+
+# Docker metadata
+GIT_HASH := `git rev-parse HEAD`
+GIT_BRANCH := `git symbolic-ref HEAD --short 2>/dev/null`
+GIT_DIRTY := `git status --porcelain`
+GIT_TAG := `git describe --tags || echo "no version info"`
+AUTHOR := $(USER)
 
 
 all: help
@@ -57,8 +55,9 @@ help:
 	@echo
 	@echo "Possible targets:"
 	@echo -e " \033[1mSetup TARGETS\033[0m "
-	@echo "- setup              Create the python virtual environment"
-	@echo "- dev                Create the python virtual environment with developper tools"
+	@echo "- setup              Create the python virtual environment and activate it"
+	@echo "- dev                Create the python virtual environment with developper tools and activate it"
+	@echo "- ci                 Create the python virtual environment and install requirements based on the Pipfile.lock"
 	@echo -e " \033[1mFORMATING, LINTING AND TESTING TOOLS TARGETS\033[0m "
 	@echo "- format             Format the python source code"
 	@echo "- lint               Lint the python source code"
@@ -81,10 +80,17 @@ help:
 
 .PHONY: dev
 dev: $(DEV_REQUIREMENTS_TIMESTAMP)
+	pipenv shell
 
 
 .PHONY: setup
 setup: $(REQUIREMENTS_TIMESTAMP)
+	pipenv shell
+
+.PHONY: ci
+ci: $(TIMESTAMPS) $(PIP_FILE) $(PIP_FILE_LOCK)
+	# Create virtual env with all packages for development using the Pipfile.lock
+	pipenv sync --dev
 
 
 # linting target, calls upon yapf to make sure your code is easier to read and respects some conventions.
@@ -92,6 +98,7 @@ setup: $(REQUIREMENTS_TIMESTAMP)
 .PHONY: format
 format: $(DEV_REQUIREMENTS_TIMESTAMP)
 	$(YAPF) -p -i --style .style.yapf $(PYTHON_FILES)
+	$(ISORT) $(PYTHON_FILES)
 
 
 .PHONY: lint
@@ -126,17 +133,23 @@ gunicornserve: $(REQUIREMENTS_TIMESTAMP)
 # Docker related functions.
 
 .PHONY: dockerbuild
-dockerbuild: $(DOCKER_BUILD_TIMESTAMP)
+dockerbuild:
+	docker build \
+		--build-arg GIT_HASH="$(GIT_HASH)" \
+		--build-arg GIT_BRANCH="$(GIT_BRANCH)" \
+		--build-arg GIT_DIRTY="$(GIT_DIRTY)" \
+		--build-arg VERSION="$(GIT_TAG)" \
+		--build-arg AUTHOR="$(AUTHOR)" -t $(DOCKER_IMG_LOCAL_TAG)
 
 
 .PHONY: dockerpush
-dockerpush: $(DOCKER_BUILD_TIMESTAMP)
+dockerpush: dockerbuild
 	docker push $(DOCKER_IMG_LOCAL_TAG)
 
 
 .PHONY: dockerrun
-dockerrun: $(DOCKER_BUILD_TIMESTAMP)
-	HTTP_PORT=$(HTTP_PORT) SERVICE_NAME=$(SERVICE_NAME) docker-compose up
+dockerrun: dockerbuild
+	HTTP_PORT=$(HTTP_PORT) docker-compose up
 
 
 .PHONY: shutdown
@@ -146,7 +159,7 @@ shutdown:
 
 .PHONY: clean_venv
 clean_venv:
-	rm -rf $(VENV)
+	pipenv --rm
 
 
 .PHONY: clean
@@ -163,53 +176,11 @@ clean: clean_venv
 $(TIMESTAMPS):
 	mkdir -p $(TIMESTAMPS)
 
-
-$(VENV_TIMESTAMP): $(SYSTEM_PYTHON_TIMESTAMP)
-	test -d $(VENV) || $(SYSTEM_PYTHON) -m venv $(VENV) && $(PIP) install --upgrade pip setuptools
-	@touch $(VENV_TIMESTAMP)
-
-
-$(REQUIREMENTS_TIMESTAMP): $(VENV_TIMESTAMP) $(REQUIREMENTS)
-	$(PIP) install -U pip wheel; \
-	$(PIP) install -r $(REQUIREMENTS);
+$(REQUIREMENTS_TIMESTAMP): $(TIMESTAMPS) $(PIP_FILE) $(PIP_FILE_LOCK)
+	pipenv install
 	@touch $(REQUIREMENTS_TIMESTAMP)
 
 
-$(DEV_REQUIREMENTS_TIMESTAMP): $(REQUIREMENTS_TIMESTAMP) $(DEV_REQUIREMENTS)
-	$(PIP) install -r $(DEV_REQUIREMENTS)
+$(DEV_REQUIREMENTS_TIMESTAMP): $(TIMESTAMPS) $(PIP_FILE) $(PIP_FILE_LOCK)
+	pipenv install --dev
 	@touch $(DEV_REQUIREMENTS_TIMESTAMP)
-
-
-$(DOCKER_BUILD_TIMESTAMP): $(TIMESTAMPS) $(PYTHON_FILES) $(CURRENT_DIR)/Dockerfile logging-cfg-*.yml
-	docker build -t $(DOCKER_IMG_LOCAL_TAG) .
-	touch $(DOCKER_BUILD_TIMESTAMP)
-
-
-# Python local build target
-
-ifneq ($(SYSTEM_PYTHON),)
-
-# A system python matching version has been found use it
-$(SYSTEM_PYTHON_TIMESTAMP): $(TIMESTAMPS)
-	@echo "Using system" $(shell $(SYSTEM_PYTHON) --version 2>&1)
-	touch $(SYSTEM_PYTHON_TIMESTAMP)
-
-
-else
-
-# No python version found, build it localy
-$(SYSTEM_PYTHON_TIMESTAMP): $(TIMESTAMPS) $(PYTHON_LOCAL_BUILD_TIMESTAMP)
-	@echo "Using local" $(shell $(SYSTEM_PYTHON) --version 2>&1)
-	touch $(SYSTEM_PYTHON_TIMESTAMP)
-
-
-$(PYTHON_LOCAL_BUILD_TIMESTAMP): $(TIMESTAMPS)
-	@echo "Building a local python..."
-	mkdir -p $(PYTHON_LOCAL_DIR);
-	curl -z $(PYTHON_LOCAL_DIR)/Python-$(PYTHON_VERSION).tar.xz https://www.python.org/ftp/python/$(PYTHON_VERSION)/Python-$(PYTHON_VERSION).tar.xz -o $(PYTHON_LOCAL_DIR)/Python-$(PYTHON_VERSION).tar.xz;
-	cd $(PYTHON_LOCAL_DIR) && tar -xf Python-$(PYTHON_VERSION).tar.xz && Python-$(PYTHON_VERSION)/configure --prefix=$(PYTHON_LOCAL_DIR)/ && make altinstall
-	touch $(PYTHON_LOCAL_BUILD_TIMESTAMP)
-
-SYSTEM_PYTHON := $(PYTHON_LOCAL_DIR)/python
-
-endif

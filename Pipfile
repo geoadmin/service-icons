@@ -1,0 +1,22 @@
+
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+PyYAML = "~=5.3.1"
+gevent = "~=20.9.0"
+gunicorn = "~=19.9.0"
+Flask = "~=1.1.1"
+Pillow = "~=7.2.0"
+logging-utilities = "~=1.2.1"
+
+[dev-packages]
+yapf = "*"
+nose2 = "*"
+pylint = "*"
+pylint-flask = "*"
+
+[requires]
+python_version = "3.7"

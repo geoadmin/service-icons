@@ -5,49 +5,65 @@
 | develop | ![Build Status](<codebuild-badge>) |
 | master | ![Build Status](<codebuild-badge>) |
 
-## Summary of the project
+## Table of content
+
+- [Table of content](#table-of-content)
+- [Description](#description)
+  - [Staging Environments](#staging-environments)
+- [Versioning](#versioning)
+- [Local Development](#local-development)
+  - [Make Dependencies](#make-dependencies)
+  - [Setting up to work](#setting-up-to-work)
+  - [Linting and formatting your work](#linting-and-formatting-your-work)
+  - [Test your work](#test-your-work)
+- [Docker](#docker)
+- [Deployment](#deployment)
+  - [Deployment configuration](#deployment-configuration)
+
+## Description
 
 A simple description of the service should go here
+A detailed descriptions of the endpoints can be found in the [OpenAPI Spec](openapi.yaml).
 
-## How to run locally
+### Staging Environments
 
-### dependencies
+| Environments | URL                                                                                                                   |
+| ------------ | --------------------------------------------------------------------------------------------------------------------- |
+| DEV          | [https://service-name.bgdi-dev.swisstopo.cloud/v4/name/](https://service-name.bgdi-dev.swisstopo.cloud/v4/name/)  |
+| INT          | [https://service-name.bgdi-int.swisstopo.cloud/v4/name/](https://service-name.bgdi-int.swisstopo.cloud/v4/name/)  |
+| PROD         | [https://service-name.bgdi-prod.swisstopo.cloud/v4/name/](https://service-name.bgdi-int.swisstopo.cloud/v4/name/) |
 
-The **Make** targets assume you have **bash**, **curl**, **tar**, **docker** and **docker-compose** installed.
+## Versioning
+
+This service uses [SemVer](https://semver.org/) as versioning scheme. The versioning is automatically handled by `.github/workflows/main.yml` file.
+
+See also [Git Flow - Versioning](https://github.com/geoadmin/doc-guidelines/blob/master/GIT_FLOW.md#versioning) for more information on the versioning guidelines.
+
+## Local Development
+
+### Make Dependencies
+
+The **Make** targets assume you have **python3.7**, **pipenv**, **bash**, **curl**, **tar**, **docker** and **docker-compose** installed.
 
 ### Setting up to work
 
 First, you'll need to clone the repo
-
     git clone git@github.com:geoadmin/service-name
-
-Then, you can run the dev target to ensure you have everything needed to develop, test and serve locally
-
-    make dev
-
+Then, you can run the setup target to ensure you have everything needed to develop, test and serve locally
+    make setup
 That's it, you're ready to work.
-
 ### Linting and formatting your work
-
 In order to have a consistent code style the code should be formatted using `yapf`. Also to avoid syntax errors and non
 pythonic idioms code, the project uses the `pylint` linter. Both formatting and linter can be manually run using the
 following command:
-
     make format-lint
-
 **Formatting and linting should be at best integrated inside the IDE, for this look at
 [Integrate yapf and pylint into IDE](https://github.com/geoadmin/doc-guidelines/blob/master/PYTHON.md#yapf-and-pylint-ide-integration)**
-
 ### Test your work
-
 Testing if what you developed work is made simple. You have four targets at your disposal. **test, serve, gunicornserve, dockerrun**
-
     make test
-
 This command run the integration and unit tests.
-
     make serve
-
 This will serve the application through Flask without any wsgi in front.
 
     make gunicornserve
@@ -63,38 +79,47 @@ To stop serving through containers,
 
 Is the command you're looking for.
 
-## Endpoints
+## Docker
 
-all trailing slashes are optionals
+The service is encapsulated in a Docker image. Images are pushed on the public [Dockerhub](https://hub.docker.com/r/swisstopo/service-name/tags) registry. From each github PR that is merged into develop branch, one Docker image is built and pushed with the following tags:
 
-### /checker/ [GET]
+- `develop.latest`
+- `CURRENT_VERSION-beta.INCREMENTAL_NUMBER`
 
-#### description of the route
+From each github PR that is merged into master, one Docker image is built an pushed with the following tag:
 
-this is a simple route meant to test if the server is up.
+- `VERSION`
 
-#### parameters
+Each image contains the following metadata:
 
-None
+- author
+- git.branch
+- git.hash
+- git.dirty
+- version
 
-#### expected results
+These metadata can be seen directly on the dockerhub registry in the image layers or can be read with the following command
 
-##### Success
+```bash
+# NOTE: jq is only used for pretty printing the json output,
+# you can install it with `apt install jq` or simply enter the command without it
+docker image inspect --format='{{json .Config.Labels}}' swisstopo/service-name:develop.latest | jq
+```
 
-    "OK", 200
+You can also check these metadata on a running container as follows
 
-## Deploying the project and continuous integration
+```bash
+docker ps --format="table {{.ID}}\t{{.Image}}\t{{.Labels}}"
+```
 
-When creating a PR, terraform should run a codebuild job to test, build and push automatically your PR as a tagged container.
+## Deployment
 
-This service is to be delployed to the Kubernetes cluster once it is merged.
-
+This service is to be deployed to the Kubernetes cluster once it is merged.
 TO DO: give instructions to deploy to kubernetes.
-
 ### Deployment configuration
 
 The service is configured by Environment Variable:
 
-| Env         | Default               | Description                            |
-|-------------|-----------------------|----------------------------------------|
-| LOGGING_CFG | logging-cfg-local.yml | Logging configuration file             |
+| Env         | Default               | Description                |
+| ----------- | --------------------- | -------------------------- |
+| LOGGING_CFG | logging-cfg-local.yml | Logging configuration file |
