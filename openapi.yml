@@ -10,20 +10,47 @@ paths:
       tags:
         - checker
       responses:
-        '200':
+        "200":
           description: Returning OK
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
-                example: "OK"
-        '500':
-          description: Internal Error
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Always true for 200 response
+                  message:
+                    type: string
+                  version:
+                    type: string
+                    description: Application version string (SemVer 2.0)
+                example:
+                  success: true
+                  message: "OK"
+                  version: "v0.2.0-beta.1"
+        "400":
+          description: Bad Requests. Caused when unsupported versions of the service are called.
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
-                example: "The server encountered an internal error"
+                $ref: "#/components/schemas/error"
+                example:
+                  success: false
+                  error:
+                    code: 400
+                    message: "unsupported version of sercive"
+        "500":
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+                example:
+                  success: false
+                  error:
+                    code: 500
+message: "An internal error occured"
 
 
   /rest/example:

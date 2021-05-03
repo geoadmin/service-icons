@@ -7,8 +7,8 @@ from flask import Flask
 from flask import abort
 from flask import request
 
-from app.helpers import make_error_msg
-from app.helpers import ALLOWED_DOMAINS_PATTERN
+from app.helpers.utils import ALLOWED_DOMAINS_PATTERN
+from app.helpers.utils import make_error_msg
 from app.middleware import ReverseProxy
 
 logger = logging.getLogger(__name__)

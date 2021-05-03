@@ -3,7 +3,7 @@ import os
 from gunicorn.app.base import BaseApplication
 
 from app import app as application
-from app.helpers import get_logging_cfg
+from app.helpers.utils import get_logging_cfg
 
 
 class StandaloneApplication(BaseApplication):  # pylint: disable=abstract-method
@@ -11,7 +11,7 @@ class StandaloneApplication(BaseApplication):  # pylint: disable=abstract-method
     def __init__(self, app, options=None):  # pylint: disable=redefined-outer-name
         self.options = options or {}
         self.application = app
-        super(StandaloneApplication, self).__init__()
+        super().__init__()
 
     def load_config(self):
         config = {
