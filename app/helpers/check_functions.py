@@ -1,12 +1,9 @@
 import logging
-
 from flask import abort
 
 from app.helpers import make_error_msg
 
 logger = logging.getLogger(__name__)
-
-MAX_ALLOWED_VERSION = 4
 
 
 def check_color_channels(r, g, b):  # pylint: disable=invalid-name
@@ -26,14 +23,3 @@ def check_color_channels(r, g, b):  # pylint: disable=invalid-name
             make_error_msg(400, "Color channel values must be integers in the range of 0 to 255.")
         )
     return r, g, b
-
-
-def check_version(ver):
-    """
-    This function checks if the version number as defined in the route is  <= the maximum
-    allowed version number. If not an error is raised.
-    :param vers: version number as defined in the route.
-    """
-    if ver > MAX_ALLOWED_VERSION:
-        logger.error("Unsupported version of service: %d", ver)
-        abort(make_error_msg(400, "unsupported version of service."))
