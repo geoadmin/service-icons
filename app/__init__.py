@@ -5,7 +5,6 @@ from werkzeug.exceptions import HTTPException
 
 from flask import Flask
 from flask import abort
-from flask import json
 from flask import request
 
 from app.helpers import make_error_msg
