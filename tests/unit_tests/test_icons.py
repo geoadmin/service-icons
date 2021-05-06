@@ -1,40 +1,11 @@
 import json
-import unittest
 from unittest.mock import patch
 
-from app import app
+from tests.unit_tests.base_test import ServiceIconsUnitTests
+from tests.unit_tests.base_test import build_request_url_for_icon
 
 
-def build_request_url_for_icon(icon_filename="marker-48@2x.png",
-                               red=255,
-                               green=0,
-                               blue=0,
-                               icon_category="default",
-                               version=4):
-    return f"/v{version}/icons/{icon_category}/{red},{green},{blue}/{icon_filename}"
-
-
-class IconsTests(unittest.TestCase):
-
-    def setUp(self):
-        self.app = app.test_client()
-        self.assertEqual(app.debug, False)
-
-    def tearDown(self):
-        pass
-
-    def request_colorized_icon(self,
-                               icon_filename="marker-48@2x.png",
-                               red=255,
-                               green=0,
-                               blue=0,
-                               icon_category="default",
-                               version=4,
-                               origin="map.geo.admin.ch"):
-        return self.app.get(
-            build_request_url_for_icon(icon_filename, red, green, blue, icon_category, version),
-            headers={"Origin": origin}
-        )
+class IconsTests(ServiceIconsUnitTests):
 
     def test_colorized_icon_with_wrong_rgb_value(self):
         response = self.request_colorized_icon(red=2155)
@@ -48,22 +19,6 @@ class IconsTests(unittest.TestCase):
                 "error": {
                     "code": 400,
                     "message": "Color channel values must be integers in the range of 0 to 255."
-                },
-                "success": False
-            }
-        )
-
-    def test_colorized_icon_with_wrong_version(self):
-        response = self.request_colorized_icon(version=999)
-        self.assertEqual(response.status_code,
-                         400,
-                         msg="Should return a HTTP 400 for an unsupported service version.")
-        self.assertEqual(response.content_type, "application/json")
-        self.assertEqual(
-            response.json, {
-                "error": {
-                    "code": 400,
-                    "message": "unsupported version of service."
                 },
                 "success": False
             }
@@ -88,35 +43,11 @@ class IconsTests(unittest.TestCase):
 
     def test_colorized_icon_http_header_origin_restriction(self):
         response = self.request_colorized_icon(origin="www.dummy.com")
-        self.assertEqual(response.status_code,
-                         403,
-                         msg="Should return HTTP 403 when origin is not authorized")
-        self.assertEqual(response.content_type, "application/json")
-        self.assertEqual(
-            response.json,
-            {
-                "error": {
-                    "code": 403,
-                    "message": "Not allowed"
-                },
-                "success": False
-            }
-        )
+        self.check_response_not_allowed(response,
+                                        msg="Should return HTTP 403 when origin is not authorized")
         response = self.request_colorized_icon(origin="")
-        self.assertEqual(response.status_code,
-                         403,
-                         msg="Should return HTTP 403 when origin is not set")
-        self.assertEqual(response.content_type, "application/json")
-        self.assertEqual(
-            response.json,
-            {
-                "error": {
-                    "code": 403,
-                    "message": "Not allowed"
-                },
-                "success": False
-            }
-        )
+        self.check_response_not_allowed(response,
+                                        msg="Should return HTTP 403 when origin is not authorized")
 
     def test_colorized_icon_no_http_post_method_allowed_on_endpoint(self):
         request_url = build_request_url_for_icon()
