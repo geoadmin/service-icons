@@ -4,11 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-PyYAML = "~=5.3.1"
+PyYAML = "~=5.4"
 gevent = "~=20.9.0"
 gunicorn = "~=19.9.0"
 Flask = "~=1.1.1"
-Pillow = ">=8.1.1"
+Pillow = ">=8.1.2"
 logging-utilities = "~=1.2.1"
 
 [dev-packages]
