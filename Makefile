@@ -60,12 +60,15 @@ help:
 	@echo "- ci                 Create the python virtual environment and install requirements based on the Pipfile.lock"
 	@echo -e " \033[1mFORMATING, LINTING AND TESTING TOOLS TARGETS\033[0m "
 	@echo "- format             Format the python source code"
+	@echo "- ci-check-format    Format the python source code and check if any files has changed. This is meant to be used by the CI."
 	@echo "- lint               Lint the python source code"
+	@echo "- lint-spec          Lint the openapi spec"
 	@echo "- format-lint        Format and lint the python source code"
 	@echo "- test               Run the tests"
 	@echo -e " \033[1mLOCAL SERVER TARGETS\033[0m "
 	@echo "- serve              Run the project using the flask debug server. Port can be set by Env variable HTTP_PORT (default: 5000)"
 	@echo "- gunicornserve      Run the project using the gunicorn WSGI server. Port can be set by Env variable DEBUG_HTTP_PORT (default: 5000)"
+	@echo "- serve-spec         Serve the spec using Redoc on localhost:8080"
 	@echo -e " \033[1mDocker TARGETS\033[0m "
 	@echo "- dockerbuild        Build the project localy (with tag := $(DOCKER_IMG_LOCAL_TAG)) using the gunicorn WSGI server inside a container"
 	@echo "- dockerpush         Build and push the project localy (with tag := $(DOCKER_IMG_LOCAL_TAG))"
@@ -109,6 +112,26 @@ lint: $(DEV_REQUIREMENTS_TIMESTAMP)
 .PHONY: format-lint
 format-lint: format lint
 
+
+.PHONY: ci-check-format
+ci-check-format: format
+	@if [[ -n `git status --porcelain` ]]; then \
+	 	>&2 echo "ERROR: Code was not formatted correctly"; \
+		exit 1; \
+	fi
+
+# Spec targets
+
+.PHONY: lint-spec
+lint-spec:
+	docker run --volume "$(PWD)":/data jamescooke/openapi-validator -e openapi.yml
+
+
+.PHONY: serve-spec
+serve-spec:
+	docker run -it --rm -p 8080:80 \
+		-v "$(PWD)/openapi.yml":/usr/share/nginx/html/openapi.yml \
+		-e SPEC_URL=openapi.yml redocly/redoc
 
 # Test target
 
