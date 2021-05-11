@@ -39,7 +39,7 @@ paths:
                   success: false
                   error:
                     code: 400
-                    message: "unsupported version of sercive"
+                    message: "unsupported version of service"
         "500":
           description: unexpected error
           content:
@@ -50,9 +50,7 @@ paths:
                   success: false
                   error:
                     code: 500
-message: "An internal error occured"
-
-
+                    message: "An internal error occured"
   /rest/example:
     get:
       summary: this is a simple example of an endpoint.
@@ -89,4 +87,22 @@ message: "An internal error occured"
             text/html:
               schema:
                 type: string
-                example: "An internal error occured during the example"
+                example: "An internal error occurred during the example"
+
+components:
+  schemas:
+    error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Always false in case of error.
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              description: Error code.
+            message:
+              type: string
+              description: Description of the error.

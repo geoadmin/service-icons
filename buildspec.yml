@@ -60,6 +60,10 @@ phases:
     commands:
       - echo "Linting code..."
       - make lint
+      - echo "Linting spec..."
+      - make lint-spec
+      - echo "Checking code style..."
+      - make ci-check-format
       - echo "Unit testing..."
       - mkdir -p ${TEST_REPORT_DIR}
       - TEST_REPORT_DIR=${TEST_REPORT_DIR} TEST_REPORT_FILE=${TEST_REPORT_FILE} make test
