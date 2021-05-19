@@ -79,11 +79,12 @@ class IconSet:
             return None
         icons = []
         for root, dirs, files in os.walk(os.path.join(IMAGE_FOLDER, self.name)):
-            for name in files:
+            for icon_filename in files:
+                name_without_extension = os.path.splitext(icon_filename)[0]
                 if serialize:
-                    icons.append(self.get_icon(name).serialize())
+                    icons.append(self.get_icon(name_without_extension).serialize())
                 else:
-                    icons.append(self.get_icon(name))
+                    icons.append(self.get_icon(name_without_extension))
         return icons
 
     def serialize(self):

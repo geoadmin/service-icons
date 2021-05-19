@@ -4,12 +4,13 @@ from app import app
 from app.settings import ROUTE_PREFIX
 
 
-def build_request_url_for_icon(icon_filename="marker-48@2x.png",
+def build_request_url_for_icon(icon_name="marker",
+                               scale='1x',
                                red=255,
                                green=0,
                                blue=0,
                                icon_category="default"):
-    return f"{ROUTE_PREFIX}/{icon_category}/{red},{green},{blue}/{icon_filename}"
+    return f"{ROUTE_PREFIX}/{icon_category}/icon/{icon_name}@{scale}-{red},{green},{blue}.png"
 
 
 class ServiceIconsUnitTests(unittest.TestCase):
@@ -22,14 +23,15 @@ class ServiceIconsUnitTests(unittest.TestCase):
         pass
 
     def request_colorized_icon(self,
-                               icon_filename="marker-48@2x.png",
+                               icon_name="marker",
+                               scale='1x',
                                red=255,
                                green=0,
                                blue=0,
                                icon_category="default",
                                origin="map.geo.admin.ch"):
         return self.app.get(
-            build_request_url_for_icon(icon_filename, red, green, blue, icon_category),
+            build_request_url_for_icon(icon_name, scale, red, green, blue, icon_category),
             headers={"Origin": origin}
         )
 

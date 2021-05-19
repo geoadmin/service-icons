@@ -33,8 +33,8 @@ class Icon:
         """
         color_part = ""
         if self.icon_set.colorable:
-            color_part = f"{red},{green},{blue}/"
-        return "".join([f"{self.icon_set.get_icon_set_url()}/icon/", color_part, self.name, ".png"])
+            color_part = f"-{red},{green},{blue}"
+        return "".join([f"{self.icon_set.get_icon_set_url()}/icon/", self.name, color_part, ".png"])
 
     def get_icon_filepath(self):
         """
