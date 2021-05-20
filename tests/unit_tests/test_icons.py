@@ -1,5 +1,5 @@
 import json
-from unittest.mock import patch
+from app.settings import ROUTE_PREFIX
 
 from tests.unit_tests.base_test import ServiceIconsUnitTests
 from tests.unit_tests.base_test import build_request_url_for_icon
@@ -25,7 +25,7 @@ class IconsTests(ServiceIconsUnitTests):
         )
 
     def test_colorized_icon_non_existent_icon_name(self):
-        response = self.request_colorized_icon(icon_filename="non_existent_dummy_file.png")
+        response = self.request_colorized_icon(icon_name="non_existent_dummy_icon")
         self.assertEqual(response.status_code,
                          400,
                          msg="Should return a HTTP 400 when file not found")
@@ -35,7 +35,7 @@ class IconsTests(ServiceIconsUnitTests):
             {
                 "error": {
                     "code": 400,
-                    "message": "The image to colorize doesn't exist."
+                    "message": "Icon not found in icon set"
                 },
                 "success": False
             }
@@ -73,24 +73,10 @@ class IconsTests(ServiceIconsUnitTests):
             }
         )
 
-    @patch('app.routes.get_all_icons')
-    def test_all_icons(self, mock_get_all_icons):
-        first_mock_icon = {
-            "category": "default",
-            "icon": "mocked_up_icon.png",
-            "url": "http://fake_url_to_first_mock_icon"
-        }
-        second_mock_icon = {
-            "category": "other",
-            "icon": "another_mocked_up_icon.png",
-            "url": "http://fake_url_to_second_mock_icon"
-        }
-        mock_get_all_icons.return_value = [first_mock_icon, second_mock_icon]
-
-        response = self.app.get('/v4/icons/all', headers={"Origin": "map.geo.admin.ch"})
+    def test_icons_from_icon_set(self):
+        response = self.app.get(f"{ROUTE_PREFIX}/default/icons",
+                                headers={"Origin": "map.geo.admin.ch"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertTrue(isinstance(response.json, list))
-        self.assertEqual(len(response.json), 2)
-        self.assertDictEqual(response.json[0], first_mock_icon)
-        self.assertDictEqual(response.json[1], second_mock_icon)
+        self.assertTrue(len(response.json) > 0)
