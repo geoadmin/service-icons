@@ -35,26 +35,26 @@ def checker_page():
 @app.route('', methods=['GET'])
 @app.route('/', methods=['GET'])
 def all_icon_sets():
-    return make_response(jsonify(get_all_icon_sets(serialize=True)))
+    return make_response(jsonify(get_all_icon_sets()))
 
 
 @app.route('/<string:icon_set_name>', methods=['GET'])
 def icon_set_metadata(icon_set_name):
     icon_set = get_and_check_icon_set(icon_set_name)
-    return make_response(jsonify(icon_set.serialize()))
+    return make_response(jsonify(icon_set))
 
 
 @app.route('/<string:icon_set_name>/icons', methods=['GET'])
 def icons_from_icon_set(icon_set_name):
     icon_set = get_and_check_icon_set(icon_set_name)
-    return make_response(jsonify(icon_set.get_all_icons(serialize=True)))
+    return make_response(jsonify(icon_set.get_all_icons()))
 
 
 @app.route('/<string:icon_set_name>/icon/<string:icon_name>', methods=['GET'])
 def icon_metadata(icon_set_name, icon_name):
     icon_set = get_and_check_icon_set(icon_set_name)
     icon = get_and_check_icon(icon_set, icon_name)
-    return make_response(jsonify(icon.serialize()))
+    return make_response(jsonify(icon))
 
 
 @app.route('/<string:icon_set_name>/icon/<string:icon_name>.png', methods=['GET'])
@@ -79,7 +79,8 @@ def colorized_icon(icon_set_name,
     elif scale in ('0.5x', '.5x'):
         scale_factor = 0.5
 
-    with Image.open(icon.get_icon_filepath()) as image:
+    with open(icon.get_icon_filepath(), 'rb') as fd:
+        image = Image.open(fd)
         if image.mode == 'P':
             image = image.convert('RGBA')
         new_size = int(48 * scale_factor)
@@ -89,6 +90,5 @@ def colorized_icon(icon_set_name,
             image = Image.composite(Image.new("RGB", image.size, (red, green, blue)), image, image)
         output = BytesIO()
         image.save(output, format='PNG')
-        image.close()
 
         return Response(output.getvalue(), mimetype='image/png')

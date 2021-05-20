@@ -67,7 +67,7 @@ class IconSet:
             return 96
         return 48
 
-    def get_all_icons(self, serialize=False):
+    def get_all_icons(self):
         """
         Generate a list of all icons belonging to this icon set.
 
@@ -81,10 +81,7 @@ class IconSet:
         for root, dirs, files in os.walk(os.path.join(IMAGE_FOLDER, self.name)):
             for icon_filename in files:
                 name_without_extension = os.path.splitext(icon_filename)[0]
-                if serialize:
-                    icons.append(self.get_icon(name_without_extension).serialize())
-                else:
-                    icons.append(self.get_icon(name_without_extension))
+                icons.append(self.get_icon(name_without_extension))
         return icons
 
     def serialize(self):

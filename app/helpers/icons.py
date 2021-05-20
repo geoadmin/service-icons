@@ -6,14 +6,11 @@ from app.settings import COLORABLE_ICON_SETS
 from app.icon_set import IconSet
 
 
-def get_all_icon_sets(serialize=False):
+def get_all_icon_sets():
     icon_sets = []
     for root, dirs, files in os.walk(IMAGE_FOLDER):
         for icon_set_name in dirs:
-            if serialize:
-                icon_sets.append(get_icon_set(icon_set_name).serialize())
-            else:
-                icon_sets.append(get_icon_set(icon_set_name))
+            icon_sets.append(get_icon_set(icon_set_name))
     return icon_sets
 
 

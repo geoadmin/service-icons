@@ -10,6 +10,7 @@ from flask import request
 from app.helpers import make_error_msg
 from app.helpers.url import ALLOWED_DOMAINS_PATTERN
 from app.middleware import ReverseProxy
+from app.helpers.service_icon_custom_serializer import CustomJSONEncoder
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.wsgi_app = ReverseProxy(app.wsgi_app, script_name='/')
+app.json_encoder = CustomJSONEncoder
 
 
 # Add CORS Headers to all request
