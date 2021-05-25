@@ -58,7 +58,7 @@ paths:
                   success: false
                   error:
                     code: 500
-                    message: "An internal error occured"
+                    message: "An internal error occurred"
 
   /v{ver}/color/{r},{g},{b}/{filename}:
     get:
@@ -124,7 +124,7 @@ paths:
                   success: false
                   error:
                     code: 500
-                    message: "An internal error occured in service color."
+                    message: "An internal error occurred"
 
 components:
   schemas:
