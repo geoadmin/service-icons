@@ -2,28 +2,32 @@ version: 0.2
 
 env:
   variables:
-    IMAGE_BASE_NAME: "swisstopo/service-icons"
+    IMAGE_BASE_NAME: "service-icons"
+    REGISTRY: "974517877189.dkr.ecr.eu-central-1.amazonaws.com"
     SHELL: /bin/bash
     AWS_DEFAULT_REGION: eu-central-1
     USER: "aws_code_build"
     TEST_REPORT_DIR: "./tests/report"
     TEST_REPORT_FILE: "nose2-junit.xml"
     PIPENV_NOSPIN: 1
-  parameter-store:
-    CI_DOCKERHUB_USER: "/dockerhub/user"
-    CI_DOCKERHUB_PASSWORD: "/dockerhub/password"
 
 phases:
   install:
     runtime-versions:
       docker: 18
     commands:
-      - echo "Installing necessary softwares"
-      - docker login -u ${CI_DOCKERHUB_USER} -p ${CI_DOCKERHUB_PASSWORD}
-      - apt-get update && apt-get install -y docker-compose python3-pip
+      - echo "Installing necessary dependencies"
+      - apt-get update && apt-get install -y docker-compose python3-pip python3-venv pass gnupg2
+      - echo "Install aws cli v2 for docker login to ECR registry"
+      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      - unzip awscliv2.zip
+      - ./aws/install
+      - aws --version
+      - echo "Login to AWS ECR docker registry"
+      - aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${REGISTRY}
   pre_build:
     commands:
-      - echo "export of the image tag for build and push purposes"
+      - echo "Export of the image tag for build and push purposes"
       # Reading git branch (the utility in the deploy script is unable to read it automatically on CodeBuild)
       # see https://stackoverflow.com/questions/47657423/get-github-git-branch-for-aws-codebuild
       - export GITHUB_BRANCH="$(git symbolic-ref HEAD --short 2>/dev/null)"
@@ -35,16 +39,22 @@ phases:
       - export GITHUB_COMMIT=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - export GITHUB_TAG="$(git describe --tags 2>/dev/null)"
       - echo "GITHUB_BRANCH=${GITHUB_BRANCH} GITHUB_COMMIT=${GITHUB_COMMIT} GITHUB_TAG=${GITHUB_TAG} DOCKER_IMG_TAG=${DOCKER_IMG_TAG}"
-      - echo "creating a clean environment"
+      - echo "Creating a clean environment"
       - make ci
+      - echo "Check code formatting"
+      - make ci-check-format
+      - echo "Linting code"
+      - make lint
+      - echo "Linting openapi spec"
+      - make lint-spec
   build:
     commands:
       - echo Build started on $(date)
-      - export DOCKER_IMG_TAG=${IMAGE_BASE_NAME}:${GITHUB_TAG}
-      - export DOCKER_IMG_TAG_LATEST=${IMAGE_BASE_NAME}:${GITHUB_BRANCH}.latest
+      - export DOCKER_IMG_TAG=${REGISTRY}/${IMAGE_BASE_NAME}:${GITHUB_TAG}
+      - export DOCKER_IMG_TAG_LATEST=${REGISTRY}/${IMAGE_BASE_NAME}:${GITHUB_BRANCH}.latest
       - |-
         if [ "${GITHUB_TAG}" = "" ] ; then
-          export DOCKER_IMG_TAG=${IMAGE_BASE_NAME}:${GITHUB_BRANCH}.${GITHUB_COMMIT}
+          export DOCKER_IMG_TAG=${REGISTRY}/${IMAGE_BASE_NAME}:${GITHUB_BRANCH}.${GITHUB_COMMIT}
           export GITHUB_TAG=${GITHUB_COMMIT}
         fi
       - echo "Building docker image with tags ${DOCKER_IMG_TAG} and ${DOCKER_IMG_TAG_LATEST}"
@@ -55,16 +65,15 @@ phases:
         --build-arg VERSION="${GITHUB_TAG}"
         --build-arg AUTHOR="CI"
         -t ${DOCKER_IMG_TAG} -t ${DOCKER_IMG_TAG_LATEST} .
+
   post_build:
     commands:
-      - echo "Linting code..."
-      - make lint
       - echo "Unit testing..."
       - mkdir -p ${TEST_REPORT_DIR}
       - TEST_REPORT_DIR=${TEST_REPORT_DIR} TEST_REPORT_FILE=${TEST_REPORT_FILE} make test
       # Only push image to dockerhub for merge to develop and master
       - |
-        if [ "${GITHUB_BRANCH}" = "master" ]; then
+         if [ "${GITHUB_BRANCH}" = "master" ]; then
           echo "Pushing ${DOCKER_IMG_TAG} to dockerhub"
           docker push ${DOCKER_IMG_TAG}
         fi
@@ -74,6 +83,7 @@ phases:
           docker push ${DOCKER_IMG_TAG}
           docker push ${DOCKER_IMG_TAG_LATEST}
         fi
+
 reports:
   nose2_reports:
     files:
