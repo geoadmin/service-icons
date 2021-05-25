@@ -7,8 +7,8 @@ from flask import Flask
 from flask import abort
 from flask import request
 
-from app.helpers import make_error_msg
-from app.helpers.url import ALLOWED_DOMAINS_PATTERN
+from app.settings import ALLOWED_DOMAINS_PATTERN
+from app.helpers.utils import make_error_msg
 from app.middleware import ReverseProxy
 from app.helpers.service_icon_custom_serializer import CustomJSONEncoder
 
@@ -29,7 +29,7 @@ def add_cors_header(response):
         re.match(ALLOWED_DOMAINS_PATTERN, request.headers['Origin'])
     ):
         response.headers['Access-Control-Allow-Origin'] = request.headers['Origin']
-        response.headers['Access-Control-Allow-Methods'] = 'GET'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
     return response
 
 

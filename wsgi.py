@@ -3,7 +3,7 @@ import os
 from gunicorn.app.base import BaseApplication
 
 from app import app as application
-from app.helpers import get_logging_cfg
+from app.helpers.utils import get_logging_cfg
 
 
 class StandaloneApplication(BaseApplication):  # pylint: disable=abstract-method

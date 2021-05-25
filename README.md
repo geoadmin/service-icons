@@ -7,6 +7,7 @@
 
 ## Table of content
 
+- [Table of content](#table-of-content)
 - [Description](#description)
 - [Dependencies](#dependencies)
 - [Service API](#service-api)
@@ -21,6 +22,7 @@
   - [Test your work](#test-your-work)
 - [Docker](#docker)
 - [Deployment](#deployment)
+  - [Deployment configuration](#deployment-configuration)
 
 ## Description
 
@@ -115,9 +117,14 @@ This will serve the application through Flask without any wsgi in front.
 
 This will serve the application with the Gunicorn layer in front of the application
 
-    curl -H "Origin: https://map.geo.admin.ch/" http://localhost:5000/v4/icons/255,133,133/marker-24@2x.png --output out.dat
+    make dockerrun
 
-This is a simple example of how to test the service after serving on localhost:5000 (`out.dat` will either contain a PNG image or contain an error message.)
+This will serve the application with the wsgi server, inside a container.
+To stop serving through containers,
+
+    make shutdown
+
+Is the command you're looking for.
 
 ## Docker
 

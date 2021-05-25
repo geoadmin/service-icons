@@ -6,7 +6,7 @@ info:
 paths:
   /v{ver}/color/checker:
     get:
-      summary: Route to check if the service is up.
+      summary: route to check if the service is up.
       operationId: checker
       tags:
         - checker
@@ -47,7 +47,7 @@ paths:
                   success: false
                   error:
                     code: 400
-                    message: "unsupported version of sercive"
+                    message: "unsupported version of service"
         "500":
           description: unexpected error
           content:
@@ -133,13 +133,13 @@ components:
       properties:
         success:
           type: boolean
-          description: Always false in case of error
+          description: Always false in case of error.
         error:
           type: object
           properties:
             code:
               type: integer
-              description: Error code
+              description: Error code.
             message:
               type: string
-              description: Description of the error
+              description: Description of the error.
