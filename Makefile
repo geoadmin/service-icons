@@ -78,8 +78,7 @@ help:
 	@echo "- dockerlogin        Login to the AWS ECR registery for pulling/pushing docker images"
 	@echo "- dockerbuild        Build the project localy (with tag := $(DOCKER_IMG_LOCAL_TAG)) using the gunicorn WSGI server inside a container"
 	@echo "- dockerpush         Build and push the project localy (with tag := $(DOCKER_IMG_LOCAL_TAG))"
-	@echo "- dockerrun          Run the project using the gunicorn WSGI server inside a container (exposed port: 5000)"
-	@echo "- shutdown           Stop the aforementioned container"
+	@echo "- dockerrun          Run the project using the gunicorn WSGI server inside a container (exposed port: $(HTTP_PORT))"
 	@echo -e " \033[1mCLEANING TARGETS\033[0m "
 	@echo "- clean              Clean genereated files"
 	@echo "- clean_venv         Clean python venv"
@@ -174,12 +173,8 @@ dockerpush: dockerbuild
 
 .PHONY: dockerrun
 dockerrun: dockerbuild
-	HTTP_PORT=$(HTTP_PORT) docker-compose up
-
-
-.PHONY: shutdown
-shutdown:
-	HTTP_PORT=$(HTTP_PORT) SERVICE_NAME=$(SERVICE_NAME) docker-compose down
+	echo "Starting docker container and mapped its 8080 port to $(HTTP_PORT); http://localhost:$(HTTP_PORT)"
+	docker run -it -p $(HTTP_PORT):8080 $(DOCKER_IMG_LOCAL_TAG)
 
 
 # Spec targets
