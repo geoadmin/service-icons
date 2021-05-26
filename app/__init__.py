@@ -8,9 +8,9 @@ from flask import abort
 from flask import request
 
 from app.helpers import make_error_msg
+from app.helpers.service_icon_custom_serializer import CustomJSONEncoder
 from app.helpers.url import ALLOWED_DOMAINS_PATTERN
 from app.middleware import ReverseProxy
-from app.helpers.service_icon_custom_serializer import CustomJSONEncoder
 
 logger = logging.getLogger(__name__)
 

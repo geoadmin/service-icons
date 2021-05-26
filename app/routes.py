@@ -9,12 +9,12 @@ from flask import make_response
 
 from app import app
 from app.helpers.check_functions import check_color_channels
-from app.helpers.check_functions import get_and_check_icon_set
 from app.helpers.check_functions import get_and_check_icon
+from app.helpers.check_functions import get_and_check_icon_set
 from app.helpers.icons import get_all_icon_sets
 from app.helpers.route import prefix_route
-from app.settings import ROUTE_PREFIX
 from app.settings import DEFAULT_COLOR
+from app.settings import ROUTE_PREFIX
 from app.version import APP_VERSION
 
 logger = logging.getLogger(__name__)
@@ -58,18 +58,24 @@ def icon_metadata(icon_set_name, icon_name):
 
 
 @app.route('/<string:icon_set_name>/icon/<string:icon_name>.png', methods=['GET'])
-@app.route('/<string:icon_set_name>/icon/<string:icon_name>-<int:red>,<int:green>,<int:blue>.png',
-           methods=['GET'])
+@app.route(
+    '/<string:icon_set_name>/icon/<string:icon_name>-<int:red>,<int:green>,<int:blue>.png',
+    methods=['GET']
+)
 @app.route('/<string:icon_set_name>/icon/<string:icon_name>@<string:scale>.png', methods=['GET'])
-@app.route('/<string:icon_set_name>/icon/<string:icon_name>@<string:scale>'
-           '-<int:red>,<int:green>,<int:blue>.png',
-           methods=['GET'])
-def colorized_icon(icon_set_name,
-                   icon_name,
-                   scale='1x',
-                   red=DEFAULT_COLOR['r'],
-                   green=DEFAULT_COLOR['g'],
-                   blue=DEFAULT_COLOR['b']):
+@app.route(
+    '/<string:icon_set_name>/icon/<string:icon_name>@<string:scale>'
+    '-<int:red>,<int:green>,<int:blue>.png',
+    methods=['GET']
+)
+def colorized_icon(
+    icon_set_name,
+    icon_name,
+    scale='1x',
+    red=DEFAULT_COLOR['r'],
+    green=DEFAULT_COLOR['g'],
+    blue=DEFAULT_COLOR['b']
+):
     red, green, blue = check_color_channels(red, green, blue)
     icon_set = get_and_check_icon_set(icon_set_name)
     icon = get_and_check_icon(icon_set, icon_name)

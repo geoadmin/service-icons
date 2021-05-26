@@ -1,9 +1,8 @@
 import os
 
-from app.settings import IMAGE_FOLDER
-from app.settings import COLORABLE_ICON_SETS
-
 from app.icon_set import IconSet
+from app.settings import COLORABLE_ICON_SETS
+from app.settings import IMAGE_FOLDER
 
 
 def get_all_icon_sets():

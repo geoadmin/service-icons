@@ -9,6 +9,7 @@ class IconSet:
     """
     Helper class that contains all relevant information for a given icon set served by this service.
     """
+
     def __init__(self, name, colorable):
         """
         Args:
@@ -94,8 +95,4 @@ class IconSet:
             A __dict__ containing all relevant information relevant to be exposed by this endpoint
                 regarding this icon set's metadata
         """
-        return {
-            "name": self.name,
-            "colorable": self.colorable,
-            "icons_url": self.get_icons_url()
-        }
+        return {"name": self.name, "colorable": self.colorable, "icons_url": self.get_icons_url()}
