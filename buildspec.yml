@@ -7,8 +7,6 @@ env:
     SHELL: /bin/bash
     AWS_DEFAULT_REGION: eu-central-1
     USER: "aws_code_build"
-    TEST_REPORT_DIR: "./tests/report"
-    TEST_REPORT_FILE: "nose2-junit.xml"
     PIPENV_NOSPIN: 1
 
 phases:
@@ -69,8 +67,7 @@ phases:
   post_build:
     commands:
       - echo "Unit testing..."
-      - mkdir -p ${TEST_REPORT_DIR}
-      - TEST_REPORT_DIR=${TEST_REPORT_DIR} TEST_REPORT_FILE=${TEST_REPORT_FILE} make test
+      - make test
       # Only push image to dockerhub for merge to develop and master
       - |
         if [ "${GITHUB_BRANCH}" = "master" ]; then
@@ -83,10 +80,3 @@ phases:
           docker push ${DOCKER_IMG_TAG}
           docker push ${DOCKER_IMG_TAG_LATEST}
         fi
-
-reports:
-  nose2_reports:
-    files:
-      - ${TEST_REPORT_FILE}
-    base-directory: ${TEST_REPORT_DIR}
-    file-format: JunitXml
