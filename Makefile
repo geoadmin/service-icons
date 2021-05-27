@@ -108,9 +108,10 @@ format:
 
 .PHONY: ci-check-format
 ci-check-format: format
-	@if [[ -n `git status --porcelain` ]]; then \
-	 	>&2 echo "ERROR: the following files are not formatted correctly:"; \
-		>&2 git status --porcelain; \
+	@if [[ -n `git status --porcelain --untracked-files=no` ]]; then \
+	 	>&2 echo "ERROR: the following files are not formatted correctly"; \
+	 	>&2 echo "'git status --porcelain' reported changes in those files after a 'make format' :"; \
+		>&2 git status --porcelain --untracked-files=no; \
 		exit 1; \
 	fi
 
