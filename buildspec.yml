@@ -73,7 +73,7 @@ phases:
       - TEST_REPORT_DIR=${TEST_REPORT_DIR} TEST_REPORT_FILE=${TEST_REPORT_FILE} make test
       # Only push image to dockerhub for merge to develop and master
       - |
-         if [ "${GITHUB_BRANCH}" = "master" ]; then
+        if [ "${GITHUB_BRANCH}" = "master" ]; then
           echo "Pushing ${DOCKER_IMG_TAG} to dockerhub"
           docker push ${DOCKER_IMG_TAG}
         fi
