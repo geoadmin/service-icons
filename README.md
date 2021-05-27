@@ -7,12 +7,9 @@
 
 ## Table of content
 
+- [Table of content](#table-of-content)
 - [Description](#description)
-- [Dependencies](#dependencies)
-- [Service API](#service-api)
   - [Staging Environments](#staging-environments)
-  - [checker GET](#checker-get)
-  - [color GET](#color-get)
 - [Versioning](#versioning)
 - [Local Development](#local-development)
   - [Make Dependencies](#make-dependencies)
@@ -21,6 +18,7 @@
   - [Test your work](#test-your-work)
 - [Docker](#docker)
 - [Deployment](#deployment)
+  - [Deployment configuration](#deployment-configuration)
 
 ## Description
 
@@ -80,11 +78,15 @@ The **Make** targets assume you have **python3.7**, **pipenv**, **bash**, **curl
 
 First, you'll need to clone the repo
 
-    git clone git@github.com:geoadmin/service-icons
+```bash
+git clone git@github.com:geoadmin/service-icons
+```
 
 Then, you can run the setup target to ensure you have everything needed to develop, test and serve locally
 
-    make setup
+```bash
+make setup
+```
 
 That's it, you're ready to work.
 
@@ -94,7 +96,9 @@ In order to have a consistent code style the code should be formatted using `yap
 pythonic idioms code, the project uses the `pylint` linter. Both formatting and linter can be manually run using the
 following command:
 
-    make format-lint
+```bash
+make format-lint
+```
 
 **Formatting and linting should be at best integrated inside the IDE, for this look at
 [Integrate yapf and pylint into IDE](https://github.com/geoadmin/doc-guidelines/blob/master/PYTHON.md#yapf-and-pylint-ide-integration)**
@@ -103,17 +107,29 @@ following command:
 
 Testing if what you developed work is made simple. You have four targets at your disposal. **test, serve, gunicornserve, dockerrun**
 
-    make test
+```bash
+make test
+```
 
 This command run the integration and unit tests.
 
-    make serve
+```bash
+make serve
+```
 
 This will serve the application through Flask without any wsgi in front.
 
-    make gunicornserve
+```bash
+make gunicornserve
+```
 
 This will serve the application with the Gunicorn layer in front of the application
+
+```bash
+make dockerrun
+```
+
+This will serve the application with the wsgi server, inside a container.
 
     curl -H "Origin: https://map.geo.admin.ch/" http://localhost:5000/v4/icons/255,133,133/marker-24@2x.png --output out.dat
 
@@ -121,12 +137,12 @@ This is a simple example of how to test the service after serving on localhost:5
 
 ## Docker
 
-The service is encapsulated in a Docker image. Images are pushed on the public [Dockerhub](https://hub.docker.com/r/swisstopo/service-icons/tags) registry. From each github PR that is merged into develop branch, one Docker image is built and pushed with the following tags:
+The service is encapsulated in a Docker image. Images are pushed on the `swisstopo-bgdi-builder` account of [AWS ECR](https://eu-central-1.console.aws.amazon.com/ecr/repositories?region=eu-central-1) registry. From each github PR that is merged into develop branch, one Docker image is built and pushed with the following tags:
 
 - `develop.latest`
 - `CURRENT_VERSION-beta.INCREMENTAL_NUMBER`
 
-From each github PR that is merged into master, one Docker image is built an pushed with the following tag:
+From each github PR that is merged into master, one Docker image is built and pushed with the following tag:
 
 - `VERSION`
 
@@ -143,7 +159,7 @@ These metadata can be seen directly on the dockerhub registry in the image layer
 ```bash
 # NOTE: jq is only used for pretty printing the json output,
 # you can install it with `apt install jq` or simply enter the command without it
-docker image inspect --format='{{json .Config.Labels}}' swisstopo/service-icons:develop.latest | jq
+docker image inspect --format='{{json .Config.Labels}}' 974517877189.dkr.ecr.eu-central-1.amazonaws.com/service-name:develop.latest | jq
 ```
 
 You can also check these metadata on a running container as follows
@@ -155,7 +171,6 @@ docker ps --format="table {{.ID}}\t{{.Image}}\t{{.Labels}}"
 ## Deployment
 
 This service is to be deployed to the Kubernetes cluster once it is merged.
-
 TO DO: give instructions to deploy to kubernetes.
 
 ### Deployment configuration

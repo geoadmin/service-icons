@@ -6,17 +6,24 @@ SERVICE_NAME := service-icons
 
 CURRENT_DIR := $(shell pwd)
 
-# Test report configuration
-TEST_REPORT_DIR ?= $(CURRENT_DIR)/tests/report
-TEST_REPORT_FILE ?= nose2-junit.xml
+# Docker metadata
+GIT_HASH = `git rev-parse HEAD`
+GIT_HASH_SHORT = `git rev-parse --short HEAD`
+GIT_BRANCH = `git symbolic-ref HEAD --short 2>/dev/null`
+GIT_DIRTY = `git status --porcelain`
+GIT_TAG = `git describe --tags || echo "no version info"`
+AUTHOR = $(USER)
 
 # general targets timestamps
 TIMESTAMPS = .timestamps
-REQUIREMENTS_TIMESTAMP = $(TIMESTAMPS)/.requirements.timestamp
-DEV_REQUIREMENTS_TIMESTAMP = $(TIMESTAMPS)/.dev-requirements.timestamps
+REQUIREMENTS := $(TIMESTAMPS) $(PIP_FILE) $(PIP_FILE_LOCK)
 
 # Docker variables
-DOCKER_IMG_LOCAL_TAG = swisstopo/$(SERVICE_NAME):local
+DOCKER_REGISTRY = 974517877189.dkr.ecr.eu-central-1.amazonaws.com
+DOCKER_IMG_LOCAL_TAG := $(DOCKER_REGISTRY)/$(SERVICE_NAME):local-$(USER)-$(GIT_HASH_SHORT)
+
+# AWS variables
+AWS_DEFAULT_REGION = eu-central-1
 
 # Find all python files that are not inside a hidden directory (directory starting with .)
 PYTHON_FILES := $(shell find ./* -type f -name "*.py" -print)
@@ -38,12 +45,6 @@ ISORT := $(PIPENV_RUN) isort
 NOSE := $(PIPENV_RUN) nose2
 PYLINT := $(PIPENV_RUN) pylint
 
-# Docker metadata
-GIT_HASH := `git rev-parse HEAD`
-GIT_BRANCH := `git symbolic-ref HEAD --short 2>/dev/null`
-GIT_DIRTY := `git status --porcelain`
-GIT_TAG := `git describe --tags || echo "no version info"`
-AUTHOR := $(USER)
 
 all: help
 
@@ -59,17 +60,21 @@ help:
 	@echo "- ci                 Create the python virtual environment and install requirements based on the Pipfile.lock"
 	@echo -e " \033[1mFORMATING, LINTING AND TESTING TOOLS TARGETS\033[0m "
 	@echo "- format             Format the python source code"
+	@echo "- ci-check-format    Format the python source code and check if any files has changed. This is meant to be used by the CI."
 	@echo "- lint               Lint the python source code"
+	@echo "- lint-spec          Lint the openapi spec"
 	@echo "- format-lint        Format and lint the python source code"
 	@echo "- test               Run the tests"
 	@echo -e " \033[1mLOCAL SERVER TARGETS\033[0m "
 	@echo "- serve              Run the project using the flask debug server. Port can be set by Env variable HTTP_PORT (default: 5000)"
 	@echo "- gunicornserve      Run the project using the gunicorn WSGI server. Port can be set by Env variable DEBUG_HTTP_PORT (default: 5000)"
+	@echo "- serve-spec-redoc   Serve the spec using Redoc on localhost:8080"
+	@echo "- serve-spec-swagger Serve the spec using Redoc on localhost:8080/swagger"
 	@echo -e " \033[1mDocker TARGETS\033[0m "
+	@echo "- dockerlogin        Login to the AWS ECR registery for pulling/pushing docker images"
 	@echo "- dockerbuild        Build the project localy (with tag := $(DOCKER_IMG_LOCAL_TAG)) using the gunicorn WSGI server inside a container"
 	@echo "- dockerpush         Build and push the project localy (with tag := $(DOCKER_IMG_LOCAL_TAG))"
-	@echo "- dockerrun          Run the project using the gunicorn WSGI server inside a container (exposed port: 5000)"
-	@echo "- shutdown           Stop the aforementioned container"
+	@echo "- dockerrun          Run the project using the gunicorn WSGI server inside a container (exposed port: $(HTTP_PORT))"
 	@echo -e " \033[1mCLEANING TARGETS\033[0m "
 	@echo "- clean              Clean genereated files"
 	@echo "- clean_venv         Clean python venv"
@@ -78,30 +83,41 @@ help:
 # Build targets. Calling setup is all that is needed for the local files to be installed as needed.
 
 .PHONY: dev
-dev: $(DEV_REQUIREMENTS_TIMESTAMP)
+dev: $(REQUIREMENTS)
+	pipenv install --dev
 	pipenv shell
 
 
 .PHONY: setup
-setup: $(REQUIREMENTS_TIMESTAMP)
+setup: $(REQUIREMENTS)
+	pipenv install
 	pipenv shell
 
 .PHONY: ci
-ci: $(TIMESTAMPS) $(PIP_FILE) $(PIP_FILE_LOCK)
+ci: $(REQUIREMENTS)
 	# Create virtual env with all packages for development using the Pipfile.lock
 	pipenv sync --dev
 
 # linting target, calls upon yapf to make sure your code is easier to read and respects some conventions.
 
 .PHONY: format
-format: $(DEV_REQUIREMENTS_TIMESTAMP)
+format:
 	$(YAPF) -p -i --style .style.yapf $(PYTHON_FILES)
 	$(ISORT) $(PYTHON_FILES)
 
 
+.PHONY: ci-check-format
+ci-check-format: format
+	@if [[ -n `git status --porcelain --untracked-files=no` ]]; then \
+	 	>&2 echo "ERROR: the following files are not formatted correctly"; \
+	 	>&2 echo "'git status --porcelain' reported changes in those files after a 'make format' :"; \
+		>&2 git status --porcelain --untracked-files=no; \
+		exit 1; \
+	fi
+
 
 .PHONY: lint
-lint: $(DEV_REQUIREMENTS_TIMESTAMP)
+lint:
 	$(PYLINT) $(PYTHON_FILES)
 
 
@@ -112,24 +128,28 @@ format-lint: format lint
 # Test target
 
 .PHONY: test
-test: $(DEV_REQUIREMENTS_TIMESTAMP)
-	mkdir -p $(TEST_REPORT_DIR)
-	$(NOSE) -c tests/unittest.cfg --verbose --junit-xml-path $(TEST_REPORT_DIR)/$(TEST_REPORT_FILE) -s tests/
+test: $(REQUIREMENTS)
+	$(NOSE) -c tests/unittest.cfg --verbose -s tests/
 
 
 # Serve targets. Using these will run the application on your local machine. You can either serve with a wsgi front (like it would be within the container), or without.
 
 .PHONY: serve
-serve: $(REQUIREMENTS_TIMESTAMP)
+serve:
 	FLASK_APP=$(subst -,_,$(SERVICE_NAME)) FLASK_DEBUG=1 $(FLASK) run --host=0.0.0.0 --port=$(HTTP_PORT)
 
 
 .PHONY: gunicornserve
-gunicornserve: $(REQUIREMENTS_TIMESTAMP)
+gunicornserve:
 	$(PYTHON) wsgi.py
 
 
 # Docker related functions.
+
+.PHONY: dockerlogin
+dockerlogin:
+	aws --profile swisstopo-bgdi-builder ecr get-login-password --region $(AWS_DEFAULT_REGION) | docker login --username AWS --password-stdin $(DOCKER_REGISTRY)
+
 
 .PHONY: dockerbuild
 dockerbuild:
@@ -148,13 +168,34 @@ dockerpush: dockerbuild
 
 .PHONY: dockerrun
 dockerrun: dockerbuild
-	HTTP_PORT=$(HTTP_PORT) docker-compose up
+	echo "Starting docker container and mapped its 8080 port to $(HTTP_PORT); http://localhost:$(HTTP_PORT)"
+	docker run -it -p $(HTTP_PORT):8080 $(DOCKER_IMG_LOCAL_TAG)
 
 
-.PHONY: shutdown
-shutdown:
-	HTTP_PORT=$(HTTP_PORT) docker-compose down
+# Spec targets
 
+.PHONY: lint-spec
+lint-spec:
+	docker run --volume "$(PWD)":/data jamescooke/openapi-validator -e openapi.yml
+
+
+.PHONY: serve-spec
+serve-spec-redoc:
+	docker run -it --rm -p 8080:80 \
+		-v "$(PWD)/openapi.yml":/usr/share/nginx/html/openapi.yml \
+		-e SPEC_URL=openapi.yml redocly/redoc
+
+
+.PHONY: serve-spec-swagger
+serve-spec-swagger:
+	echo "SWAGGER UI on http://localhost:8080/swagger"
+	docker run -p 8080:8080 \
+		-e BASE_URL=/swagger -e SWAGGER_JSON=/openapi.yaml \
+		-v ${PWD}/openapi.yml:/openapi.yaml \
+		swaggerapi/swagger-ui
+
+
+# Clean targets
 
 .PHONY: clean_venv
 clean_venv:
@@ -165,7 +206,6 @@ clean_venv:
 clean: clean_venv
 	@# clean python cache files
 	find . -name __pycache__ -type d -print0 | xargs -I {} -0 rm -rf "{}"
-	rm -rf $(TEST_REPORT_DIR)
 	rm -rf $(TIMESTAMPS)
 
 
@@ -173,13 +213,3 @@ clean: clean_venv
 
 $(TIMESTAMPS):
 	mkdir -p $(TIMESTAMPS)
-
-
-$(REQUIREMENTS_TIMESTAMP): $(TIMESTAMPS) $(PIP_FILE) $(PIP_FILE_LOCK)
-	pipenv install
-	@touch $(REQUIREMENTS_TIMESTAMP)
-
-
-$(DEV_REQUIREMENTS_TIMESTAMP): $(TIMESTAMPS) $(PIP_FILE) $(PIP_FILE_LOCK)
-	pipenv install --dev
-	@touch $(DEV_REQUIREMENTS_TIMESTAMP)

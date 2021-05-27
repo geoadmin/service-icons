@@ -1,5 +1,6 @@
 import logging
 import os
+
 from flask import abort
 
 from app.helpers import make_error_msg
@@ -27,8 +28,13 @@ def check_color_channels(red, green, blue):
           verified r, g and b values.
     """
     if not (__check_color(red) and __check_color(green) and __check_color(blue)):
-        logger.error("Color channel values must be integers in the range of 0 to 255. "
-                     "(given: %d, %d, %d)", red, green, blue)
+        logger.error(
+            "Color channel values must be integers in the range of 0 to 255. "
+            "(given: %d, %d, %d)",
+            red,
+            green,
+            blue
+        )
         abort(
             make_error_msg(400, "Color channel values must be integers in the range of 0 to 255.")
         )
