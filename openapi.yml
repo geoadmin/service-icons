@@ -1,17 +1,23 @@
-openapi: "3.0.0"
+openapi: 3.0.0
 info:
-  version: "1.0.0"
+  version: 1.0.0
   title: Service Icons
-
+tags:
+  - name: checker
+    description: Health check operations
+  - name: icons
+    description: All operations that will output icons
+  - name: icon_sets
+    description: All operations that will output icon sets
 paths:
-  /v4/color/checker:
+  /v4/iconsets/checker:
     get:
-      summary: Route to check if the service is up.
+      description: Route to check if the service is up.
       operationId: checker
       tags:
         - checker
       responses:
-        "200":
+        '200':
           description: Returning OK
           content:
             application/json:
@@ -28,80 +34,163 @@ paths:
                     description: Application version string (SemVer 2.0)
                 example:
                   success: true
-                  message: "OK"
-                  version: "v0.2.0-beta.1"
-        "500":
+                  message: OK
+                  version: v0.2.0-beta.1
+        '500':
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
-                example:
-                  success: false
-                  error:
-                    code: 500
-                    message: "An internal error occured"
-
-  /v4/color/{red},{green},{blue}/{filename}:
+                $ref: '#/components/schemas/error'
+  /v4/iconsets:
     get:
-      summary: Colorized the specified symbol with the specified color.
+      description: List all available icon sets.
+      tags:
+        - icon_sets
+      responses:
+        '200':
+          description: A JSON list of all available icon sets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/icon_set'
+  '/v4/iconsets/{icon_set_name}':
+    get:
+      description: Metadat of a single icon set
+      tags:
+        - icon_sets
+      parameters:
+        - in: path
+          name: icon_set_name
+          schema:
+            type: string
+          required: true
+          description: The name of the icon set (lower case)
+      responses:
+        '200':
+          description: Metadata of this icon set
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  colorable:
+                    type: boolean
+                    description: 'True if this icon set''s icon can be (re-)colorized with RGB values in the URL (if False, RGB values will be ignored if you give them anyway)'
+                  icons_url:
+                    type: string
+                    description: The URL to call to get a list of all available icons for this specific icon set
+                  name:
+                    type: string
+                    description: The name of this icon set
+  '/v4/iconsets/{icon_set_name}/icons':
+    get:
+      description: List all icons for a specific icon set
+      tags:
+        - icons
+      parameters:
+        - in: path
+          name: icon_set_name
+          schema:
+            type: string
+          required: true
+          description: The name of the icon set (lower case)
+      responses:
+        '200':
+          description: a JSON list of all available icons for this icon set
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/icon'
+  '/v4/iconsets/{icon_set_name}/icon/{icon_name}{icon_scale}-{red},{green},{blue}.png':
+    get:
+      description: Colorized the specified symbol with the specified color.
       operationId: color
       tags:
-        - color
+        - icons
       parameters:
+        - in: path
+          name: icon_set_name
+          schema:
+            type: string
+          required: true
+          description: The name of the icon set in which belongs the icon
+        - in: path
+          name: icon_name
+          schema:
+            type: string
+          required: true
+          description: The name of the icon
+        - in: path
+          name: icon_scale
+          schema:
+            type: string
+            enum:
+              - '@1x'
+              - '@2x'
+              - '@0.5x'
+          required: true
+          description: The scalling wanted for this icon (1x scalling means 48x48px icon)
         - in: path
           name: red
           schema:
             type: integer
+            minimum: 0
+            maximum: 255
+            default: 255
           required: true
-          description: The value of the red color channel
+          description: Red value for this icon
         - in: path
           name: green
           schema:
             type: integer
+            minimum: 0
+            maximum: 255
           required: true
-          description: The value of the greeb color channel
+          description: Green value for this icon
         - in: path
           name: blue
           schema:
             type: integer
+            minimum: 0
+            maximum: 255
           required: true
-          description: The value of the blue color channel
-        - in: path
-          name: filename
-          schema:
-            type: string
-          required: true
-          description: Filename of the symbol to be colorized
+          description: Blue value for this icon
       responses:
-        "200":
+        '200':
           description: Returns the symbol colorized in the specified colors.
           content:
             image/png:
               schema:
                 type: string
                 format: binary
-
-        "400":
-          description: Bad Requests. This can be caused by ill defined parameters, or the host/the domain is/are not part of the authorised hosts/domains.
+        '400':
+          description: 'Bad Requests. This can be caused by ill defined parameters, or the host/the domain is/are not part of the authorised hosts/domains.'
           content:
             text/html:
               schema:
                 type: string
-                example: "Color channel values must be integers in the range of 0 to 255."
-
-        "500":
+                example: Color channel values must be integers in the range of 0 to 255.
+        '500':
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
-                example:
-                  success: false
-                  error:
-                    code: 500
-                    message: "An internal error occured in service color."
-
+                $ref: '#/components/schemas/error'
 components:
   schemas:
     error:
@@ -119,3 +208,54 @@ components:
             message:
               type: string
               description: Description of the error
+          example:
+            success: false
+            error:
+              code: 500
+              message: An internal error occurred
+    icon_set:
+      description: 'A JSON representation of an icon set'
+      type: object
+      x-examples:
+        icon_set:
+          colorable: false
+          icons_url: 'https://service-icons.bgdi-dev.swisstopo.cloud/v4/iconsets/babs/icons'
+          name: babs
+      properties:
+        colorable:
+          type: boolean
+          description: 'If this icon set''s icon can be colorized or not. If false, there''s no need to specify colors in the URL (it will be ignored anyway)'
+        icons_url:
+          type: string
+          minLength: 1
+          description: The URL used to access the list of all available icons for this icon set
+        name:
+          type: string
+          minLength: 1
+          description: The name of this icon set. Can be used in further URLs to access more metadata about this icon set.
+      required:
+        - colorable
+        - icons_url
+        - name
+    icon:
+      description: 'A JSON representation of an icon metadata'
+      type: object
+      x-examples:
+        icon:
+          icon_set: 'default'
+          name: 'airfield'
+          url: 'http://service-icons.bgdi-dev.swisstopo.cloud/v4/iconsets/default/icon/airfield-255,0,0.png'
+      properties:
+        icon_set:
+          type: string
+          description: 'The name of the icon set in which belongs this icon'
+        name:
+          type: string
+          description: 'The name of this icon'
+        url:
+          type: string
+          description: 'The default URL to access this icon''s image (with default color red, and no scaling)'
+      required:
+        - icon_set
+        - name
+        - url

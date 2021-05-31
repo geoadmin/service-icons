@@ -35,7 +35,7 @@ def checker_page():
 @app.route('', methods=['GET'])
 @app.route('/', methods=['GET'])
 def all_icon_sets():
-    return make_response(jsonify(get_all_icon_sets()))
+    return make_response(jsonify({"success": True, "items": get_all_icon_sets()}))
 
 
 @app.route('/<string:icon_set_name>', methods=['GET'])
@@ -47,7 +47,7 @@ def icon_set_metadata(icon_set_name):
 @app.route('/<string:icon_set_name>/icons', methods=['GET'])
 def icons_from_icon_set(icon_set_name):
     icon_set = get_and_check_icon_set(icon_set_name)
-    return make_response(jsonify(icon_set.get_all_icons()))
+    return make_response(jsonify({"success": True, "items": icon_set.get_all_icons()}))
 
 
 @app.route('/<string:icon_set_name>/icon/<string:icon_name>', methods=['GET'])

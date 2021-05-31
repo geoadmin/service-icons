@@ -109,7 +109,10 @@ class AllIconsTest(ServiceIconsUnitTests):
         response = self.app.get(f"{ROUTE_PREFIX}/", headers={"Origin": "map.geo.admin.ch"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, "application/json")
-        icon_sets_from_endpoint = response.json
+        self.assertIn('success', response.json)
+        self.assertTrue(response.json['items'])
+        self.assertIn('items', response.json)
+        icon_sets_from_endpoint = response.json['items']
         self.assertEqual(len(icon_sets_from_endpoint), len(self.all_icon_sets))
         for icon_set in icon_sets_from_endpoint:
             self.assertIn('name', icon_set)
@@ -139,7 +142,12 @@ class AllIconsTest(ServiceIconsUnitTests):
                 )
                 self.assertEqual(icons_response.status_code, 200)
                 self.assertEqual(icons_response.content_type, "application/json")
-                self.assertEqual(len(icons_response.json), len(self.all_icon_sets[icon_set_name]))
+                self.assertIn('success', icons_response.json)
+                self.assertTrue(icons_response.json['success'])
+                self.assertIn('items', icons_response.json)
+                self.assertEqual(
+                    len(icons_response.json['items']), len(self.all_icon_sets[icon_set_name])
+                )
 
     def test_all_icon_metadata_endpoint(self):
         """
