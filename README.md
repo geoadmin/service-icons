@@ -171,6 +171,32 @@ docker ps --format="table {{.ID}}\t{{.Image}}\t{{.Labels}}"
 ## Deployment
 
 This service is to be deployed to the Kubernetes cluster once it is merged.
+
+**Check on which k8s you are before doing anything**
+
+by running :
+
+```bash
+kubectl config get-contexts
+```
+or (if you already have it installed)
+```bash
+kubectx
+```
+
+Make sure you are on the right context (staging) for what you want to achieve
+
+### Dev
+
+To deploy (or refresh) on dev, we have to kill all pods. The K8S configuration is made so that it will revive any killed pod while always retrieving the latest docker image.
+So as soon as your merge on `develop` as been successfully built by the CI (and so the CI has pushed the new image to our AWS ECR registry) you can kill all dev pods by running
+
+```bash
+kubectl delete --all pods --namespace=service-icons
+```
+
+### Int
+
 TO DO: give instructions to deploy to kubernetes.
 
 ### Deployment configuration
