@@ -1,5 +1,7 @@
 import os
 
+from app.helpers.icons import get_icon_template_url
+from app.helpers.url import get_base_url
 from app.settings import DEFAULT_COLOR
 from app.settings import IMAGE_FOLDER
 
@@ -31,10 +33,14 @@ class Icon:
             green: (int) green value (if this icon is part of an icon set that can be colorized)
             blue: (int) blue value (if this icon is part of an icon set that can be colorized)
         """
-        color_part = ""
-        if self.icon_set.colorable:
-            color_part = f"-{red},{green},{blue}"
-        return f"{self.icon_set.get_icon_set_url()}/icon/{self.name}{color_part}.png"
+        return get_icon_template_url(get_base_url(), self.icon_set.colorable).format(
+            icon_set_name=self.icon_set.name,
+            icon_name=self.name,
+            icon_scale='1x',
+            r=red,
+            g=green,
+            b=blue
+        )
 
     def get_icon_filepath(self):
         """
@@ -64,4 +70,5 @@ class Icon:
             "name": self.name,
             "icon_set": self.icon_set.name,
             "url": self.get_icon_url(),
+            "template_url": get_icon_template_url(get_base_url())
         }

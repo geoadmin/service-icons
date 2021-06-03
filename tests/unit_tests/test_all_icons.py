@@ -4,7 +4,8 @@ import os
 
 from PIL import Image
 
-from app.helpers.icons import get_icon_set
+from app.helpers.icons import get_icon_template_url
+from app.icon_set import get_icon_set
 from app.settings import COLORABLE_ICON_SETS
 from app.settings import IMAGE_FOLDER
 from app.settings import ROUTE_PREFIX
@@ -137,6 +138,8 @@ class AllIconsTest(ServiceIconsUnitTests):
                 self.assertEqual(icon_set_name, icon_set_metadata['name'])
                 self.assertIn('colorable', icon_set_metadata)
                 self.assertIn('icons_url', icon_set_metadata)
+                self.assertIsNotNone(icon_set_metadata['icons_url'])
+                self.assertTrue(icon_set_metadata['icons_url'].endswith(f"{icon_set_name}/icons"))
                 icons_response = self.app.get(
                     icon_set_metadata['icons_url'], headers={"Origin": "map.geo.admin.ch"}
                 )
@@ -167,17 +170,21 @@ class AllIconsTest(ServiceIconsUnitTests):
                     self.assertEqual(icon_set_name, json_response['icon_set'])
                     self.assertIn('name', json_response)
                     self.assertEqual(icon_name, json_response['name'])
+                    self.assertIn('template_url', json_response)
+                    self.assertIsNotNone(json_response['template_url'])
+                    self.assertTrue(json_response['template_url'].endswith(get_icon_template_url()))
                     self.assertIn('url', json_response)
+                    self.assertIsNotNone(json_response['url'])
                     icon_url_without_color = f"{ROUTE_PREFIX}/{icon_set_name}/icon"
                     if icon_set_name in COLORABLE_ICON_SETS:
                         self.assertTrue(
                             json_response['url'].
-                            endswith(f"{icon_url_without_color}/{icon_name}-255,0,0.png")
+                            endswith(f"{icon_url_without_color}/{icon_name}@1x-255,0,0.png")
                         )
                     else:
                         self.assertTrue(
                             json_response['url'].
-                            endswith(f"{icon_url_without_color}/{icon_name}.png")
+                            endswith(f"{icon_url_without_color}/{icon_name}@1x.png")
                         )
 
     def test_all_icon_basic_image(self):
