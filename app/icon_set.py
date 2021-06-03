@@ -63,7 +63,7 @@ class IconSet:
         Returns:
             the URL by which this icon set's metadata can be accessed on this service
         """
-        return get_icon_set_template_url(get_base_url()).replace('{icon_set_name}', self.name)
+        return get_icon_set_template_url(get_base_url()).format(icon_set_name=self.name)
 
     def get_icons_url(self):
         """
