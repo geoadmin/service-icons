@@ -2,6 +2,7 @@ import logging
 import re
 
 from werkzeug.exceptions import HTTPException
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from flask import Flask
 from flask import abort
@@ -17,7 +18,10 @@ logger = logging.getLogger(__name__)
 # Standard Flask application initialisation
 
 app = Flask(__name__)
-app.wsgi_app = ReverseProxy(app.wsgi_app, script_name='/')
+# Using ProxyFix so that HTTP Headers regarding HTTPS or other things forwarded by the proxy
+# (CloudFront) is handled correctly (mainly that the URLs we output are following HTTPS protocol if
+# the proxy was requested with HTTPS)
+app.wsgi_app = ReverseProxy(ProxyFix(app.wsgi_app), script_name='/')
 app.json_encoder = CustomJSONEncoder
 
 

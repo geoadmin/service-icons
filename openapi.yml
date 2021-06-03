@@ -244,7 +244,7 @@ components:
         icon:
           icon_set: 'default'
           name: 'airfield'
-          url: 'http://service-icons.bgdi-dev.swisstopo.cloud/v4/iconsets/default/icon/airfield-255,0,0.png'
+          url: 'https://service-icons.bgdi-dev.swisstopo.cloud/v4/iconsets/default/icon/airfield-255,0,0.png'
       properties:
         icon_set:
           type: string

@@ -1,8 +1,33 @@
 import os
 
+from app.helpers.icons import get_icon_set_template_url
 from app.helpers.url import get_base_url
 from app.icon import Icon
+from app.settings import COLORABLE_ICON_SETS
 from app.settings import IMAGE_FOLDER
+
+
+def get_icon_set(icon_set_name):
+    """
+    Args:
+        icon_set_name (str): The name of the icon set we want
+    Returns:
+        (IconSet): the icon set if found, or None if no icon set with this name is found
+    """
+    if icon_set_name:
+        icon_set = IconSet(icon_set_name, icon_set_name in COLORABLE_ICON_SETS)
+        # checking that this icon set really exists in the static/images folder
+        if icon_set.is_valid():
+            return icon_set
+    return None
+
+
+def get_all_icon_sets():
+    icon_sets = []
+    for root, dirs, files in os.walk(IMAGE_FOLDER):
+        for icon_set_name in dirs:
+            icon_sets.append(get_icon_set(icon_set_name))
+    return icon_sets
 
 
 class IconSet:
@@ -38,7 +63,7 @@ class IconSet:
         Returns:
             the URL by which this icon set's metadata can be accessed on this service
         """
-        return f"{get_base_url()}/{self.name}"
+        return get_icon_set_template_url(get_base_url()).format(icon_set_name=self.name)
 
     def get_icons_url(self):
         """
@@ -95,4 +120,9 @@ class IconSet:
             A __dict__ containing all relevant information relevant to be exposed by this endpoint
                 regarding this icon set's metadata
         """
-        return {"name": self.name, "colorable": self.colorable, "icons_url": self.get_icons_url()}
+        return {
+            "name": self.name,
+            "colorable": self.colorable,
+            "icons_url": self.get_icons_url(),
+            "template_url": get_icon_set_template_url(get_base_url())
+        }
