@@ -11,6 +11,7 @@ from flask import request
 from app.helpers import make_error_msg
 from app.helpers.service_icon_custom_serializer import CustomJSONEncoder
 from app.helpers.url import ALLOWED_DOMAINS_PATTERN
+from app.middleware import LogRoute
 from app.middleware import ReverseProxy
 
 logger = logging.getLogger(__name__)
@@ -18,10 +19,13 @@ logger = logging.getLogger(__name__)
 # Standard Flask application initialisation
 
 app = Flask(__name__)
+app.wsgi_app = ReverseProxy(app.wsgi_app, script_name='/')
 # Using ProxyFix so that HTTP Headers regarding HTTPS or other things forwarded by the proxy
 # (CloudFront) is handled correctly (mainly that the URLs we output are following HTTPS protocol if
 # the proxy was requested with HTTPS)
-app.wsgi_app = ReverseProxy(ProxyFix(app.wsgi_app), script_name='/')
+app.wsgi_app = ProxyFix(app.wsgi_app)
+# Logging each request made to this service in debug log
+app.wsgi_app = LogRoute(app.wsgi_app)
 app.json_encoder = CustomJSONEncoder
 
 
