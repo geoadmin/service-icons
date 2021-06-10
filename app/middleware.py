@@ -1,3 +1,24 @@
+import logging
+
+from werkzeug.wrappers import Request
+
+logger = logging.getLogger(__name__)
+
+
+class LogRoute(object):
+    """
+    Logs every route that Flask serves into the debug log
+    """
+
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self, environ, start_response):
+        request = Request(environ)
+        logger.debug("%s on path %s", request.method, request.path)
+        return self.app(environ, start_response)
+
+
 class ReverseProxy(object):
     """
     Reverse proxies can cause some problems within applications, as they change routes, redirect
