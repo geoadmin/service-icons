@@ -1,24 +1,3 @@
-import logging
-
-from werkzeug.wrappers import Request
-
-logger = logging.getLogger(__name__)
-
-
-class LogRoute(object):
-    """
-    Logs every route that Flask serves into the debug log
-    """
-
-    def __init__(self, app):
-        self.app = app
-
-    def __call__(self, environ, start_response):
-        request = Request(environ)
-        logger.debug("%s on path %s", request.method, request.path)
-        return self.app(environ, start_response)
-
-
 class ReverseProxy(object):
     """
     Reverse proxies can cause some problems within applications, as they change routes, redirect
@@ -65,8 +44,14 @@ class ReverseProxy(object):
                 environ['PATH_INFO'] = path_info[len(script_name):]
         # The scheme is the protocol used (http/s) to connect to the server.
         scheme = environ.get('HTTP_X_SCHEME', '') or self.scheme
-        if scheme:
-            environ['wsgi.url_scheme'] = scheme
+        if 'HTTP_CLOUDFRONT_FORWARDED_PROTO' in environ:
+            scheme = environ['HTTP_CLOUDFRONT_FORWARDED_PROTO']
+        elif 'HTTP_X_FORWARDED_PROTO' in environ:
+            scheme = environ['HTTP_X_FORWARDED_PROTO']
+        elif 'HTTP_X_SCHEME' in environ:
+            scheme = environ['HTTP_X_SCHEME']
+        else:
+            scheme = self.scheme
         # this sets our own HOST parameter to be the one that was queried in the first place.
         server = environ.get('HTTP_X_FORWARDED_HOST', '') or self.server
         if server:
