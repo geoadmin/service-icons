@@ -7,6 +7,7 @@ ALLOWED_DOMAINS = [
     r'.*\.geo\.admin\.ch',
     r'.*bgdi\.ch',
     r'.*\.swisstopo\.cloud',
+    r'(http|https)://localhost[:.*]',
 ]
 
 ALLOWED_DOMAINS_PATTERN = '({})'.format('|'.join(ALLOWED_DOMAINS))
