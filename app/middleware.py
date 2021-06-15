@@ -52,6 +52,8 @@ class ReverseProxy(object):
             scheme = environ['HTTP_X_SCHEME']
         else:
             scheme = self.scheme
+        if scheme:
+            environ['wsgi.url_scheme'] = scheme
         # this sets our own HOST parameter to be the one that was queried in the first place.
         server = environ.get('HTTP_X_FORWARDED_HOST', '') or self.server
         if server:
