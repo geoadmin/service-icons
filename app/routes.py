@@ -32,39 +32,40 @@ def checker_page():
     return make_response(jsonify({'success': True, 'message': 'OK', 'version': APP_VERSION}))
 
 
-@app.route('', methods=['GET'])
-@app.route('/', methods=['GET'])
+@app.route('/sets', methods=['GET'])
 def all_icon_sets():
     return make_response(jsonify({"success": True, "items": get_all_icon_sets()}))
 
 
-@app.route('/<string:icon_set_name>', methods=['GET'])
+@app.route('/sets/<string:icon_set_name>', methods=['GET'])
 def icon_set_metadata(icon_set_name):
     icon_set = get_and_check_icon_set(icon_set_name)
     return make_response(jsonify(icon_set))
 
 
-@app.route('/<string:icon_set_name>/icons', methods=['GET'])
+@app.route('/sets/<string:icon_set_name>/icons', methods=['GET'])
 def icons_from_icon_set(icon_set_name):
     icon_set = get_and_check_icon_set(icon_set_name)
     return make_response(jsonify({"success": True, "items": icon_set.get_all_icons()}))
 
 
-@app.route('/<string:icon_set_name>/icon/<string:icon_name>', methods=['GET'])
+@app.route('/sets/<string:icon_set_name>/icons/<string:icon_name>', methods=['GET'])
 def icon_metadata(icon_set_name, icon_name):
     icon_set = get_and_check_icon_set(icon_set_name)
     icon = get_and_check_icon(icon_set, icon_name)
     return make_response(jsonify(icon))
 
 
-@app.route('/<string:icon_set_name>/icon/<string:icon_name>.png', methods=['GET'])
+@app.route('/sets/<string:icon_set_name>/icons/<string:icon_name>.png', methods=['GET'])
 @app.route(
-    '/<string:icon_set_name>/icon/<string:icon_name>-<int:red>,<int:green>,<int:blue>.png',
+    '/sets/<string:icon_set_name>/icons/<string:icon_name>-<int:red>,<int:green>,<int:blue>.png',
     methods=['GET']
 )
-@app.route('/<string:icon_set_name>/icon/<string:icon_name>@<string:scale>.png', methods=['GET'])
 @app.route(
-    '/<string:icon_set_name>/icon/<string:icon_name>@<string:scale>'
+    '/sets/<string:icon_set_name>/icons/<string:icon_name>@<string:scale>.png', methods=['GET']
+)
+@app.route(
+    '/sets/<string:icon_set_name>/icons/<string:icon_name>@<string:scale>'
     '-<int:red>,<int:green>,<int:blue>.png',
     methods=['GET']
 )
