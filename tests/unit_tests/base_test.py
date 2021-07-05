@@ -7,7 +7,8 @@ from app.settings import ROUTE_PREFIX
 def build_request_url_for_icon(
     icon_name="marker", scale='1x', red=255, green=0, blue=0, icon_category="default"
 ):
-    return f"{ROUTE_PREFIX}/{icon_category}/icon/{icon_name}@{scale}-{red},{green},{blue}.png"
+    return f"{ROUTE_PREFIX}/sets/{icon_category}" \
+           f"/icons/{icon_name}@{scale}-{red},{green},{blue}.png"
 
 
 class ServiceIconsUnitTests(unittest.TestCase):

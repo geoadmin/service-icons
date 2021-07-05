@@ -77,7 +77,7 @@ class IconsTests(ServiceIconsUnitTests):
 
     def test_icons_from_icon_set(self):
         response = self.app.get(
-            f"{ROUTE_PREFIX}/default/icons", headers={"Origin": "map.geo.admin.ch"}
+            f"{ROUTE_PREFIX}/sets/default/icons", headers={"Origin": "map.geo.admin.ch"}
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')

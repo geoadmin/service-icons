@@ -10,7 +10,7 @@ tags:
   - name: icon_sets
     description: All operations that will output icon sets
 paths:
-  /v4/iconsets/checker:
+  /v4/icons/checker:
     get:
       description: Route to check if the service is up.
       operationId: checker
@@ -42,7 +42,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-  /v4/iconsets:
+  /v4/icons/sets:
     get:
       description: List all available icon sets.
       tags:
@@ -61,7 +61,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/icon_set'
-  '/v4/iconsets/{icon_set_name}':
+  '/v4/icons/sets/{icon_set_name}':
     get:
       description: Metadat of a single icon set
       tags:
@@ -90,7 +90,7 @@ paths:
                   name:
                     type: string
                     description: The name of this icon set
-  '/v4/iconsets/{icon_set_name}/icons':
+  '/v4/icons/sets/{icon_set_name}/icons':
     get:
       description: List all icons for a specific icon set
       tags:
@@ -116,7 +116,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/icon'
-  '/v4/iconsets/{icon_set_name}/icon/{icon_name}{icon_scale}-{red},{green},{blue}.png':
+  '/v4/icons/sets/{icon_set_name}/icons/{icon_name}{icon_scale}-{red},{green},{blue}.png':
     get:
       description: Colorized the specified symbol with the specified color.
       operationId: color
@@ -219,7 +219,7 @@ components:
       x-examples:
         icon_set:
           colorable: false
-          icons_url: 'https://service-icons.bgdi-dev.swisstopo.cloud/v4/iconsets/babs/icons'
+          icons_url: 'https://service-icons.bgdi-dev.swisstopo.cloud/v4/icons/sets/babs/icons'
           name: babs
       properties:
         colorable:
@@ -244,7 +244,7 @@ components:
         icon:
           icon_set: 'default'
           name: 'airfield'
-          url: 'https://service-icons.bgdi-dev.swisstopo.cloud/v4/iconsets/default/icon/airfield-255,0,0.png'
+          url: 'https://service-icons.bgdi-dev.swisstopo.cloud/v4/icons/sets/default/icons/airfield-255,0,0.png'
       properties:
         icon_set:
           type: string

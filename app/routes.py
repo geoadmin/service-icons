@@ -12,6 +12,8 @@ from app.helpers.check_functions import check_color_channels
 from app.helpers.check_functions import get_and_check_icon
 from app.helpers.check_functions import get_and_check_icon_set
 from app.helpers.route import prefix_route
+from app.icon import Icon
+from app.icon_set import IconSet
 from app.icon_set import get_all_icon_sets
 from app.settings import DEFAULT_COLOR
 from app.settings import ROUTE_PREFIX
@@ -23,48 +25,60 @@ logger = logging.getLogger(__name__)
 app.route = prefix_route(app.route, ROUTE_PREFIX)
 
 
+def make_api_compliant_response(response_object):
+    """
+    Making sure our responses are compliant with
+    https://github.com/geoadmin/doc-guidelines/blob/master/API.md
+    """
+    if isinstance(response_object, (Icon, IconSet)):
+        return make_response(jsonify({'success': True, **response_object.serialize()}))
+    if isinstance(response_object, list):
+        return make_response(jsonify({'success': True, "items": response_object}))
+    return make_response(jsonify({'success': True, **response_object}))
+
+
 @app.route('/checker')
 def checker_page():
     """
     Just a route for the health check.
     :return: OK with a 200 status code or raise error in case of unsupported version.
     """
-    return make_response(jsonify({'success': True, 'message': 'OK', 'version': APP_VERSION}))
+    return make_api_compliant_response({'message': 'OK', 'version': APP_VERSION})
 
 
-@app.route('', methods=['GET'])
-@app.route('/', methods=['GET'])
+@app.route('/sets', methods=['GET'])
 def all_icon_sets():
-    return make_response(jsonify({"success": True, "items": get_all_icon_sets()}))
+    return make_api_compliant_response(get_all_icon_sets())
 
 
-@app.route('/<string:icon_set_name>', methods=['GET'])
+@app.route('/sets/<string:icon_set_name>', methods=['GET'])
 def icon_set_metadata(icon_set_name):
-    icon_set = get_and_check_icon_set(icon_set_name)
-    return make_response(jsonify(icon_set))
+    return make_api_compliant_response(get_and_check_icon_set(icon_set_name))
 
 
-@app.route('/<string:icon_set_name>/icons', methods=['GET'])
+@app.route('/sets/<string:icon_set_name>/icons', methods=['GET'])
 def icons_from_icon_set(icon_set_name):
     icon_set = get_and_check_icon_set(icon_set_name)
-    return make_response(jsonify({"success": True, "items": icon_set.get_all_icons()}))
+    return make_api_compliant_response(icon_set.get_all_icons())
 
 
-@app.route('/<string:icon_set_name>/icon/<string:icon_name>', methods=['GET'])
+@app.route('/sets/<string:icon_set_name>/icons/<string:icon_name>', methods=['GET'])
 def icon_metadata(icon_set_name, icon_name):
     icon_set = get_and_check_icon_set(icon_set_name)
     icon = get_and_check_icon(icon_set, icon_name)
-    return make_response(jsonify(icon))
+    return make_api_compliant_response(icon)
 
 
-@app.route('/<string:icon_set_name>/icon/<string:icon_name>.png', methods=['GET'])
+@app.route('/sets/<string:icon_set_name>/icons/<string:icon_name>.png', methods=['GET'])
 @app.route(
-    '/<string:icon_set_name>/icon/<string:icon_name>-<int:red>,<int:green>,<int:blue>.png',
+    '/sets/<string:icon_set_name>/icons/<string:icon_name>-<int:red>,<int:green>,<int:blue>.png',
     methods=['GET']
 )
-@app.route('/<string:icon_set_name>/icon/<string:icon_name>@<string:scale>.png', methods=['GET'])
 @app.route(
-    '/<string:icon_set_name>/icon/<string:icon_name>@<string:scale>'
+    '/sets/<string:icon_set_name>/icons/<string:icon_name>@<string:scale>.png', methods=['GET']
+)
+@app.route(
+    '/sets/<string:icon_set_name>/icons/<string:icon_name>@<string:scale>'
     '-<int:red>,<int:green>,<int:blue>.png',
     methods=['GET']
 )

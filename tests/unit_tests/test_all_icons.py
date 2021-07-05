@@ -105,9 +105,9 @@ class AllIconsTest(ServiceIconsUnitTests):
 
     def test_all_icon_sets_endpoint(self):
         """
-        Checking that the endpoint /iconsets returns all available icon sets
+        Checking that the endpoint /sets returns all available icon sets
         """
-        response = self.app.get(f"{ROUTE_PREFIX}/", headers={"Origin": "map.geo.admin.ch"})
+        response = self.app.get(f"{ROUTE_PREFIX}/sets", headers={"Origin": "map.geo.admin.ch"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, "application/json")
         self.assertIn('success', response.json)
@@ -123,13 +123,13 @@ class AllIconsTest(ServiceIconsUnitTests):
 
     def test_all_icon_sets_metadata_endpoint(self):
         """
-        Checking that the endpoint /iconsets/{icon_set_name} returns all relevant information
+        Checking that the endpoint /sets/{icon_set_name} returns all relevant information
         about an icon set, and that the icon URL given provides all available icons
         """
         for icon_set_name in self.all_icon_sets:
             with self.subTest(icon_set_name=icon_set_name):
                 response = self.app.get(
-                    f"{ROUTE_PREFIX}/{icon_set_name}", headers={"Origin": "map.geo.admin.ch"}
+                    f"{ROUTE_PREFIX}/sets/{icon_set_name}", headers={"Origin": "map.geo.admin.ch"}
                 )
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.content_type, "application/json")
@@ -139,7 +139,9 @@ class AllIconsTest(ServiceIconsUnitTests):
                 self.assertIn('colorable', icon_set_metadata)
                 self.assertIn('icons_url', icon_set_metadata)
                 self.assertIsNotNone(icon_set_metadata['icons_url'])
-                self.assertTrue(icon_set_metadata['icons_url'].endswith(f"{icon_set_name}/icons"))
+                self.assertTrue(
+                    icon_set_metadata['icons_url'].endswith(f"sets/{icon_set_name}/icons")
+                )
                 icons_response = self.app.get(
                     icon_set_metadata['icons_url'], headers={"Origin": "map.geo.admin.ch"}
                 )
@@ -159,7 +161,7 @@ class AllIconsTest(ServiceIconsUnitTests):
         for icon_set_name in self.all_icon_sets:
             for icon_name in self.all_icon_sets[icon_set_name]:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
-                    icon_metadata_url = f"{ROUTE_PREFIX}/{icon_set_name}/icon/{icon_name}"
+                    icon_metadata_url = f"{ROUTE_PREFIX}/sets/{icon_set_name}/icons/{icon_name}"
                     response = self.app.get(
                         icon_metadata_url, headers={"Origin": "map.geo.admin.ch"}
                     )
@@ -175,7 +177,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                     self.assertTrue(json_response['template_url'].endswith(get_icon_template_url()))
                     self.assertIn('url', json_response)
                     self.assertIsNotNone(json_response['url'])
-                    icon_url_without_color = f"{ROUTE_PREFIX}/{icon_set_name}/icon"
+                    icon_url_without_color = f"{ROUTE_PREFIX}/sets/{icon_set_name}/icons"
                     if icon_set_name in COLORABLE_ICON_SETS:
                         self.assertTrue(
                             json_response['url'].
@@ -194,7 +196,7 @@ class AllIconsTest(ServiceIconsUnitTests):
         for icon_set_name in self.all_icon_sets:
             for icon_name in self.all_icon_sets[icon_set_name]:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
-                    icon_url = f"{ROUTE_PREFIX}/{icon_set_name}/icon/{icon_name}.png"
+                    icon_url = f"{ROUTE_PREFIX}/sets/{icon_set_name}/icons/{icon_name}.png"
                     self.check_image(icon_name, icon_url)
 
     def test_all_icon_double_size(self):
@@ -204,7 +206,8 @@ class AllIconsTest(ServiceIconsUnitTests):
         for icon_set_name in self.all_icon_sets:
             for icon_name in self.all_icon_sets[icon_set_name]:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
-                    double_size_icon_url = f"{ROUTE_PREFIX}/{icon_set_name}/icon/{icon_name}@2x.png"
+                    double_size_icon_url = f"{ROUTE_PREFIX}/sets/{icon_set_name}" \
+                                           f"/icons/{icon_name}@2x.png"
                     self.check_image(icon_name, double_size_icon_url, expected_size=96)
 
     def test_all_icon_half_size(self):
@@ -214,7 +217,8 @@ class AllIconsTest(ServiceIconsUnitTests):
         for icon_set_name in self.all_icon_sets:
             for icon_name in self.all_icon_sets[icon_set_name]:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
-                    half_size_icon_url = f"{ROUTE_PREFIX}/{icon_set_name}/icon/{icon_name}@0.5x.png"
+                    half_size_icon_url = f"{ROUTE_PREFIX}/sets/{icon_set_name}" \
+                                         f"/icons/{icon_name}@0.5x.png"
                     self.check_image(icon_name, half_size_icon_url, expected_size=24)
 
     def test_all_icons_colorized(self):
@@ -226,7 +230,8 @@ class AllIconsTest(ServiceIconsUnitTests):
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_set = get_icon_set(icon_set_name)
                     color_part = "-0,255,255" if icon_set.colorable else ""
-                    colored_url = f"{ROUTE_PREFIX}/{icon_set_name}/icon/{icon_name}{color_part}.png"
+                    colored_url = f"{ROUTE_PREFIX}/sets/{icon_set_name}" \
+                                  f"/icons/{icon_name}{color_part}.png"
                     self.check_image(
                         icon_name,
                         colored_url,
@@ -245,8 +250,8 @@ class AllIconsTest(ServiceIconsUnitTests):
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_set = get_icon_set(icon_set_name)
                     color_part = "-0,0,255" if icon_set.colorable else ""
-                    colored_url = f"{ROUTE_PREFIX}/{icon_set_name}/icon/" \
-                                  f"{icon_name}@2x{color_part}.png"
+                    colored_url = f"{ROUTE_PREFIX}/sets/{icon_set_name}" \
+                                  f"/icons/{icon_name}@2x{color_part}.png"
                     self.check_image(
                         icon_name,
                         colored_url,
@@ -266,7 +271,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_set = get_icon_set(icon_set_name)
                     color_part = "-0,255,0" if icon_set.colorable else ""
-                    colored_url = f"{ROUTE_PREFIX}/{icon_set_name}/icon/" \
+                    colored_url = f"{ROUTE_PREFIX}/sets/{icon_set_name}/icons/" \
                                   f"{icon_name}@.5x{color_part}.png"
                     self.check_image(
                         icon_name,
