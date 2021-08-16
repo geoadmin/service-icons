@@ -33,6 +33,7 @@ PIP_FILE = Pipfile
 PIP_FILE_LOCK = Pipfile.lock
 
 # default configuration
+ENV_FILE ?= .env.local
 HTTP_PORT ?= 5000
 
 # Commands
@@ -169,7 +170,10 @@ dockerpush: dockerbuild
 .PHONY: dockerrun
 dockerrun: dockerbuild
 	echo "Starting docker container and mapped its 8080 port to $(HTTP_PORT); http://localhost:$(HTTP_PORT)"
-	docker run -it -p $(HTTP_PORT):8080 $(DOCKER_IMG_LOCAL_TAG)
+	docker run \
+		-it -p $(HTTP_PORT):8080 \
+		--env-file=${PWD}/${ENV_FILE} \
+	 	$(DOCKER_IMG_LOCAL_TAG)
 
 
 # Spec targets
