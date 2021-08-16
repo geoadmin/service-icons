@@ -30,3 +30,4 @@ service_icons.py
 buildspec.yml
 .validaterc
 nose2-junit.xml
+.env.*

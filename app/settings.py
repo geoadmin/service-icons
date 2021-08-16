@@ -17,7 +17,5 @@ DEFAULT_COLOR = {"r": 255, "g": 0, "b": 0}
 TRAP_HTTP_EXCEPTIONS = True
 
 # Definition of the allowed domains for CORS implementation
-ALLOWED_DOMAINS_STRING = os.getenv(
-    'ALLOWED_DOMAINS', r'.*\.geo\.admin\.ch,.*\.bgdi\.ch,.*\.swisstopo\.cloud'
-)
+ALLOWED_DOMAINS_STRING = os.getenv('ALLOWED_DOMAINS', r'http[s]?://localhost')
 ALLOWED_DOMAINS = ALLOWED_DOMAINS_STRING.split(',')
