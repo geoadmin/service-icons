@@ -126,7 +126,7 @@ class AllIconsTest(ServiceIconsUnitTests):
         Checking that the endpoint /sets/{icon_set_name} returns all relevant information
         about an icon set, and that the icon URL given provides all available icons
         """
-        for icon_set_name in self.all_icon_sets:
+        for icon_set_name, icon_set in self.all_icon_sets.items():
             with self.subTest(icon_set_name=icon_set_name):
                 response = self.app.get(
                     f"{ROUTE_PREFIX}/sets/{icon_set_name}", headers={"Origin": "map.geo.admin.ch"}
@@ -150,16 +150,14 @@ class AllIconsTest(ServiceIconsUnitTests):
                 self.assertIn('success', icons_response.json)
                 self.assertTrue(icons_response.json['success'])
                 self.assertIn('items', icons_response.json)
-                self.assertEqual(
-                    len(icons_response.json['items']), len(self.all_icon_sets[icon_set_name])
-                )
+                self.assertEqual(len(icons_response.json['items']), len(icon_set))
 
     def test_all_icon_metadata_endpoint(self):
         """
         Checking all icons' URLs without giving the extension (should return icon's metadata)
         """
-        for icon_set_name in self.all_icon_sets:
-            for icon_name in self.all_icon_sets[icon_set_name]:
+        for icon_set_name, icon_set in self.all_icon_sets.items():
+            for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_metadata_url = f"{ROUTE_PREFIX}/sets/{icon_set_name}/icons/{icon_name}"
                     response = self.app.get(
@@ -193,8 +191,8 @@ class AllIconsTest(ServiceIconsUnitTests):
         """
         Checking URLs without scale or color
         """
-        for icon_set_name in self.all_icon_sets:
-            for icon_name in self.all_icon_sets[icon_set_name]:
+        for icon_set_name, icon_set in self.all_icon_sets.items():
+            for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_url = f"{ROUTE_PREFIX}/sets/{icon_set_name}/icons/{icon_name}.png"
                     self.check_image(icon_name, icon_url)
@@ -203,8 +201,8 @@ class AllIconsTest(ServiceIconsUnitTests):
         """
         Check URLs with "2x" as scale but no color
         """
-        for icon_set_name in self.all_icon_sets:
-            for icon_name in self.all_icon_sets[icon_set_name]:
+        for icon_set_name, icon_set in self.all_icon_sets.items():
+            for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     double_size_icon_url = f"{ROUTE_PREFIX}/sets/{icon_set_name}" \
                                            f"/icons/{icon_name}@2x.png"
@@ -214,8 +212,8 @@ class AllIconsTest(ServiceIconsUnitTests):
         """
         Check URLs with "0.5x" as scale but no color
         """
-        for icon_set_name in self.all_icon_sets:
-            for icon_name in self.all_icon_sets[icon_set_name]:
+        for icon_set_name, icon_set in self.all_icon_sets.items():
+            for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     half_size_icon_url = f"{ROUTE_PREFIX}/sets/{icon_set_name}" \
                                          f"/icons/{icon_name}@0.5x.png"
@@ -225,8 +223,8 @@ class AllIconsTest(ServiceIconsUnitTests):
         """
         Checks URLs with yellow color (no scaling)
         """
-        for icon_set_name in self.all_icon_sets:
-            for icon_name in self.all_icon_sets[icon_set_name]:
+        for icon_set_name, icon_set in self.all_icon_sets.items():
+            for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_set = get_icon_set(icon_set_name)
                     color_part = "-0,255,255" if icon_set.colorable else ""
@@ -245,8 +243,8 @@ class AllIconsTest(ServiceIconsUnitTests):
         """
         Checks URLs with blue color and double size
         """
-        for icon_set_name in self.all_icon_sets:
-            for icon_name in self.all_icon_sets[icon_set_name]:
+        for icon_set_name, icon_set in self.all_icon_sets.items():
+            for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_set = get_icon_set(icon_set_name)
                     color_part = "-0,0,255" if icon_set.colorable else ""
@@ -266,8 +264,8 @@ class AllIconsTest(ServiceIconsUnitTests):
         """
         Checks URLs with green color and half size
         """
-        for icon_set_name in self.all_icon_sets:
-            for icon_name in self.all_icon_sets[icon_set_name]:
+        for icon_set_name, icon_set in self.all_icon_sets.items():
+            for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_set = get_icon_set(icon_set_name)
                     color_part = "-0,255,0" if icon_set.colorable else ""
