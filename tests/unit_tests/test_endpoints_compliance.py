@@ -22,8 +22,7 @@ class CheckerTests(ServiceIconsUnitTests):
 
     def launch_get_request(self, relative_endpoint):
         return self.app.get(
-            f"{ROUTE_PREFIX}/{remove_prefix_slash(relative_endpoint)}",
-            headers={"Origin": "map.geo.admin.ch"}
+            f"{ROUTE_PREFIX}/{remove_prefix_slash(relative_endpoint)}", headers=self.default_header
         )
 
     def test_checker(self):

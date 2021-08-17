@@ -6,7 +6,7 @@ from tests.unit_tests.base_test import ServiceIconsUnitTests
 class CheckerTests(ServiceIconsUnitTests):
 
     def test_checker(self):
-        response = self.app.get(f"{ROUTE_PREFIX}/checker", headers={"Origin": "map.geo.admin.ch"})
+        response = self.app.get(f"{ROUTE_PREFIX}/checker", headers=self.default_header)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, "application/json")
         self.assertEqual(response.json, {"message": "OK", "success": True, "version": APP_VERSION})
