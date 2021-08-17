@@ -73,7 +73,7 @@ class AllIconsTest(ServiceIconsUnitTests):
         (it doesn't check if it is a zero value, because some icons have edges that are not of
         the primary color, resulting in an average color that can't be "pure")
         """
-        response = self.app.get(image_url, headers={"Origin": "map.geo.admin.ch"})
+        response = self.app.get(image_url, headers=self.default_header)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, "image/png")
         # reading the icon image so that we can check its size in px and average color
@@ -107,7 +107,7 @@ class AllIconsTest(ServiceIconsUnitTests):
         """
         Checking that the endpoint /sets returns all available icon sets
         """
-        response = self.app.get(f"{ROUTE_PREFIX}/sets", headers={"Origin": "map.geo.admin.ch"})
+        response = self.app.get(f"{ROUTE_PREFIX}/sets", headers=self.default_header)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, "application/json")
         self.assertIn('success', response.json)
@@ -129,7 +129,7 @@ class AllIconsTest(ServiceIconsUnitTests):
         for icon_set_name, icon_set in self.all_icon_sets.items():
             with self.subTest(icon_set_name=icon_set_name):
                 response = self.app.get(
-                    f"{ROUTE_PREFIX}/sets/{icon_set_name}", headers={"Origin": "map.geo.admin.ch"}
+                    f"{ROUTE_PREFIX}/sets/{icon_set_name}", headers=self.default_header
                 )
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.content_type, "application/json")
@@ -143,7 +143,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                     icon_set_metadata['icons_url'].endswith(f"sets/{icon_set_name}/icons")
                 )
                 icons_response = self.app.get(
-                    icon_set_metadata['icons_url'], headers={"Origin": "map.geo.admin.ch"}
+                    icon_set_metadata['icons_url'], headers=self.default_header
                 )
                 self.assertEqual(icons_response.status_code, 200)
                 self.assertEqual(icons_response.content_type, "application/json")
@@ -160,9 +160,7 @@ class AllIconsTest(ServiceIconsUnitTests):
             for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_metadata_url = f"{ROUTE_PREFIX}/sets/{icon_set_name}/icons/{icon_name}"
-                    response = self.app.get(
-                        icon_metadata_url, headers={"Origin": "map.geo.admin.ch"}
-                    )
+                    response = self.app.get(icon_metadata_url, headers=self.default_header)
                     self.assertEqual(response.status_code, 200)
                     self.assertEqual(response.content_type, "application/json")
                     json_response = response.json

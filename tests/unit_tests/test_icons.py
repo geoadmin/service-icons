@@ -55,7 +55,7 @@ class IconsTests(ServiceIconsUnitTests):
             request_url,
             data=json.dumps({"url": "https://test.bgdi.ch/test"}),
             content_type="application/json",
-            headers={"Origin": "map.geo.admin.ch"}
+            headers=self.default_header
         )
         self.assertEqual(
             response.status_code,
@@ -76,9 +76,7 @@ class IconsTests(ServiceIconsUnitTests):
         )
 
     def test_icons_from_icon_set(self):
-        response = self.app.get(
-            f"{ROUTE_PREFIX}/sets/default/icons", headers={"Origin": "map.geo.admin.ch"}
-        )
+        response = self.app.get(f"{ROUTE_PREFIX}/sets/default/icons", headers=self.default_header)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertTrue('success' in response.json)

@@ -11,7 +11,16 @@ def build_request_url_for_icon(
            f"/icons/{icon_name}@{scale}-{red},{green},{blue}.png"
 
 
+ORIGIN_FOR_TESTING = "some_random_domain"
+
+
 class ServiceIconsUnitTests(unittest.TestCase):
+
+    def __init__(self, methodName: str):
+        super().__init__(methodName=methodName)
+        # check .env.test for Origin value
+        self.origin_for_testing = ORIGIN_FOR_TESTING
+        self.default_header = {"Origin": self.origin_for_testing}
 
     def setUp(self):
         self.app = app.test_client()
@@ -28,7 +37,8 @@ class ServiceIconsUnitTests(unittest.TestCase):
         green=0,
         blue=0,
         icon_category="default",
-        origin="map.geo.admin.ch"
+        # see .env.test
+        origin=ORIGIN_FOR_TESTING
     ):
         return self.app.get(
             build_request_url_for_icon(icon_name, scale, red, green, blue, icon_category),
