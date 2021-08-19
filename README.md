@@ -131,7 +131,7 @@ make dockerrun
 
 This will serve the application with the wsgi server, inside a container.
 
-    curl -H "Origin: https://map.geo.admin.ch/" http://localhost:5000/v4/icons/255,133,133/marker-24@2x.png --output out.dat
+    curl -H "Origin: https://map.geo.admin.ch/" http://localhost:5000/v4/icons/255,133,133/001-marker-24@2x.png --output out.dat
 
 This is a simple example of how to test the service after serving on localhost:5000 (`out.dat` will either contain a PNG image or contain an error message.)
 

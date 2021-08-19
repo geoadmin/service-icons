@@ -40,4 +40,4 @@ class CheckerTests(ServiceIconsUnitTests):
         )
 
     def test_icon_metadata(self):
-        self.check_response_compliance(self.launch_get_request('/sets/default/icons/marker'))
+        self.check_response_compliance(self.launch_get_request('/sets/default/icons/001-marker'))
