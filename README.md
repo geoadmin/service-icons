@@ -9,7 +9,11 @@
 
 - [Table of content](#table-of-content)
 - [Description](#description)
+- [Dependencies](#dependencies)
+- [Service API](#service-api)
   - [Staging Environments](#staging-environments)
+  - [checker GET](#checker-get)
+  - [color GET](#color-get)
 - [Versioning](#versioning)
 - [Local Development](#local-development)
   - [Make Dependencies](#make-dependencies)
@@ -18,6 +22,8 @@
   - [Test your work](#test-your-work)
 - [Docker](#docker)
 - [Deployment](#deployment)
+  - [Dev](#dev)
+  - [Int](#int)
   - [Deployment configuration](#deployment-configuration)
 
 ## Description
@@ -205,4 +211,7 @@ The service is configured by Environment Variable:
 
 | Env         | Default               | Description                |
 | ----------- | --------------------- | -------------------------- |
-| LOGGING_CFG | logging-cfg-local.yml | Logging configuration file |
+| LOGGING_CFG | `logging-cfg-local.yml` | Logging configuration file |
+| ALLOWED_DOMAINS | `.*` | Comma separated list of regex that are allowed as domain in Origin header |
+| CACHE_CONTROL | `public, max-age=86400` | Cache Control header value of the `GET /v4/icons/*` endpoints |
+| CACHE_CONTROL_4XX | `public, max-age=3600` | Cache Control header for 4XX responses |

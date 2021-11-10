@@ -6,11 +6,14 @@ from werkzeug.exceptions import HTTPException
 from flask import Flask
 from flask import abort
 from flask import request
+from flask.helpers import url_for
 
 from app.helpers import make_error_msg
 from app.helpers.service_icon_custom_serializer import CustomJSONEncoder
 from app.helpers.url import ALLOWED_DOMAINS_PATTERN
 from app.middleware import ReverseProxy
+from app.settings import CACHE_CONTROL
+from app.settings import CACHE_CONTROL_4XX
 
 logger = logging.getLogger(__name__)
 route_logger = logging.getLogger('app.routes')
@@ -42,6 +45,16 @@ def add_cors_header(response):
     return response
 
 
+@app.after_request
+def add_cache_control_header(response):
+    if request.method == 'GET' and request.path != url_for('checker_page'):
+        if response.status_code >= 400:
+            response.headers.set('Cache-Control', CACHE_CONTROL_4XX)
+        else:
+            response.headers.set('Cache-Control', CACHE_CONTROL)
+    return response
+
+
 # Reject request from non allowed origins
 @app.before_request
 def validate_origin():
@@ -65,4 +78,4 @@ def handle_exception(err):
     return make_error_msg(500, "Internal server error, please consult logs")
 
 
-from app import routes  # isort:skip pylint: disable=wrong-import-position
+from app import routes  # isort:skip pylint: disable=wrong-import-position,cyclic-import
