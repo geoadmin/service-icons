@@ -13,6 +13,7 @@ class CheckerTests(ServiceIconsUnitTests):
     def check_response_compliance(self, response, is_list_endpoint=False, have_cache_control=True):
         self.assertIsNotNone(response)
         self.assertEqual(response.status_code, 200)
+        self.assertCors(response)
         self.assertEqual(response.content_type, "application/json")
         if have_cache_control:
             self.assertIn('Cache-Control', response.headers)

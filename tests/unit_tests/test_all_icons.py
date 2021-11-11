@@ -75,6 +75,7 @@ class AllIconsTest(ServiceIconsUnitTests):
         """
         response = self.app.get(image_url, headers=self.default_header)
         self.assertEqual(response.status_code, 200)
+        self.assertCors(response)
         self.assertEqual(response.content_type, "image/png")
         self.assertIn('Cache-Control', response.headers)
         self.assertIn('max-age=', response.headers['Cache-Control'])
@@ -111,6 +112,7 @@ class AllIconsTest(ServiceIconsUnitTests):
         """
         response = self.app.get(f"{ROUTE_PREFIX}/sets", headers=self.default_header)
         self.assertEqual(response.status_code, 200)
+        self.assertCors(response)
         self.assertEqual(response.content_type, "application/json")
         self.assertIn('Cache-Control', response.headers)
         self.assertIn('max-age=', response.headers['Cache-Control'])
@@ -136,6 +138,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                     f"{ROUTE_PREFIX}/sets/{icon_set_name}", headers=self.default_header
                 )
                 self.assertEqual(response.status_code, 200)
+                self.assertCors(response)
                 self.assertEqual(response.content_type, "application/json")
                 self.assertIn('Cache-Control', response.headers)
                 self.assertIn('max-age=', response.headers['Cache-Control'])
@@ -168,6 +171,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                     icon_metadata_url = f"{ROUTE_PREFIX}/sets/{icon_set_name}/icons/{icon_name}"
                     response = self.app.get(icon_metadata_url, headers=self.default_header)
                     self.assertEqual(response.status_code, 200)
+                    self.assertCors(response)
                     self.assertEqual(response.content_type, "application/json")
                     self.assertIn('Cache-Control', response.headers)
                     self.assertIn('max-age=', response.headers['Cache-Control'])
