@@ -37,7 +37,7 @@ def make_api_compliant_response(response_object):
     return make_response(jsonify({'success': True, **response_object}))
 
 
-@app.route('/checker')
+@app.route('/checker', methods=['GET'])
 def checker_page():
     """
     Just a route for the health check.
