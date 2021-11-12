@@ -32,7 +32,7 @@ if __name__ == '__main__':
     options = {
         'bind': '%s:%s' % ('0.0.0.0', HTTP_PORT),
         'worker_class': 'gevent',
-        'workers': 2,  # scaling horizontaly is left to Kubernetes
+        'workers': 2,  # scaling horizontally is left to Kubernetes
         'timeout': 60,
         'logconfig_dict': get_logging_cfg()
     }

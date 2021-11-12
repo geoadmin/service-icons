@@ -76,6 +76,8 @@ class AllIconsTest(ServiceIconsUnitTests):
         response = self.app.get(image_url, headers=self.default_header)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, "image/png")
+        self.assertIn('Cache-Control', response.headers)
+        self.assertIn('max-age=', response.headers['Cache-Control'])
         # reading the icon image so that we can check its size in px and average color
         with Image.open(io.BytesIO(response.data)) as icon:
             width, height = icon.size
@@ -110,6 +112,8 @@ class AllIconsTest(ServiceIconsUnitTests):
         response = self.app.get(f"{ROUTE_PREFIX}/sets", headers=self.default_header)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, "application/json")
+        self.assertIn('Cache-Control', response.headers)
+        self.assertIn('max-age=', response.headers['Cache-Control'])
         self.assertIn('success', response.json)
         self.assertTrue(response.json['items'])
         self.assertIn('items', response.json)
@@ -133,6 +137,8 @@ class AllIconsTest(ServiceIconsUnitTests):
                 )
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.content_type, "application/json")
+                self.assertIn('Cache-Control', response.headers)
+                self.assertIn('max-age=', response.headers['Cache-Control'])
                 icon_set_metadata = response.json
                 self.assertIn('name', icon_set_metadata)
                 self.assertEqual(icon_set_name, icon_set_metadata['name'])
@@ -163,6 +169,8 @@ class AllIconsTest(ServiceIconsUnitTests):
                     response = self.app.get(icon_metadata_url, headers=self.default_header)
                     self.assertEqual(response.status_code, 200)
                     self.assertEqual(response.content_type, "application/json")
+                    self.assertIn('Cache-Control', response.headers)
+                    self.assertIn('max-age=', response.headers['Cache-Control'])
                     json_response = response.json
                     self.assertIn('icon_set', json_response)
                     self.assertEqual(icon_set_name, json_response['icon_set'])

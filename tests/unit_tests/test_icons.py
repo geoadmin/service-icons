@@ -12,6 +12,8 @@ class IconsTests(ServiceIconsUnitTests):
         self.assertEqual(
             response.status_code, 400, "Should return a HTTP 400 when a RGB value is out of range"
         )
+        self.assertIn('Cache-Control', response.headers)
+        self.assertIn('max-age=3600', response.headers['Cache-Control'])
         self.assertEqual(response.content_type, "application/json")
         self.assertEqual(
             response.json,
@@ -30,6 +32,8 @@ class IconsTests(ServiceIconsUnitTests):
         self.assertEqual(
             response.status_code, 400, msg="Should return a HTTP 400 when file not found"
         )
+        self.assertIn('Cache-Control', response.headers)
+        self.assertIn('max-age=3600', response.headers['Cache-Control'])
         self.assertEqual(response.content_type, "application/json")
         self.assertEqual(
             response.json, {
@@ -79,6 +83,8 @@ class IconsTests(ServiceIconsUnitTests):
         response = self.app.get(f"{ROUTE_PREFIX}/sets/default/icons", headers=self.default_header)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
+        self.assertIn('Cache-Control', response.headers)
+        self.assertIn('max-age=', response.headers['Cache-Control'])
         self.assertTrue('success' in response.json)
         self.assertTrue(response.json['success'])
         self.assertTrue('items' in response.json)
