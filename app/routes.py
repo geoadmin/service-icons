@@ -38,7 +38,7 @@ def make_api_compliant_response(response_object):
 
 
 @app.route('/checker', methods=['GET'])
-def checker_page():
+def checker():
     """
     Just a route for the health check.
     :return: OK with a 200 status code or raise error in case of unsupported version.

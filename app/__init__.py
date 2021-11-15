@@ -10,8 +10,8 @@ from flask.helpers import url_for
 
 from app.helpers import make_error_msg
 from app.helpers.service_icon_custom_serializer import CustomJSONEncoder
-from app.helpers.url import ALLOWED_DOMAINS_PATTERN
 from app.middleware import ReverseProxy
+from app.settings import ALLOWED_DOMAINS_PATTERN
 from app.settings import CACHE_CONTROL
 from app.settings import CACHE_CONTROL_4XX
 
@@ -36,18 +36,23 @@ def log_route():
 # Add CORS Headers to all request
 @app.after_request
 def add_cors_header(response):
+    # Do not add CORS header to internal /checker endpoint.
+    if request.endpoint == 'checker':
+        return response
+
     if (
         'Origin' in request.headers and
         re.match(ALLOWED_DOMAINS_PATTERN, request.headers['Origin'])
     ):
         response.headers['Access-Control-Allow-Origin'] = request.headers['Origin']
-        response.headers['Access-Control-Allow-Methods'] = 'GET'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, HEAD, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = '*'
     return response
 
 
 @app.after_request
 def add_cache_control_header(response):
-    if request.method == 'GET' and request.path != url_for('checker_page'):
+    if request.method == 'GET' and request.endpoint != 'checker':
         if response.status_code >= 400:
             response.headers.set('Cache-Control', CACHE_CONTROL_4XX)
         else:

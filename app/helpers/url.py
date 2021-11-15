@@ -1,9 +1,6 @@
 from flask import request
 
-from app.settings import ALLOWED_DOMAINS
 from app.settings import ROUTE_PREFIX
-
-ALLOWED_DOMAINS_PATTERN = '({})'.format('|'.join(ALLOWED_DOMAINS))
 
 
 def get_base_url():
