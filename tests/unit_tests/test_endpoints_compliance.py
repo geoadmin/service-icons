@@ -10,12 +10,12 @@ def remove_prefix_slash(value):
 
 class CheckerTests(ServiceIconsUnitTests):
 
-    def check_response_compliance(self, response, is_list_endpoint=False, have_cache_control=True):
+    def check_response_compliance(self, response, is_list_endpoint=False, is_checker=False):
         self.assertIsNotNone(response)
         self.assertEqual(response.status_code, 200)
-        self.assertCors(response)
         self.assertEqual(response.content_type, "application/json")
-        if have_cache_control:
+        if not is_checker:
+            self.assertCors(response)
             self.assertIn('Cache-Control', response.headers)
             self.assertIn('max-age=', response.headers['Cache-Control'])
         self.assertTrue('success' in response.json)
@@ -30,9 +30,7 @@ class CheckerTests(ServiceIconsUnitTests):
         )
 
     def test_checker(self):
-        self.check_response_compliance(
-            self.launch_get_request('/checker'), have_cache_control=False
-        )
+        self.check_response_compliance(self.launch_get_request('/checker'), is_checker=True)
 
     def test_icon_sets_list(self):
         self.check_response_compliance(self.launch_get_request('/sets'), is_list_endpoint=True)

@@ -68,8 +68,8 @@ class ServiceIconsUnitTests(unittest.TestCase):
 
     def check_response_not_allowed(self, response, msg, is_checker=False):
         self.assertEqual(response.status_code, 403, msg=msg)
-        self.assertCors(response, check_origin=False)
         if not is_checker:
+            self.assertCors(response, check_origin=False)
             self.assertIn('Cache-Control', response.headers)
             self.assertIn('max-age=3600', response.headers['Cache-Control'])
         self.assertEqual(response.content_type, "application/json")
