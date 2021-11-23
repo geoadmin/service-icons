@@ -34,6 +34,11 @@ if __name__ == '__main__':
         'worker_class': 'gevent',
         'workers': 2,  # scaling horizontally is left to Kubernetes
         'timeout': 60,
-        'logconfig_dict': get_logging_cfg()
+        'logconfig_dict': get_logging_cfg(),
+        'forwarded_allow_ips': os.getenv('FORWARED_ALLOW_IPS', '*'),
+        'secure_scheme_headers':
+            {
+                os.getenv('FORWARDED_PROTO_HEADER_NAME', 'X-Forwarded-Proto').upper(): 'https'
+            }
     }
     StandaloneApplication(application, options).run()

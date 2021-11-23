@@ -35,6 +35,7 @@ PIP_FILE_LOCK = Pipfile.lock
 # default configuration
 ENV_FILE ?= .env.local
 HTTP_PORT ?= 5000
+ROUTE_PREFIX ?= /api/icons
 
 # Commands
 PIPENV_RUN := pipenv run
@@ -142,7 +143,7 @@ serve:
 
 .PHONY: gunicornserve
 gunicornserve:
-	$(PYTHON) wsgi.py
+	SCRIPT_NAME=$(ROUTE_PREFIX) $(PYTHON) wsgi.py
 
 
 # Docker related functions.
@@ -173,6 +174,7 @@ dockerrun: dockerbuild
 	docker run \
 		-it -p $(HTTP_PORT):8080 \
 		--env-file=${PWD}/${ENV_FILE} \
+		--env SCRIPT_NAME=$(ROUTE_PREFIX) \
 	 	$(DOCKER_IMG_LOCAL_TAG)
 
 

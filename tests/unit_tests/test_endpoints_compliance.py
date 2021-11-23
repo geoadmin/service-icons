@@ -1,11 +1,6 @@
-from app.settings import ROUTE_PREFIX
+from flask import url_for
+
 from tests.unit_tests.base_test import ServiceIconsUnitTests
-
-
-def remove_prefix_slash(value):
-    if value.startswith('/'):
-        return value[len('/'):]
-    return value[:]
 
 
 class CheckerTests(ServiceIconsUnitTests):
@@ -24,24 +19,44 @@ class CheckerTests(ServiceIconsUnitTests):
             self.assertTrue('items' in response.json)
             self.assertIsNotNone(response.json['items'])
 
-    def launch_get_request(self, relative_endpoint):
-        return self.app.get(
-            f"{ROUTE_PREFIX}/{remove_prefix_slash(relative_endpoint)}", headers=self.default_header
+    def test_checker(self):
+        self.check_response_compliance(
+            self.app.get(url_for('checker', _external=True), headers=self.default_header),
+            is_checker=True
         )
 
-    def test_checker(self):
-        self.check_response_compliance(self.launch_get_request('/checker'), is_checker=True)
-
     def test_icon_sets_list(self):
-        self.check_response_compliance(self.launch_get_request('/sets'), is_list_endpoint=True)
+        self.check_response_compliance(
+            self.app.get(url_for('all_icon_sets', _external=True), headers=self.default_header),
+            is_list_endpoint=True
+        )
 
     def test_icon_set_metadata(self):
-        self.check_response_compliance(self.launch_get_request('/sets/default'))
+        self.check_response_compliance(
+            self.app.get(
+                url_for('icon_set_metadata', icon_set_name='default', _external=True),
+                headers=self.default_header
+            )
+        )
 
     def test_icons_list(self):
         self.check_response_compliance(
-            self.launch_get_request('/sets/default/icons'), is_list_endpoint=True
+            self.app.get(
+                url_for('icons_from_icon_set', icon_set_name='default', _external=True),
+                headers=self.default_header
+            ),
+            is_list_endpoint=True
         )
 
     def test_icon_metadata(self):
-        self.check_response_compliance(self.launch_get_request('/sets/default/icons/001-marker'))
+        self.check_response_compliance(
+            self.app.get(
+                url_for(
+                    'icon_metadata',
+                    icon_set_name='default',
+                    icon_name='001-marker',
+                    _external=True
+                ),
+                headers=self.default_header
+            )
+        )
