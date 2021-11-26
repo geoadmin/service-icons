@@ -18,6 +18,5 @@ TRAP_HTTP_EXCEPTIONS = True
 # Definition of the allowed domains for CORS implementation
 ALLOWED_DOMAINS = os.getenv('ALLOWED_DOMAINS', r'.*').split(',')
 ALLOWED_DOMAINS_PATTERN = '({})'.format('|'.join(ALLOWED_DOMAINS))
-SCRIPT_NAME = os.getenv('SCRIPT_NAME', '')
 CACHE_CONTROL = os.getenv('CACHE_CONTROL', 'public, max-age=86400')
 CACHE_CONTROL_4XX = os.getenv('CACHE_CONTROL_4XX', 'public, max-age=3600')

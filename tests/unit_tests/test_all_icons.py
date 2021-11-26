@@ -1,12 +1,14 @@
 import io
 import logging
 import os
+from urllib.parse import unquote_plus
 
 from PIL import Image
 
 from flask import url_for
 
 from app.helpers.icons import get_icon_template_url
+from app.helpers.url import get_base_url
 from app.icon_set import get_icon_set
 from app.settings import COLORABLE_ICON_SETS
 from app.settings import IMAGE_FOLDER
@@ -111,9 +113,7 @@ class AllIconsTest(ServiceIconsUnitTests):
         """
         Checking that the endpoint /sets returns all available icon sets
         """
-        response = self.app.get(
-            url_for('all_icon_sets', _external=True), headers=self.default_header
-        )
+        response = self.app.get(url_for('all_icon_sets'), headers=self.default_header)
         self.assertEqual(response.status_code, 200)
         self.assertCors(response)
         self.assertEqual(response.content_type, "application/json")
@@ -138,7 +138,7 @@ class AllIconsTest(ServiceIconsUnitTests):
         for icon_set_name, icon_set in self.all_icon_sets.items():
             with self.subTest(icon_set_name=icon_set_name):
                 response = self.app.get(
-                    url_for('icon_set_metadata', icon_set_name=icon_set_name, _external=True),
+                    url_for('icon_set_metadata', icon_set_name=icon_set_name),
                     headers=self.default_header
                 )
                 self.assertEqual(response.status_code, 200)
@@ -152,12 +152,11 @@ class AllIconsTest(ServiceIconsUnitTests):
                 self.assertIn('colorable', icon_set_metadata)
                 self.assertIn('icons_url', icon_set_metadata)
                 self.assertIsNotNone(icon_set_metadata['icons_url'])
-                self.assertTrue(
-                    icon_set_metadata['icons_url'].endswith(f"sets/{icon_set_name}/icons")
+                self.assertEqual(
+                    icon_set_metadata['icons_url'],
+                    url_for('icons_from_icon_set', icon_set_name=icon_set_name, _external=True)
                 )
-                url = url_for(
-                    'icons_from_icon_set', icon_set_name=icon_set_metadata["name"], _external=True
-                )
+                url = url_for('icons_from_icon_set', icon_set_name=icon_set_metadata["name"])
                 icons_response = self.app.get(url, headers=self.default_header)
                 self.assertEqual(icons_response.status_code, 200)
                 self.assertEqual(icons_response.content_type, "application/json")
@@ -174,10 +173,7 @@ class AllIconsTest(ServiceIconsUnitTests):
             for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_metadata_url = url_for(
-                        'icon_metadata',
-                        icon_set_name=icon_set_name,
-                        icon_name=icon_name,
-                        _external=True
+                        'icon_metadata', icon_set_name=icon_set_name, icon_name=icon_name
                     )
                     response = self.app.get(icon_metadata_url, headers=self.default_header)
                     self.assertEqual(response.status_code, 200)
@@ -192,21 +188,39 @@ class AllIconsTest(ServiceIconsUnitTests):
                     self.assertEqual(icon_name, json_response['name'])
                     self.assertIn('template_url', json_response)
                     self.assertIsNotNone(json_response['template_url'])
-                    self.assertTrue(json_response['template_url'].endswith(get_icon_template_url()))
+                    self.assertEqual(
+                        json_response['template_url'], get_icon_template_url(get_base_url())
+                    )
                     self.assertIn('url', json_response)
                     self.assertIsNotNone(json_response['url'])
-                    icon_url_without_color = url_for(
-                        'icons_from_icon_set', icon_set_name=icon_set_name, _external=True
-                    )
                     if icon_set_name in COLORABLE_ICON_SETS:
-                        self.assertTrue(
-                            json_response['url'].
-                            endswith(f"{icon_url_without_color}/{icon_name}@1x-255,0,0.png")
+                        self.assertEqual(
+                            json_response['url'],
+                            unquote_plus(
+                                url_for(
+                                    'colorized_icon',
+                                    icon_set_name=icon_set_name,
+                                    icon_name=icon_name,
+                                    red="255",
+                                    green="0",
+                                    blue="0",
+                                    scale="1x",
+                                    _external=True
+                                )
+                            )
                         )
                     else:
-                        self.assertTrue(
-                            json_response['url'].
-                            endswith(f"{icon_url_without_color}/{icon_name}@1x.png")
+                        self.assertEqual(
+                            json_response['url'],
+                            unquote_plus(
+                                url_for(
+                                    'colorized_icon',
+                                    icon_set_name=icon_set_name,
+                                    icon_name=icon_name,
+                                    scale="1x",
+                                    _external=True
+                                )
+                            )
                         )
 
     def test_all_icon_basic_image(self):
@@ -217,10 +231,7 @@ class AllIconsTest(ServiceIconsUnitTests):
             for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_url = url_for(
-                        'colorized_icon',
-                        icon_set_name=icon_set_name,
-                        icon_name=icon_name,
-                        _external=True
+                        'colorized_icon', icon_set_name=icon_set_name, icon_name=icon_name
                     )
                     self.check_image(icon_name, icon_url)
 
@@ -235,8 +246,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                         'colorized_icon',
                         icon_set_name=icon_set_name,
                         icon_name=icon_name,
-                        scale="2x",
-                        _external=True
+                        scale="2x"
                     )
                     self.check_image(icon_name, double_size_icon_url, expected_size=96)
 
@@ -251,8 +261,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                         'colorized_icon',
                         icon_set_name=icon_set_name,
                         icon_name=icon_name,
-                        scale=".5x",
-                        _external=True
+                        scale=".5x"
                     )
                     self.check_image(icon_name, half_size_icon_url, expected_size=24)
 
@@ -269,7 +278,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                         params["red"] = 0
                         params["green"] = 255
                         params["blue"] = 255
-                    colored_url = url_for('colorized_icon', **params, _external=True)
+                    colored_url = url_for('colorized_icon', **params)
                     self.check_image(
                         icon_name,
                         colored_url,
@@ -292,7 +301,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                         params["red"] = 0
                         params["green"] = 0
                         params["blue"] = 255
-                    colored_url = url_for('colorized_icon', **params, _external=True)
+                    colored_url = url_for('colorized_icon', **params)
                     self.check_image(
                         icon_name,
                         colored_url,
@@ -318,7 +327,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                         params["red"] = 0
                         params["green"] = 255
                         params["blue"] = 0
-                    colored_url = url_for('colorized_icon', **params, _external=True)
+                    colored_url = url_for('colorized_icon', **params)
                     self.check_image(
                         icon_name,
                         colored_url,

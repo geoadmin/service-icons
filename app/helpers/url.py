@@ -1,7 +1,5 @@
 from flask import request
 
-from app.settings import SCRIPT_NAME
-
 
 def get_base_url():
     """
@@ -12,11 +10,10 @@ def get_base_url():
     Returns:
         The base endpoint for this service, where it is currently being served (or accessed)
     """
-    # we need to remove either the trailing slash of request.host_url
-    # or the prefix slash of SCRIPT_NAME (otherwise there are two slashes in between)
-    base_url = f"{request.host_url[:-1]}{SCRIPT_NAME}"
-    # if base_url ends with a /, this needs to be removed, as following parts of the route will
-    # also begin with a / when added. Otherwise there would be // in the route.
+    base_url = request.root_url
+    # if base_url ends with a /, this needs to be removed, as following parts of the route
+    # (e.g. a SCRIPT_NAME if set in the k8s config) will begin with a / when added.
+    # Otherwise there would be // in the route.
     if base_url.endswith('/'):
         base_url = base_url[:-1]
     return base_url
