@@ -6,7 +6,6 @@ from werkzeug.exceptions import HTTPException
 from flask import Flask
 from flask import abort
 from flask import request
-from flask.helpers import url_for
 
 from app.helpers import make_error_msg
 from app.helpers.service_icon_custom_serializer import CustomJSONEncoder

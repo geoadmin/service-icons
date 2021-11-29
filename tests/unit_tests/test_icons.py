@@ -62,8 +62,7 @@ class IconsTests(ServiceIconsUnitTests):
                 scale='1x',
                 red=255,
                 green=0,
-                blue=0,
-                _external=True
+                blue=0
             ),
             data=json.dumps({"url": "https://test.bgdi.ch/test"}),
             content_type="application/json",
@@ -90,8 +89,7 @@ class IconsTests(ServiceIconsUnitTests):
 
     def test_icons_from_icon_set(self):
         response = self.app.get(
-            url_for('icons_from_icon_set', icon_set_name="default", _external=True),
-            headers=self.default_header
+            url_for('icons_from_icon_set', icon_set_name="default"), headers=self.default_header
         )
         self.assertEqual(response.status_code, 200)
         self.assertCors(response)

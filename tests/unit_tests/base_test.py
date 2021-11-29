@@ -64,8 +64,7 @@ class ServiceIconsUnitTests(unittest.TestCase):
                 scale=scale,
                 red=red,
                 green=red,
-                blue=blue,
-                _external=True
+                blue=blue
             ),
             headers={"Origin": origin}
         )
