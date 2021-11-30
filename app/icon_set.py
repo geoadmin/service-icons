@@ -1,5 +1,7 @@
 import os
 
+from flask import url_for
+
 from app.helpers.icons import get_icon_set_template_url
 from app.helpers.url import get_base_url
 from app.icon import Icon
@@ -63,7 +65,7 @@ class IconSet:
         Returns:
             the URL by which this icon set's metadata can be accessed on this service
         """
-        return get_icon_set_template_url(get_base_url()).format(icon_set_name=self.name)
+        return url_for('icon_set_metadata', icon_set_name=self.name, _external=True)
 
     def get_icons_url(self):
         """
@@ -72,7 +74,7 @@ class IconSet:
         Returns:
             the URL to list all available icons in this icon set
         """
-        return f"{self.get_icon_set_url()}/icons"
+        return url_for('icons_from_icon_set', icon_set_name=self.name, _external=True)
 
     def get_icon(self, icon_name):
         """

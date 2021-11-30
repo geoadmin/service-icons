@@ -1,7 +1,6 @@
 import io
 import logging
 import os
-from urllib.parse import unquote_plus
 
 from PIL import Image
 
@@ -196,30 +195,26 @@ class AllIconsTest(ServiceIconsUnitTests):
                     if icon_set_name in COLORABLE_ICON_SETS:
                         self.assertEqual(
                             json_response['url'],
-                            unquote_plus(
-                                url_for(
-                                    'colorized_icon',
-                                    icon_set_name=icon_set_name,
-                                    icon_name=icon_name,
-                                    red="255",
-                                    green="0",
-                                    blue="0",
-                                    scale="1x",
-                                    _external=True
-                                )
+                            url_for(
+                                'colorized_icon',
+                                icon_set_name=icon_set_name,
+                                icon_name=icon_name,
+                                red="255",
+                                green="0",
+                                blue="0",
+                                scale="1x",
+                                _external=True
                             )
                         )
                     else:
                         self.assertEqual(
                             json_response['url'],
-                            unquote_plus(
-                                url_for(
-                                    'colorized_icon',
-                                    icon_set_name=icon_set_name,
-                                    icon_name=icon_name,
-                                    scale="1x",
-                                    _external=True
-                                )
+                            url_for(
+                                'colorized_icon',
+                                icon_set_name=icon_set_name,
+                                icon_name=icon_name,
+                                scale="1x",
+                                _external=True
                             )
                         )
 
