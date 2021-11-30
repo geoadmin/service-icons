@@ -14,9 +14,12 @@ IMAGE_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), '../stati
 COLORABLE_ICON_SETS = ['default']
 DEFAULT_COLOR = {"r": 255, "g": 0, "b": 0}
 TRAP_HTTP_EXCEPTIONS = True
+LOGS_DIR = os.getenv('LOGS_DIR', str(BASE_DIR / 'logs'))
+os.environ['LOGS_DIR'] = LOGS_DIR  # Set default if not set
+LOGGING_CFG = os.getenv('LOGGING_CFG', 'logging-cfg-local.yml')
 
 # Definition of the allowed domains for CORS implementation
 ALLOWED_DOMAINS = os.getenv('ALLOWED_DOMAINS', r'.*').split(',')
-ALLOWED_DOMAINS_PATTERN = '({})'.format('|'.join(ALLOWED_DOMAINS))
+ALLOWED_DOMAINS_PATTERN = f"({format('|'.join(ALLOWED_DOMAINS))})"
 CACHE_CONTROL = os.getenv('CACHE_CONTROL', 'public, max-age=86400')
 CACHE_CONTROL_4XX = os.getenv('CACHE_CONTROL_4XX', 'public, max-age=3600')
