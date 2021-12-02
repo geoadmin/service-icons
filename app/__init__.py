@@ -6,11 +6,9 @@ from werkzeug.exceptions import HTTPException
 from flask import Flask
 from flask import abort
 from flask import request
-from flask.helpers import url_for
 
 from app.helpers import make_error_msg
 from app.helpers.service_icon_custom_serializer import CustomJSONEncoder
-from app.middleware import ReverseProxy
 from app.settings import ALLOWED_DOMAINS_PATTERN
 from app.settings import CACHE_CONTROL
 from app.settings import CACHE_CONTROL_4XX
@@ -22,7 +20,6 @@ route_logger = logging.getLogger('app.routes')
 
 app = Flask(__name__)
 app.config.from_object('app.settings')
-app.wsgi_app = ReverseProxy(app.wsgi_app, script_name='/')
 app.json_encoder = CustomJSONEncoder
 
 

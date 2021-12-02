@@ -1,8 +1,8 @@
 import json
 
-from app.settings import ROUTE_PREFIX
+from flask import url_for
+
 from tests.unit_tests.base_test import ServiceIconsUnitTests
-from tests.unit_tests.base_test import build_request_url_for_icon
 
 
 class IconsTests(ServiceIconsUnitTests):
@@ -54,9 +54,16 @@ class IconsTests(ServiceIconsUnitTests):
         )
 
     def test_colorized_icon_no_http_post_method_allowed_on_endpoint(self):
-        request_url = build_request_url_for_icon()
         response = self.app.post(
-            request_url,
+            url_for(
+                'colorized_icon',
+                icon_set_name="default",
+                icon_name="marker",
+                scale='1x',
+                red=255,
+                green=0,
+                blue=0
+            ),
             data=json.dumps({"url": "https://test.bgdi.ch/test"}),
             content_type="application/json",
             headers=self.default_header
@@ -81,7 +88,9 @@ class IconsTests(ServiceIconsUnitTests):
         )
 
     def test_icons_from_icon_set(self):
-        response = self.app.get(f"{ROUTE_PREFIX}/sets/default/icons", headers=self.default_header)
+        response = self.app.get(
+            url_for('icons_from_icon_set', icon_set_name="default"), headers=self.default_header
+        )
         self.assertEqual(response.status_code, 200)
         self.assertCors(response)
         self.assertEqual(response.content_type, 'application/json')

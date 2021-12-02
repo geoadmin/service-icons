@@ -11,18 +11,13 @@ from app import app
 from app.helpers.check_functions import check_color_channels
 from app.helpers.check_functions import get_and_check_icon
 from app.helpers.check_functions import get_and_check_icon_set
-from app.helpers.route import prefix_route
 from app.icon import Icon
 from app.icon_set import IconSet
 from app.icon_set import get_all_icon_sets
 from app.settings import DEFAULT_COLOR
-from app.settings import ROUTE_PREFIX
 from app.version import APP_VERSION
 
 logger = logging.getLogger(__name__)
-
-# add route prefix
-app.route = prefix_route(app.route, ROUTE_PREFIX)
 
 
 def make_api_compliant_response(response_object):

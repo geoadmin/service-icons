@@ -29,6 +29,7 @@ wheels/
 .installed.cfg
 *.egg
 local/
+logs/
 
 # Makefile
 .timestamps

@@ -37,8 +37,6 @@ phases:
       - make ci-check-format
       - echo "Linting code"
       - make lint
-      - echo "Linting openapi spec"
-      - make lint-spec
   build:
     commands:
       - echo Build started on $(date)

@@ -14,9 +14,10 @@ GIT_DIRTY = `git status --porcelain`
 GIT_TAG = `git describe --tags || echo "no version info"`
 AUTHOR = $(USER)
 
-# general targets timestamps
-TIMESTAMPS = .timestamps
-REQUIREMENTS := $(TIMESTAMPS) $(PIP_FILE) $(PIP_FILE_LOCK)
+
+# general targets
+LOGS_DIR = $(PWD)/logs
+
 
 # Docker variables
 DOCKER_REGISTRY = 974517877189.dkr.ecr.eu-central-1.amazonaws.com
@@ -35,6 +36,7 @@ PIP_FILE_LOCK = Pipfile.lock
 # default configuration
 ENV_FILE ?= .env.local
 HTTP_PORT ?= 5000
+ROUTE_PREFIX ?= /api/icons
 
 # Commands
 PIPENV_RUN := pipenv run
@@ -45,6 +47,7 @@ YAPF := $(PIPENV_RUN) yapf
 ISORT := $(PIPENV_RUN) isort
 NOSE := $(PIPENV_RUN) nose2
 PYLINT := $(PIPENV_RUN) pylint
+
 
 
 all: help
@@ -63,14 +66,11 @@ help:
 	@echo "- format             Format the python source code"
 	@echo "- ci-check-format    Format the python source code and check if any files has changed. This is meant to be used by the CI."
 	@echo "- lint               Lint the python source code"
-	@echo "- lint-spec          Lint the openapi spec"
 	@echo "- format-lint        Format and lint the python source code"
 	@echo "- test               Run the tests"
 	@echo -e " \033[1mLOCAL SERVER TARGETS\033[0m "
 	@echo "- serve              Run the project using the flask debug server. Port can be set by Env variable HTTP_PORT (default: 5000)"
 	@echo "- gunicornserve      Run the project using the gunicorn WSGI server. Port can be set by Env variable DEBUG_HTTP_PORT (default: 5000)"
-	@echo "- serve-spec-redoc   Serve the spec using Redoc on localhost:8080"
-	@echo "- serve-spec-swagger Serve the spec using Redoc on localhost:8080/swagger"
 	@echo -e " \033[1mDocker TARGETS\033[0m "
 	@echo "- dockerlogin        Login to the AWS ECR registery for pulling/pushing docker images"
 	@echo "- dockerbuild        Build the project localy (with tag := $(DOCKER_IMG_LOCAL_TAG)) using the gunicorn WSGI server inside a container"
@@ -79,25 +79,28 @@ help:
 	@echo -e " \033[1mCLEANING TARGETS\033[0m "
 	@echo "- clean              Clean genereated files"
 	@echo "- clean_venv         Clean python venv"
+	@echo "- clean_logs         Clean logs"
 
 
 # Build targets. Calling setup is all that is needed for the local files to be installed as needed.
 
 .PHONY: dev
-dev: $(REQUIREMENTS)
+dev:
 	pipenv install --dev
 	pipenv shell
 
 
 .PHONY: setup
-setup: $(REQUIREMENTS)
+setup:
 	pipenv install
 	pipenv shell
 
+
 .PHONY: ci
-ci: $(REQUIREMENTS)
+ci:
 	# Create virtual env with all packages for development using the Pipfile.lock
 	pipenv sync --dev
+
 
 # linting target, calls upon yapf to make sure your code is easier to read and respects some conventions.
 
@@ -110,8 +113,8 @@ format:
 .PHONY: ci-check-format
 ci-check-format: format
 	@if [[ -n `git status --porcelain --untracked-files=no` ]]; then \
-	 	>&2 echo "ERROR: the following files are not formatted correctly"; \
-	 	>&2 echo "'git status --porcelain' reported changes in those files after a 'make format' :"; \
+		>&2 echo "ERROR: the following files are not formatted correctly"; \
+		>&2 echo "'git status --porcelain' reported changes in those files after a 'make format' :"; \
 		>&2 git status --porcelain --untracked-files=no; \
 		exit 1; \
 	fi
@@ -129,20 +132,19 @@ format-lint: format lint
 # Test target
 
 .PHONY: test
-test: $(REQUIREMENTS)
+test:
 	ENV_FILE=.env.test $(NOSE) -c tests/unittest.cfg --verbose -s tests/
-
 
 # Serve targets. Using these will run the application on your local machine. You can either serve with a wsgi front (like it would be within the container), or without.
 
 .PHONY: serve
-serve:
-	FLASK_APP=$(subst -,_,$(SERVICE_NAME)) FLASK_DEBUG=1 $(FLASK) run --host=0.0.0.0 --port=$(HTTP_PORT)
+serve: clean_logs $(LOGS_DIR)
+	ENV_FILE=$(ENV_FILE) LOGS_DIR=$(LOGS_DIR) FLASK_APP=$(subst -,_,$(SERVICE_NAME)) FLASK_DEBUG=1 $(FLASK) run --host=0.0.0.0 --port=$(HTTP_PORT)
 
 
 .PHONY: gunicornserve
-gunicornserve:
-	$(PYTHON) wsgi.py
+gunicornserve: clean_logs $(LOGS_DIR)
+	SCRIPT_NAME=$(ROUTE_PREFIX) ENV_FILE=$(ENV_FILE) LOGS_DIR=$(LOGS_DIR) $(PYTHON) wsgi.py
 
 
 # Docker related functions.
@@ -159,6 +161,7 @@ dockerbuild:
 		--build-arg GIT_BRANCH="$(GIT_BRANCH)" \
 		--build-arg GIT_DIRTY="$(GIT_DIRTY)" \
 		--build-arg VERSION="$(GIT_TAG)" \
+		--build-arg HTTP_PORT="$(HTTP_PORT)" \
 		--build-arg AUTHOR="$(AUTHOR)" -t $(DOCKER_IMG_LOCAL_TAG) .
 
 
@@ -168,38 +171,22 @@ dockerpush: dockerbuild
 
 
 .PHONY: dockerrun
-dockerrun: dockerbuild
-	echo "Starting docker container and mapped its 8080 port to $(HTTP_PORT); http://localhost:$(HTTP_PORT)"
+dockerrun: clean_logs dockerbuild $(LOGS_DIR)
 	docker run \
 		-it -p $(HTTP_PORT):8080 \
 		--env-file=${PWD}/${ENV_FILE} \
-	 	$(DOCKER_IMG_LOCAL_TAG)
+		--env LOGS_DIR=/logs \
+		--env SCRIPT_NAME=$(ROUTE_PREFIX) \
+		--mount type=bind,source="${LOGS_DIR}",target=/logs \
+		$(DOCKER_IMG_LOCAL_TAG)
 
 
-# Spec targets
+ # Clean targets
 
-.PHONY: lint-spec
-lint-spec:
-	docker run --volume "$(PWD)":/data jamescooke/openapi-validator -e openapi.yml
+.PHONY: clean_logs
+clean_logs:
+	rm -rf $(LOGS_DIR)
 
-
-.PHONY: serve-spec
-serve-spec-redoc:
-	docker run -it --rm -p 8080:80 \
-		-v "$(PWD)/openapi.yml":/usr/share/nginx/html/openapi.yml \
-		-e SPEC_URL=openapi.yml redocly/redoc
-
-
-.PHONY: serve-spec-swagger
-serve-spec-swagger:
-	echo "SWAGGER UI on http://localhost:8080/swagger"
-	docker run -p 8080:8080 \
-		-e BASE_URL=/swagger -e SWAGGER_JSON=/openapi.yaml \
-		-v ${PWD}/openapi.yml:/openapi.yaml \
-		swaggerapi/swagger-ui
-
-
-# Clean targets
 
 .PHONY: clean_venv
 clean_venv:
@@ -207,13 +194,13 @@ clean_venv:
 
 
 .PHONY: clean
-clean: clean_venv
+clean: clean_venv clean_logs
 	@# clean python cache files
 	find . -name __pycache__ -type d -print0 | xargs -I {} -0 rm -rf "{}"
-	rm -rf $(TIMESTAMPS)
 
 
 # Actual builds targets with dependencies
 
-$(TIMESTAMPS):
-	mkdir -p $(TIMESTAMPS)
+$(LOGS_DIR):
+	mkdir -p -m=777 $(LOGS_DIR)
+

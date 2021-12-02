@@ -1,17 +1,10 @@
 import re
 import unittest
 
+from flask import url_for
+
 from app import app
 from app.settings import ALLOWED_DOMAINS_PATTERN
-from app.settings import ROUTE_PREFIX
-
-
-def build_request_url_for_icon(
-    icon_name="marker", scale='1x', red=255, green=0, blue=0, icon_category="default"
-):
-    return f"{ROUTE_PREFIX}/sets/{icon_category}" \
-           f"/icons/{icon_name}@{scale}-{red},{green},{blue}.png"
-
 
 ORIGIN_FOR_TESTING = "some_random_domain"
 
@@ -25,6 +18,8 @@ class ServiceIconsUnitTests(unittest.TestCase):
         self.default_header = {"Origin": self.origin_for_testing}
 
     def setUp(self):
+        self.context = app.test_request_context()
+        self.context.push()
         self.app = app.test_client()
         self.assertEqual(app.debug, False)
 
@@ -62,7 +57,15 @@ class ServiceIconsUnitTests(unittest.TestCase):
         origin=ORIGIN_FOR_TESTING
     ):
         return self.app.get(
-            build_request_url_for_icon(icon_name, scale, red, green, blue, icon_category),
+            url_for(
+                'colorized_icon',
+                icon_set_name=icon_category,
+                icon_name=icon_name,
+                scale=scale,
+                red=red,
+                green=red,
+                blue=blue
+            ),
             headers={"Origin": origin}
         )
 

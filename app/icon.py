@@ -1,5 +1,7 @@
 import os
 
+from flask import url_for
+
 from app.helpers.icons import get_icon_template_url
 from app.helpers.url import get_base_url
 from app.settings import DEFAULT_COLOR
@@ -33,13 +35,23 @@ class Icon:
             green: (int) green value (if this icon is part of an icon set that can be colorized)
             blue: (int) blue value (if this icon is part of an icon set that can be colorized)
         """
-        return get_icon_template_url(get_base_url(), self.icon_set.colorable).format(
+        if self.icon_set.colorable:
+            return url_for(
+                'colorized_icon',
+                icon_set_name=self.icon_set.name,
+                icon_name=self.name,
+                scale='1x',
+                red=red,
+                green=green,
+                blue=blue,
+                _external=True
+            )
+        return url_for(
+            'colorized_icon',
             icon_set_name=self.icon_set.name,
             icon_name=self.name,
-            icon_scale='1x',
-            r=red,
-            g=green,
-            b=blue
+            scale='1x',
+            _external=True
         )
 
     def get_icon_filepath(self):
