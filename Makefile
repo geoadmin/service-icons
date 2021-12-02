@@ -15,14 +15,8 @@ GIT_TAG = `git describe --tags || echo "no version info"`
 AUTHOR = $(USER)
 
 
-# Test report configuration
-TEST_REPORT_DIR ?= $(CURRENT_DIR)/tests/report
-TEST_REPORT_FILE ?= nose2-junit.xml
-
-# general targets timestamps
-TIMESTAMPS = .timestamps
+# general targets
 LOGS_DIR = $(PWD)/logs
-REQUIREMENTS := $(TIMESTAMPS) $(LOGS_DIR) $(PIP_FILE) $(PIP_FILE_LOCK)
 
 
 # Docker variables
@@ -70,6 +64,7 @@ help:
 	@echo "- ci                 Create the python virtual environment and install requirements based on the Pipfile.lock"
 	@echo -e " \033[1mFORMATING, LINTING AND TESTING TOOLS TARGETS\033[0m "
 	@echo "- format             Format the python source code"
+	@echo "- ci-check-format    Format the python source code and check if any files has changed. This is meant to be used by the CI."
 	@echo "- lint               Lint the python source code"
 	@echo "- format-lint        Format and lint the python source code"
 	@echo "- test               Run the tests"
@@ -90,19 +85,19 @@ help:
 # Build targets. Calling setup is all that is needed for the local files to be installed as needed.
 
 .PHONY: dev
-dev: $(REQUIREMENTS)
+dev:
 	pipenv install --dev
 	pipenv shell
 
 
 .PHONY: setup
-setup: $(REQUIREMENTS)
+setup:
 	pipenv install
 	pipenv shell
 
 
 .PHONY: ci
-ci: $(REQUIREMENTS)
+ci:
 	# Create virtual env with all packages for development using the Pipfile.lock
 	pipenv sync --dev
 
@@ -138,9 +133,7 @@ format-lint: format lint
 
 .PHONY: test
 test:
-	mkdir -p $(TEST_REPORT_DIR)
-	ENV_FILE=.env.test $(NOSE) -c tests/unittest.cfg --verbose --junit-xml-path $(TEST_REPORT_DIR)/$(TEST_REPORT_FILE) -s tests/
-
+	ENV_FILE=.env.test $(NOSE) -c tests/unittest.cfg --verbose -s tests/
 
 # Serve targets. Using these will run the application on your local machine. You can either serve with a wsgi front (like it would be within the container), or without.
 
@@ -194,6 +187,7 @@ dockerrun: clean_logs dockerbuild $(LOGS_DIR)
 clean_logs:
 	rm -rf $(LOGS_DIR)
 
+
 .PHONY: clean_venv
 clean_venv:
 	pipenv --rm
@@ -203,15 +197,9 @@ clean_venv:
 clean: clean_venv clean_logs
 	@# clean python cache files
 	find . -name __pycache__ -type d -print0 | xargs -I {} -0 rm -rf "{}"
-	rm -rf $(TEST_REPORT_DIR)
-	rm -rf $(TIMESTAMPS)
 
 
 # Actual builds targets with dependencies
-
-$(TIMESTAMPS):
-	mkdir -p $(TIMESTAMPS)
-
 
 $(LOGS_DIR):
 	mkdir -p -m=777 $(LOGS_DIR)
