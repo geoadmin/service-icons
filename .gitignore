@@ -29,12 +29,20 @@ wheels/
 .installed.cfg
 *.egg
 local/
+logs/
+
+# Makefile
+.timestamps
+.local
 
 # virtualenv
 .venv
 
 # mypy
 .mypy_cache/
+
+# unittest report
+nose2-junit.xml
 
 # PyCharm generated files
 *.idea
@@ -45,3 +53,9 @@ local/
 
 #vim
 *.swp
+
+# git generate files
+*.orig
+
+# visual studio code config
+.vscode

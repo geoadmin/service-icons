@@ -1,21 +1,33 @@
 # Git
 .git
+.github
 .gitignore
 .gitmodules
+**/*.orig
 **/*.md
 
 # Docker
 docker-compose.yml
 docker-compose.yml.in
 .docker
+.dockerignore
+Dockerfile
 
 # Python
-*.pyc
-__pycache__
+**/*.pyc
+**/__pycache__
 
 # Files not used within docker
-./tests/*
+tests
 Makefile
 .venv
-lib-makefiles/*
+.pylintrc
+.isort.cfg
+.style.yapf
+.timestamps
+.vscode
+service_icons.py
 buildspec.yml
+.validaterc
+nose2-junit.xml
+.env.*
