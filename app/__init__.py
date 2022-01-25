@@ -1,10 +1,12 @@
 import logging
 import re
+import time
 
 from werkzeug.exceptions import HTTPException
 
 from flask import Flask
 from flask import abort
+from flask import g
 from flask import request
 
 from app.helpers import make_error_msg
@@ -27,7 +29,8 @@ app.json_encoder = CustomJSONEncoder
 # the route might not be logged if another method reject the request.
 @app.before_request
 def log_route():
-    route_logger.info('%s %s', request.method, request.path)
+    g.setdefault('started', time.time())
+    route_logger.debug('%s %s', request.method, request.path)
 
 
 # Add CORS Headers to all request
@@ -66,6 +69,24 @@ def validate_origin():
     if not re.match(ALLOWED_DOMAINS_PATTERN, request.headers['Origin']):
         logger.error('Origin=%s is not allowed', request.headers['Origin'])
         abort(403, 'Not allowed')
+
+
+@app.after_request
+def log_response(response):
+    logger.info(
+        "%s %s - %s",
+        request.method,
+        request.path,
+        response.status,
+        extra={
+            'response':
+                {
+                    "status_code": response.status_code, "headers": dict(response.headers.items())
+                },
+            "duration": time.time() - g.get('started', time.time())
+        }
+    )
+    return response
 
 
 # Register error handler to make sure that every error returns a json answer
