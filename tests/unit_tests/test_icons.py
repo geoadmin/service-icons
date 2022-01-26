@@ -69,14 +69,14 @@ class IconsTests(ServiceIconsUnitTests):
     def test_colorized_icon_non_existent_icon_name(self):
         response = self.request_colorized_icon(icon_name="non_existent_dummy_icon")
         self.assertEqual(
-            response.status_code, 400, msg="Should return a HTTP 400 when file not found"
+            response.status_code, 404, msg="Should return a HTTP 404 when file not found"
         )
         self.assertIn('max-age=3600', response.headers['Cache-Control'])
         self.assertEqual(response.content_type, "application/json")
         self.assertEqual(
             response.json, {
                 "error": {
-                    "code": 400, "message": "Icon not found in icon set"
+                    "code": 404, "message": "Icon not found in icon set"
                 }, "success": False
             }
         )

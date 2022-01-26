@@ -67,7 +67,7 @@ def get_and_check_icon_set(icon_set_name):
     icon_set = get_icon_set(icon_set_name)
     if not icon_set:
         logger.error("Icon set not found: %s", icon_set_name)
-        abort(400, "Icon set not found")
+        abort(404, "Icon set not found")
     return icon_set
 
 
@@ -86,5 +86,5 @@ def get_and_check_icon(icon_set, icon_name):
     path = icon.get_icon_filepath()
     if not os.path.isfile(path):
         logger.error("The icon doesn't exist: %s", path)
-        abort(400, "Icon not found in icon set")
+        abort(404, "Icon not found in icon set")
     return icon
