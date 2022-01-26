@@ -217,6 +217,22 @@ class AllIconsTest(ServiceIconsUnitTests):
                                 _external=True
                             )
                         )
+                    self.assertIn('anchor', json_response)
+                    self.assertIsInstance(
+                        json_response['anchor'],
+                        list,
+                        msg='"anchor" should be a list with x and y fraction'
+                    )
+                    self.assertEqual(
+                        len(json_response['anchor']),
+                        2,
+                        msg='"anchor" should have two items; x and y fraction'
+                    )
+                    for fraction in json_response['anchor']:
+                        self.assertIsInstance(
+                            fraction, (int, float), msg='"anchor" fraction should be int or float'
+                        )
+                        self.assertTrue(fraction > 0, msg='"anchor" fraction should be > 0')
 
     def test_all_icon_basic_image(self):
         """
