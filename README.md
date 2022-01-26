@@ -11,9 +11,6 @@
 - [Description](#description)
 - [Dependencies](#dependencies)
 - [Service API](#service-api)
-  - [Staging Environments](#staging-environments)
-  - [checker GET](#checker-get)
-  - [color GET](#color-get)
 - [Versioning](#versioning)
 - [Local Development](#local-development)
   - [Make Dependencies](#make-dependencies)
@@ -22,8 +19,6 @@
   - [Test your work](#test-your-work)
 - [Docker](#docker)
 - [Deployment](#deployment)
-  - [Dev](#dev)
-  - [Int](#int)
   - [Deployment configuration](#deployment-configuration)
 
 ## Description
@@ -36,37 +31,19 @@ This service doesn't have any external dependencies
 
 ## Service API
 
-This service has two endpoints:
+The service has the following endpoints:
 
-- [checker GET](#checker-get)
-- [color GET](#color-get)
+- `GET /checker`
+- `GET /sets`
+- `GET /sets/<icon_set_name>`
+- `GET /sets/<icon_set_name>/icons`
+- `GET /sets/<icon_set_name>/icons/<icon_name>`
+- `GET /sets/<icon_set_name>/icons/<icon_name>.png`
+- `GET /sets/<icon_set_name>/icons/<icon_name>-<red>,<green>,<blue>.png`
+- `GET /sets/<icon_set_name>/icons/<icon_name>@<scale>.png`
+- `GET /sets/<icon_set_name>/icons/<icon_name>@<scale>-<red>,<green>,<blue>.png`
 
-A detailed descriptions of the endpoints can be found in the [OpenAPI Spec](openapi.yaml).
-
-### Staging Environments
-
-| Environments | URL                                                                                                                   |
-| ------------ | --------------------------------------------------------------------------------------------------------------------- |
-| DEV          | [https://service-icons.bgdi-dev.swisstopo.cloud/v4/icons/](https://service-icons.bgdi-dev.swisstopo.cloud/v4/icons/)  |
-| INT          | [https://service-icons.bgdi-int.swisstopo.cloud/v4/icons/](https://service-icons.bgdi-int.swisstopo.cloud/v4/icons/)  |
-| PROD         | [https://service-icons.bgdi-prod.swisstopo.cloud/v4/icons/](https://service-icons.bgdi-int.swisstopo.cloud/v4/icons/) |
-
-### checker GET
-
-This is a simple route meant to test if the server is up.
-
-| Path              | Method | Argument | Response Type    |
-| ----------------- | ------ | -------- | ---------------- |
-| /v4/icons/checker | GET    | -        | application/json |
-
-### color GET
-
-This route takes a color (defined by r, g and b values) and the name of a file containing a symbol to be colorized
-and returns the colorized symbol.
-
-| Path      | Method | Argument          | Response Type |
-| --------- | ------ | ----------------- | ------------- |
-| /v4/icons | GET    | r, g, b, filename | image/png     |
+A detailed descriptions of the endpoints can be found in the [OpenAPI Spec](https://github.com/geoadmin/doc-api-specs) repository.
 
 ## Versioning
 
@@ -78,7 +55,7 @@ See also [Git Flow - Versioning](https://github.com/geoadmin/doc-guidelines/blob
 
 ### Make Dependencies
 
-The **Make** targets assume you have **python3.7**, **pipenv**, **bash**, **curl**, **tar**, **docker** and **docker-compose** installed.
+The **Make** targets assume you have **python3.9**, **pipenv**, **bash**, **curl**, **tar**, **docker** and **docker-compose** installed.
 
 ### Setting up to work
 
@@ -91,7 +68,7 @@ git clone git@github.com:geoadmin/service-icons
 Then, you can run the setup target to ensure you have everything needed to develop, test and serve locally
 
 ```bash
-make setup
+make dev
 ```
 
 That's it, you're ready to work.
@@ -137,9 +114,14 @@ make dockerrun
 
 This will serve the application with the wsgi server, inside a container.
 
-    curl -H "Origin: https://map.geo.admin.ch/" http://localhost:5000/v4/icons/255,133,133/001-marker-24@2x.png --output out.dat
+Here below are simple examples of how to test the service after serving on localhost:5000:
 
-This is a simple example of how to test the service after serving on localhost:5000 (`out.dat` will either contain a PNG image or contain an error message.)
+```bash
+curl -H "Origin: www.example.com" http://localhost:5000/sets/default/icons
+curl -H "Origin: www.example.com" http://localhost:5000/sets/default/icons/001-marker@2x-255,133,133.png --output out.png
+```
+
+*NOTE: if you serve using gunicorn or docker, you need to add the route prefix `/api/icons`*
 
 ## Docker
 
@@ -176,35 +158,6 @@ docker ps --format="table {{.ID}}\t{{.Image}}\t{{.Labels}}"
 
 ## Deployment
 
-This service is to be deployed to the Kubernetes cluster once it is merged.
-
-**Check on which k8s you are before doing anything**
-
-by running :
-
-```bash
-kubectl config get-contexts
-```
-or (if you already have it installed)
-```bash
-kubectx
-```
-
-Make sure you are on the right context (staging) for what you want to achieve
-
-### Dev
-
-To deploy (or refresh) on dev, we have to kill all pods. The K8S configuration is made so that it will revive any killed pod while always retrieving the latest docker image.
-So as soon as your merge on `develop` as been successfully built by the CI (and so the CI has pushed the new image to our AWS ECR registry) you can kill all dev pods by running
-
-```bash
-kubectl delete --all pods --namespace=service-icons
-```
-
-### Int
-
-TO DO: give instructions to deploy to kubernetes.
-
 ### Deployment configuration
 
 The service is configured by Environment Variable:
@@ -213,5 +166,9 @@ The service is configured by Environment Variable:
 | ----------- | --------------------- | -------------------------- |
 | LOGGING_CFG | `logging-cfg-local.yml` | Logging configuration file |
 | ALLOWED_DOMAINS | `.*` | Comma separated list of regex that are allowed as domain in Origin header |
-| CACHE_CONTROL | `public, max-age=86400` | Cache Control header value of the `GET /v4/icons/*` endpoints |
+| CACHE_CONTROL | `public, max-age=86400` | Cache Control header value of the `GET /*` endpoints |
 | CACHE_CONTROL_4XX | `public, max-age=3600` | Cache Control header for 4XX responses |
+| FORWARED_ALLOW_IPS | `*` | Sets the gunicorn `forwarded_allow_ips`. See [Gunicorn Doc](https://docs.gunicorn.org/en/stable/settings.html#forwarded-allow-ips). This setting is required in order to `secure_scheme_headers` to work. |
+| FORWARDED_PROTO_HEADER_NAME | `X-Forwarded-Proto` | Sets gunicorn `secure_scheme_headers` parameter to `{${FORWARDED_PROTO_HEADER_NAME}: 'https'}`. This settings is required in order to generate correct URLs in the service responses. See [Gunicorn Doc](https://docs.gunicorn.org/en/stable/settings.html#secure-scheme-headers). |
+| SCRIPT_NAME | `''` | If the service is behind a reverse proxy and not served at the root, the route prefix must be set in `SCRIPT_NAME`. |
+| WSGI_TIMEOUT | `5` | WSGI timeout. |

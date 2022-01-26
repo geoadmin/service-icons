@@ -202,7 +202,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                                 red="255",
                                 green="0",
                                 blue="0",
-                                scale="1x",
+                                scale='1x',
                                 _external=True
                             )
                         )
@@ -213,10 +213,26 @@ class AllIconsTest(ServiceIconsUnitTests):
                                 'colorized_icon',
                                 icon_set_name=icon_set_name,
                                 icon_name=icon_name,
-                                scale="1x",
+                                scale='1x',
                                 _external=True
                             )
                         )
+                    self.assertIn('anchor', json_response)
+                    self.assertIsInstance(
+                        json_response['anchor'],
+                        list,
+                        msg='"anchor" should be a list with x and y fraction'
+                    )
+                    self.assertEqual(
+                        len(json_response['anchor']),
+                        2,
+                        msg='"anchor" should have two items; x and y fraction'
+                    )
+                    for fraction in json_response['anchor']:
+                        self.assertIsInstance(
+                            fraction, (int, float), msg='"anchor" fraction should be int or float'
+                        )
+                        self.assertTrue(fraction > 0, msg='"anchor" fraction should be > 0')
 
     def test_all_icon_basic_image(self):
         """
@@ -238,10 +254,7 @@ class AllIconsTest(ServiceIconsUnitTests):
             for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     double_size_icon_url = url_for(
-                        'colorized_icon',
-                        icon_set_name=icon_set_name,
-                        icon_name=icon_name,
-                        scale="2x"
+                        'colorized_icon', icon_set_name=icon_set_name, icon_name=icon_name, scale=2
                     )
                     self.check_image(icon_name, double_size_icon_url, expected_size=96)
 
@@ -256,7 +269,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                         'colorized_icon',
                         icon_set_name=icon_set_name,
                         icon_name=icon_name,
-                        scale=".5x"
+                        scale='0.5x'
                     )
                     self.check_image(icon_name, half_size_icon_url, expected_size=24)
 
@@ -291,7 +304,7 @@ class AllIconsTest(ServiceIconsUnitTests):
             for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_set = get_icon_set(icon_set_name)
-                    params = {"icon_set_name": icon_set_name, "icon_name": icon_name, "scale": "2x"}
+                    params = {"icon_set_name": icon_set_name, "icon_name": icon_name, "scale": '2x'}
                     if icon_set.colorable:
                         params["red"] = 0
                         params["green"] = 0
@@ -316,7 +329,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_set = get_icon_set(icon_set_name)
                     params = {
-                        "icon_set_name": icon_set_name, "icon_name": icon_name, "scale": ".5x"
+                        "icon_set_name": icon_set_name, "icon_name": icon_name, "scale": '0.5x'
                     }
                     if icon_set.colorable:
                         params["red"] = 0

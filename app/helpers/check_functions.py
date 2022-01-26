@@ -9,7 +9,10 @@ logger = logging.getLogger(__name__)
 
 
 def __check_color(color):
-    return 0 <= color <= 255
+    try:
+        return 0 <= int(color) <= 255
+    except ValueError:
+        return False
 
 
 def check_color_channels(red, green, blue):
@@ -29,13 +32,24 @@ def check_color_channels(red, green, blue):
     if not (__check_color(red) and __check_color(green) and __check_color(blue)):
         logger.error(
             "Color channel values must be integers in the range of 0 to 255. "
-            "(given: %d, %d, %d)",
+            "(given: %s, %s, %s)",
             red,
             green,
             blue
         )
         abort(400, "Color channel values must be integers in the range of 0 to 255.")
-    return red, green, blue
+    return int(red), int(green), int(blue)
+
+
+def check_scale(scale):
+    try:
+        _scale = float(scale.rstrip('x'))
+    except ValueError:
+        _scale = 0
+    if _scale <= 0:
+        logger.error('Invalid Scale %s: must be a number > 0', scale)
+        abort(400, "Invalid scale must be a positive number")
+    return _scale
 
 
 def get_and_check_icon_set(icon_set_name):
@@ -53,7 +67,7 @@ def get_and_check_icon_set(icon_set_name):
     icon_set = get_icon_set(icon_set_name)
     if not icon_set:
         logger.error("Icon set not found: %s", icon_set_name)
-        abort(400, "Icon set not found")
+        abort(404, "Icon set not found")
     return icon_set
 
 
@@ -72,5 +86,5 @@ def get_and_check_icon(icon_set, icon_name):
     path = icon.get_icon_filepath()
     if not os.path.isfile(path):
         logger.error("The icon doesn't exist: %s", path)
-        abort(400, "Icon not found in icon set")
+        abort(404, "Icon not found in icon set")
     return icon

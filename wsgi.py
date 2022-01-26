@@ -33,12 +33,11 @@ if __name__ == '__main__':
         'bind': f"0.0.0.0:{HTTP_PORT}",
         'worker_class': 'gevent',
         'workers': 2,  # scaling horizontally is left to Kubernetes
-        'timeout': 60,
+        'timeout': int(os.getenv('WSGI_TIMEOUT', '5')),
         'logconfig_dict': get_logging_cfg(),
         'forwarded_allow_ips': os.getenv('FORWARED_ALLOW_IPS', '*'),
-        'secure_scheme_headers':
-            {
-                os.getenv('FORWARDED_PROTO_HEADER_NAME', 'X-Forwarded-Proto').upper(): 'https'
-            }
+        'secure_scheme_headers': {
+            os.getenv('FORWARDED_PROTO_HEADER_NAME', 'X-Forwarded-Proto').upper(): 'https'
+        }
     }
     StandaloneApplication(application, options).run()
