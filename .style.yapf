@@ -17,9 +17,20 @@ based_on_style=google
 #       end_ts=now(),
 #   )        # <--- this bracket is dedented and on a separate line
 dedent_closing_brackets=True
+coalesce_brackets=True
 
-# Split before arguments, but do not split all subexpressions recursively
+arithmetic_precedence_indication=True
+no_spaces_around_selected_binary_operators=True
+
+# This avoid issues with complex dictionary
+# see https://github.com/google/yapf/issues/392#issuecomment-407958737
+indent_dictionary_value=True
+allow_split_before_dict_value=False
+
+# Split before arguments, but do not split all sub expressions recursively
 # (unless needed).
 split_all_top_level_comma_separated_values=True
 
+# Split lines longer than 100 characters (this only applies to code not to
+# comment and docstring)
 column_limit=100

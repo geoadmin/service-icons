@@ -79,10 +79,9 @@ def log_response(response):
         request.path,
         response.status,
         extra={
-            'response':
-                {
-                    "status_code": response.status_code, "headers": dict(response.headers.items())
-                },
+            'response': {
+                "status_code": response.status_code, "headers": dict(response.headers.items())
+            },
             "duration": time.time() - g.get('started', time.time())
         }
     )

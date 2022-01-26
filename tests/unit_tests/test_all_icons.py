@@ -316,7 +316,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_set = get_icon_set(icon_set_name)
                     params = {
-                        "icon_set_name": icon_set_name, "icon_name": icon_name, "scale": ".5x"
+                        "icon_set_name": icon_set_name, "icon_name": icon_name, "scale": '0.5x'
                     }
                     if icon_set.colorable:
                         params["red"] = 0

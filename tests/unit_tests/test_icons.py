@@ -19,11 +19,10 @@ class IconsTests(ServiceIconsUnitTests):
         self.assertEqual(
             response.json,
             {
-                "error":
-                    {
-                        "code": 400,
-                        "message": "Color channel values must be integers in the range of 0 to 255."
-                    },
+                "error": {
+                    "code": 400,
+                    "message": "Color channel values must be integers in the range of 0 to 255."
+                },
                 "success": False
             }
         )
@@ -79,10 +78,9 @@ class IconsTests(ServiceIconsUnitTests):
         self.assertEqual(
             response.json,
             {
-                "error":
-                    {
-                        "code": 405, "message": "The method is not allowed for the requested URL."
-                    },
+                "error": {
+                    "code": 405, "message": "The method is not allowed for the requested URL."
+                },
                 "success": False
             }
         )
