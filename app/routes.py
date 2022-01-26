@@ -9,6 +9,7 @@ from flask import make_response
 
 from app import app
 from app.helpers.check_functions import check_color_channels
+from app.helpers.check_functions import check_scale
 from app.helpers.check_functions import get_and_check_icon
 from app.helpers.check_functions import get_and_check_icon_set
 from app.icon import Icon
@@ -64,18 +65,17 @@ def icon_metadata(icon_set_name, icon_name):
     return make_api_compliant_response(icon)
 
 
-@app.route('/sets/<string:icon_set_name>/icons/<string:icon_name>.png', methods=['GET'])
 @app.route(
-    '/sets/<string:icon_set_name>/icons/<string:icon_name>-<int:red>,<int:green>,<int:blue>.png',
-    methods=['GET']
+    '/sets/<icon_set_name>/icons/<icon_name>.png',
 )
 @app.route(
-    '/sets/<string:icon_set_name>/icons/<string:icon_name>@<string:scale>.png', methods=['GET']
+    '/sets/<icon_set_name>/icons/<icon_name>-<red>,<green>,<blue>.png',
 )
 @app.route(
-    '/sets/<string:icon_set_name>/icons/<string:icon_name>@<string:scale>'
-    '-<int:red>,<int:green>,<int:blue>.png',
-    methods=['GET']
+    '/sets/<icon_set_name>/icons/<icon_name>@<scale>.png',
+)
+@app.route(
+    '/sets/<icon_set_name>/icons/<icon_name>@<scale>-<red>,<green>,<blue>.png',
 )
 def colorized_icon(
     icon_set_name,
@@ -88,17 +88,13 @@ def colorized_icon(
     red, green, blue = check_color_channels(red, green, blue)
     icon_set = get_and_check_icon_set(icon_set_name)
     icon = get_and_check_icon(icon_set, icon_name)
-    scale_factor = 1
-    if scale == '2x':
-        scale_factor = 2
-    elif scale in ('0.5x', '.5x'):
-        scale_factor = 0.5
+    scale = check_scale(scale)
 
     with open(icon.get_icon_filepath(), 'rb') as fd:
         image = Image.open(fd)
         if image.mode == 'P':
             image = image.convert('RGBA')
-        new_size = int(48 * scale_factor)
+        new_size = int(48 * scale)
         if new_size != icon_set.get_default_pixel_size():
             image = image.resize((new_size, new_size))
         if icon_set.colorable:

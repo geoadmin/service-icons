@@ -7,8 +7,47 @@ from tests.unit_tests.base_test import ServiceIconsUnitTests
 
 class IconsTests(ServiceIconsUnitTests):
 
+    def test_colorized_icon_with_invalid_scale_value(self):
+        response = self.request_colorized_icon(scale='0x')
+        self.assertEqual(
+            response.status_code, 400, "Should return a HTTP 400 when a invalid scale value"
+        )
+        self.assertCors(response)
+        self.assertIn('Cache-Control', response.headers)
+        self.assertIn('max-age=3600', response.headers['Cache-Control'])
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(
+            response.json,
+            {
+                "error": {
+                    "code": 400, "message": "Invalid scale must be a positive number"
+                },
+                "success": False
+            }
+        )
+
     def test_colorized_icon_with_wrong_rgb_value(self):
         response = self.request_colorized_icon(red=2155)
+        self.assertEqual(
+            response.status_code, 400, "Should return a HTTP 400 when a RGB value is out of range"
+        )
+        self.assertCors(response)
+        self.assertIn('Cache-Control', response.headers)
+        self.assertIn('max-age=3600', response.headers['Cache-Control'])
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(
+            response.json,
+            {
+                "error": {
+                    "code": 400,
+                    "message": "Color channel values must be integers in the range of 0 to 255."
+                },
+                "success": False
+            }
+        )
+
+    def test_colorized_icon_with_invalid_rgb_value(self):
+        response = self.request_colorized_icon(red='invalid')
         self.assertEqual(
             response.status_code, 400, "Should return a HTTP 400 when a RGB value is out of range"
         )
@@ -57,7 +96,7 @@ class IconsTests(ServiceIconsUnitTests):
             url_for(
                 'colorized_icon',
                 icon_set_name="default",
-                icon_name="marker",
+                icon_name="001-marker",
                 scale='1x',
                 red=255,
                 green=0,
