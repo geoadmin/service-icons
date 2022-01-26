@@ -107,7 +107,7 @@ class IconSet:
             return None
         icons = []
         for root, dirs, files in os.walk(os.path.join(IMAGE_FOLDER, self.name)):
-            for icon_filename in files:
+            for icon_filename in sorted(files):
                 name_without_extension = os.path.splitext(icon_filename)[0]
                 icons.append(self.get_icon(name_without_extension))
         return icons
