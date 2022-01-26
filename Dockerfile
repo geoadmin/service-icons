@@ -1,5 +1,5 @@
-# Buster slim python 3.7 base image.
-FROM python:3.7-slim-buster
+# Buster slim python 3.9 base image.
+FROM python:3.9-slim-buster
 ENV HTTP_PORT 8080
 RUN groupadd -r geoadmin && useradd -r -s /bin/false -g geoadmin geoadmin
 
