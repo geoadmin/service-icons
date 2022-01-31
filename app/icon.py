@@ -7,6 +7,19 @@ from app.helpers.url import get_base_url
 from app.settings import DEFAULT_COLOR
 from app.settings import IMAGE_FOLDER
 
+# Here we disable yapf to avoid putting spaces between fractional parts
+# (`24/48` instead of `24 / 48`)
+# yapf: disable
+
+# Icon anchor is defined as [x, y] and as fractional. Here below we used the x and y in pixels
+# to define the fraction with width=48px and height=48px
+DEFAULT_ICON_ANCHOR = [24/48, 24/48]
+ICON_ANCHORS = {
+    '001-marker': [24/48, 42/48],
+    '007-marker-stroked': [24/48, 42/48],
+}
+# yapf: enable
+
 
 class Icon:
     """
@@ -21,6 +34,7 @@ class Icon:
         """
         self.name = name
         self.icon_set = icon_set
+        self.anchor = ICON_ANCHORS.get(name, DEFAULT_ICON_ANCHOR)
 
     def get_icon_url(
         self, red=DEFAULT_COLOR['r'], green=DEFAULT_COLOR['g'], blue=DEFAULT_COLOR['b']
@@ -80,6 +94,7 @@ class Icon:
         """
         return {
             "name": self.name,
+            "anchor": self.anchor,
             "icon_set": self.icon_set.name,
             "url": self.get_icon_url(),
             "template_url": get_icon_template_url(get_base_url())

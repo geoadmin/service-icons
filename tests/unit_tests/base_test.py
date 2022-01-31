@@ -47,11 +47,11 @@ class ServiceIconsUnitTests(unittest.TestCase):
 
     def request_colorized_icon(
         self,
-        icon_name="marker",
+        icon_name="001-marker",
         scale='1x',
-        red=255,
-        green=0,
-        blue=0,
+        red='255',
+        green='0',
+        blue='0',
         icon_category="default",
         # see .env.test
         origin=ORIGIN_FOR_TESTING
@@ -63,7 +63,7 @@ class ServiceIconsUnitTests(unittest.TestCase):
                 icon_name=icon_name,
                 scale=scale,
                 red=red,
-                green=red,
+                green=green,
                 blue=blue
             ),
             headers={"Origin": origin}
