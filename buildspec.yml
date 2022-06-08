@@ -22,10 +22,29 @@ phases:
     commands:
       - echo "Export of the image tag for build and push purposes"
       - echo "CODEBUILD_WEBHOOK_HEAD_REF=${CODEBUILD_WEBHOOK_HEAD_REF} CODEBUILD_WEBHOOK_BASE_REF=${CODEBUILD_WEBHOOK_BASE_REF}"
-      - export GITHUB_BRANCH="${CODEBUILD_WEBHOOK_HEAD_REF#refs/heads/}"
+      - |
+        if [[ -n "${CODEBUILD_WEBHOOK_HEAD_REF}" ]]; then
+          export GITHUB_BRANCH="${CODEBUILD_WEBHOOK_HEAD_REF#refs/heads/}"
+        else
+          # NOTE: For manual build trigger, CODEBUILD_WEBHOOK_HEAD_REF is not set therefore get
+          # the branch name from git command. This is a bit hacky but did not find any other solution
+          export GITHUB_BRANCH=$(git show-ref --heads | grep $(git --no-pager show --format=%H) | head -1 | awk '{gsub("refs/heads/", ""); print $2}')
+        fi
       - export GITHUB_COMMIT=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - export GITHUB_TAG="$(git describe --tags 2>/dev/null)"
-      - echo "GITHUB_BRANCH=${GITHUB_BRANCH} GITHUB_COMMIT=${GITHUB_COMMIT} GITHUB_TAG=${GITHUB_TAG} DOCKER_IMG_TAG=${DOCKER_IMG_TAG}"
+      - |
+        if [[ -n "${GITHUB_TAG}" ]]; then
+          export DOCKER_IMG_TAG=${REGISTRY}/${IMAGE_BASE_NAME}:${GITHUB_TAG}
+        else
+          export DOCKER_IMG_TAG=${REGISTRY}/${IMAGE_BASE_NAME}:${GITHUB_BRANCH//\//_}.${GITHUB_COMMIT}
+          export GITHUB_TAG=${GITHUB_COMMIT}
+        fi
+      - export DOCKER_IMG_TAG_LATEST=${REGISTRY}/${IMAGE_BASE_NAME}:${GITHUB_BRANCH//\//_}.latest
+      - echo "GITHUB_BRANCH=${GITHUB_BRANCH}"
+      - echo "GITHUB_COMMIT=${GITHUB_COMMIT}"
+      - echo "GITHUB_TAG=${GITHUB_TAG}"
+      - echo "DOCKER_IMG_TAG=${DOCKER_IMG_TAG}"
+      - echo "DOCKER_IMG_TAG_LATEST=${DOCKER_IMG_TAG_LATEST}"
       - echo "Creating a clean environment"
       - make ci
       - echo "Check code formatting"
@@ -35,13 +54,6 @@ phases:
   build:
     commands:
       - echo Build started on $(date)
-      - export DOCKER_IMG_TAG=${REGISTRY}/${IMAGE_BASE_NAME}:${GITHUB_TAG}
-      - export DOCKER_IMG_TAG_LATEST=${REGISTRY}/${IMAGE_BASE_NAME}:${GITHUB_BRANCH//\//_}.latest
-      - |-
-        if [ "${GITHUB_TAG}" = "" ] ; then
-          export DOCKER_IMG_TAG=${REGISTRY}/${IMAGE_BASE_NAME}:${GITHUB_BRANCH//\//_}.${GITHUB_COMMIT}
-          export GITHUB_TAG=${GITHUB_COMMIT}
-        fi
       - echo "Building docker image with tags ${DOCKER_IMG_TAG} and ${DOCKER_IMG_TAG_LATEST}"
       - >
         docker build
