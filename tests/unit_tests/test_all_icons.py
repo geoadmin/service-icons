@@ -108,6 +108,32 @@ class AllIconsTest(ServiceIconsUnitTests):
                         blue, average_color[2], delta=acceptable_color_delta, msg=error_message
                     )
 
+    def test_icon_set_origin_validation(self):
+        url = url_for('all_icon_sets')
+        response = self.app.get(url, headers={'Sec-Fetch-Site': 'same-origin'})
+        self.assertEqual(response.status_code, 200)
+        response = self.app.get(url, headers={'Origin': self.origin_for_testing})
+        self.assertEqual(response.status_code, 200)
+        response = self.app.get(url, headers={'Referer': self.origin_for_testing})
+        self.assertEqual(response.status_code, 200)
+
+        response = self.app.get(url, headers={'Origin': 'dummy'})
+        self.assertEqual(response.status_code, 403)
+        response = self.app.get(url, headers={'Referer': 'dummy'})
+        self.assertEqual(response.status_code, 403)
+        esponse = self.app.get(url, headers={'Origin': ''})
+        self.assertEqual(response.status_code, 403)
+        response = self.app.get(url, headers={'Referer': ''})
+        self.assertEqual(response.status_code, 403)
+        response = self.app.get(url, headers={'Sec-Fetch-Site': 'cross-site'})
+        self.assertEqual(response.status_code, 403)
+        response = self.app.get(url, headers={'Sec-Fetch-Site': 'none'})
+        self.assertEqual(response.status_code, 403)
+        response = self.app.get(url, headers={'Sec-Fetch-Site': ''})
+        self.assertEqual(response.status_code, 403)
+        response = self.app.get(url)
+        self.assertEqual(response.status_code, 403)
+
     def test_all_icon_sets_endpoint(self):
         """
         Checking that the endpoint /sets returns all available icon sets
