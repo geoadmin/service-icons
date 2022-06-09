@@ -75,18 +75,26 @@ def validate_origin():
     origin = request.headers.get('Origin', None)
     referrer = request.headers.get('Referer', None)
 
-    if origin is None and referrer is None and sec_fetch_site is None:
-        logger.error('Referer and/or Origin and/or Sec-Fetch-Site headers not set')
-        abort(403, 'Not allowed')
-    if origin is not None and not is_domain_allowed(origin):
-        logger.error('Origin=%s is not allowed', origin)
-        abort(403, 'Not allowed')
-    if referrer is not None and not is_domain_allowed(referrer):
-        logger.error('Referer=%s is not allowed', referrer)
-        abort(403, 'Not allowed')
-    if sec_fetch_site is not None and sec_fetch_site != 'same-origin':
+    if origin is not None:
+        if is_domain_allowed(origin):
+            return
+        logger.error('Origin=%s does not match %s', origin, ALLOWED_DOMAINS_PATTERN)
+        abort(403, 'Permission denied')
+
+    if sec_fetch_site is not None:
+        if sec_fetch_site in ['same-origin', 'same-site']:
+            return
         logger.error('Sec-Fetch-Site=%s is not allowed', sec_fetch_site)
-        abort(403, 'Not allowed')
+        abort(403, 'Permission denied')
+
+    if referrer is not None:
+        if is_domain_allowed(referrer):
+            return
+        logger.error('Referer=%s does not match %s', referrer, ALLOWED_DOMAINS_PATTERN)
+        abort(403, 'Permission denied')
+
+    logger.error('Referer and/or Origin and/or Sec-Fetch-Site headers not set')
+    abort(403, 'Permission denied')
 
 
 @app.after_request
