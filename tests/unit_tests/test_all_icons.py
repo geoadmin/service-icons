@@ -2,6 +2,7 @@ import io
 import logging
 import os
 
+from nose2.tools import params
 from PIL import Image
 
 from flask import url_for
@@ -108,42 +109,50 @@ class AllIconsTest(ServiceIconsUnitTests):
                         blue, average_color[2], delta=acceptable_color_delta, msg=error_message
                     )
 
-    def test_icon_set_origin_validation(self):
-        url = url_for('all_icon_sets')
-        response = self.app.get(url, headers={'Sec-Fetch-Site': 'same-origin'})
-        self.assertEqual(response.status_code, 200)
-        self.assertCors(response)
-        response = self.app.get(url, headers={'Origin': self.origin_for_testing})
-        self.assertEqual(response.status_code, 200)
-        self.assertCors(response)
-        response = self.app.get(url, headers={'Referer': self.origin_for_testing})
-        self.assertEqual(response.status_code, 200)
+    @params(
+        None,
+        {'Origin': 'www.example'},
+        {
+            'Origin': 'www.example', 'Sec-Fetch-Site': 'cross-site'
+        },
+        {
+            'Origin': 'www.example', 'Sec-Fetch-Site': 'same-site'
+        },
+        {
+            'Origin': 'www.example', 'Sec-Fetch-Site': 'same-origin'
+        },
+        {'Referer': 'http://www.example'},
+    )
+    def test_icon_set_origin_not_allowed(self, headers):
+        response = self.app.get(url_for('all_icon_sets'), headers=headers)
+        self.assertEqual(response.status_code, 403, msg="Domain restriction not applied")
         self.assertCors(response)
 
-        response = self.app.get(url, headers={'Origin': 'dummy'})
-        self.assertEqual(response.status_code, 403)
+    @params(
+        {'Origin': 'map.geo.admin.ch'},
+        {
+            'Origin': 'map.geo.admin.ch', 'Sec-Fetch-Site': 'same-site'
+        },
+        {
+            'Origin': 'public.geo.admin.ch', 'Sec-Fetch-Site': 'same-origin'
+        },
+        {
+            'Origin': 'http://localhost', 'Sec-Fetch-Site': 'cross-site'
+        },
+        {'Sec-Fetch-Site': 'same-origin'},
+        {'Referer': 'https://map.geo.admin.ch'},
+    )
+    def test_icon_set_origin_allowed(self, headers):
+        response = self.app.get(url_for('all_icon_sets'), headers=headers)
+        self.assertEqual(response.status_code, 200)
         self.assertCors(response)
-        response = self.app.get(url, headers={'Referer': 'dummy'})
-        self.assertEqual(response.status_code, 403)
-        self.assertCors(response)
-        response = self.app.get(url, headers={'Origin': ''})
-        self.assertEqual(response.status_code, 403)
-        self.assertCors(response)
-        response = self.app.get(url, headers={'Referer': ''})
-        self.assertEqual(response.status_code, 403)
-        self.assertCors(response)
-        response = self.app.get(url, headers={'Sec-Fetch-Site': 'cross-site'})
-        self.assertEqual(response.status_code, 403)
-        self.assertCors(response)
-        response = self.app.get(url, headers={'Sec-Fetch-Site': 'none'})
-        self.assertEqual(response.status_code, 403)
-        self.assertCors(response)
-        response = self.app.get(url, headers={'Sec-Fetch-Site': ''})
-        self.assertEqual(response.status_code, 403)
-        self.assertCors(response)
-        response = self.app.get(url)
-        self.assertEqual(response.status_code, 403)
-        self.assertCors(response)
+        self.assertEqual(response.content_type, "application/json")
+        self.assertIn('Cache-Control', response.headers, msg="Cache control header missing")
+        self.assertIn(
+            'max-age=', response.headers['Cache-Control'], msg="Cache Control max-age not set"
+        )
+        self.assertIn('success', response.json)
+        self.assertIn('items', response.json)
 
     def test_all_icon_sets_endpoint(self):
         """
@@ -156,8 +165,8 @@ class AllIconsTest(ServiceIconsUnitTests):
         self.assertIn('Cache-Control', response.headers)
         self.assertIn('max-age=', response.headers['Cache-Control'])
         self.assertIn('success', response.json)
-        self.assertTrue(response.json['items'])
         self.assertIn('items', response.json)
+        self.assertTrue(response.json['items'])
         icon_sets_from_endpoint = response.json['items']
         self.assertEqual(len(icon_sets_from_endpoint), len(self.all_icon_sets))
         for icon_set in icon_sets_from_endpoint:
@@ -318,12 +327,12 @@ class AllIconsTest(ServiceIconsUnitTests):
             for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_set = get_icon_set(icon_set_name)
-                    params = {"icon_set_name": icon_set_name, "icon_name": icon_name}
+                    url_params = {"icon_set_name": icon_set_name, "icon_name": icon_name}
                     if icon_set.colorable:
-                        params["red"] = 0
-                        params["green"] = 255
-                        params["blue"] = 255
-                    colored_url = url_for('colorized_icon', **params)
+                        url_params["red"] = 0
+                        url_params["green"] = 255
+                        url_params["blue"] = 255
+                    colored_url = url_for('colorized_icon', **url_params)
                     self.check_image(
                         icon_name,
                         colored_url,
@@ -341,12 +350,14 @@ class AllIconsTest(ServiceIconsUnitTests):
             for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_set = get_icon_set(icon_set_name)
-                    params = {"icon_set_name": icon_set_name, "icon_name": icon_name, "scale": '2x'}
+                    url_params = {
+                        "icon_set_name": icon_set_name, "icon_name": icon_name, "scale": '2x'
+                    }
                     if icon_set.colorable:
-                        params["red"] = 0
-                        params["green"] = 0
-                        params["blue"] = 255
-                    colored_url = url_for('colorized_icon', **params)
+                        url_params["red"] = 0
+                        url_params["green"] = 0
+                        url_params["blue"] = 255
+                    colored_url = url_for('colorized_icon', **url_params)
                     self.check_image(
                         icon_name,
                         colored_url,
@@ -365,14 +376,14 @@ class AllIconsTest(ServiceIconsUnitTests):
             for icon_name in icon_set:
                 with self.subTest(icon_set_name=icon_set_name, icon_name=icon_name):
                     icon_set = get_icon_set(icon_set_name)
-                    params = {
+                    url_params = {
                         "icon_set_name": icon_set_name, "icon_name": icon_name, "scale": '0.5x'
                     }
                     if icon_set.colorable:
-                        params["red"] = 0
-                        params["green"] = 255
-                        params["blue"] = 0
-                    colored_url = url_for('colorized_icon', **params)
+                        url_params["red"] = 0
+                        url_params["green"] = 255
+                        url_params["blue"] = 0
+                    colored_url = url_for('colorized_icon', **url_params)
                     self.check_image(
                         icon_name,
                         colored_url,

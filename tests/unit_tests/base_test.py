@@ -80,7 +80,7 @@ class ServiceIconsUnitTests(unittest.TestCase):
         self.assertEqual(
             response.json, {
                 "error": {
-                    "code": 403, "message": "Not allowed"
+                    "code": 403, "message": "Permission denied"
                 }, "success": False
             }
         )
