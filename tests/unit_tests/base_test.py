@@ -26,12 +26,13 @@ class ServiceIconsUnitTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def assertCors(self, response, check_origin=True):  # pylint: disable=invalid-name
-        if check_origin:
-            self.assertIn('Access-Control-Allow-Origin', response.headers)
-            self.assertTrue(
-                re.match(ALLOWED_DOMAINS_PATTERN, response.headers['Access-Control-Allow-Origin'])
-            )
+    def assertCors(self, response):  # pylint: disable=invalid-name
+        self.assertIn('Access-Control-Allow-Origin', response.headers)
+        self.assertIsNotNone(
+            re.match(ALLOWED_DOMAINS_PATTERN, response.headers['Access-Control-Allow-Origin']),
+            msg=f"Access-Control-Allow-Origin={response.headers['Access-Control-Allow-Origin']} "
+            f"doesn't match {ALLOWED_DOMAINS_PATTERN}"
+        )
         self.assertIn('Access-Control-Allow-Methods', response.headers)
         self.assertListEqual(
             sorted(['GET', 'HEAD', 'OPTIONS']),
@@ -72,7 +73,7 @@ class ServiceIconsUnitTests(unittest.TestCase):
     def check_response_not_allowed(self, response, msg, is_checker=False):
         self.assertEqual(response.status_code, 403, msg=msg)
         if not is_checker:
-            self.assertCors(response, check_origin=False)
+            self.assertCors(response)
             self.assertIn('Cache-Control', response.headers)
             self.assertIn('max-age=3600', response.headers['Cache-Control'])
         self.assertEqual(response.content_type, "application/json")

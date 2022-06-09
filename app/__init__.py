@@ -25,6 +25,10 @@ app.config.from_object('app.settings')
 app.json_encoder = CustomJSONEncoder
 
 
+def is_domain_allowed(domain):
+    return re.match(ALLOWED_DOMAINS_PATTERN, domain) is not None
+
+
 # NOTE it is better to have this method registered first (before validate_origin) otherwise
 # the route might not be logged if another method reject the request.
 @app.before_request
@@ -40,10 +44,9 @@ def add_cors_header(response):
     if request.endpoint == 'checker':
         return response
 
-    if 'Origin' in request.headers:
+    response.headers['Access-Control-Allow-Origin'] = request.host_url
+    if 'Origin' in request.headers and is_domain_allowed(request.headers['Origin']):
         response.headers['Access-Control-Allow-Origin'] = request.headers['Origin']
-    else:
-        response.headers['Access-Control-Allow-Origin'] = request.host_url
     response.headers['Vary'] = 'Origin'
     response.headers['Access-Control-Allow-Methods'] = 'GET, HEAD, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = '*'
@@ -75,10 +78,10 @@ def validate_origin():
     if origin is None and referrer is None and sec_fetch_site is None:
         logger.error('Referer and/or Origin and/or Sec-Fetch-Site headers not set')
         abort(403, 'Not allowed')
-    if origin is not None and not re.match(ALLOWED_DOMAINS_PATTERN, origin):
+    if origin is not None and not is_domain_allowed(origin):
         logger.error('Origin=%s is not allowed', origin)
         abort(403, 'Not allowed')
-    if referrer is not None and not re.match(ALLOWED_DOMAINS_PATTERN, referrer):
+    if referrer is not None and not is_domain_allowed(referrer):
         logger.error('Referer=%s is not allowed', referrer)
         abort(403, 'Not allowed')
     if sec_fetch_site is not None and sec_fetch_site != 'same-origin':
