@@ -38,45 +38,50 @@ filters:
       - method
       - headers
       - remote_addr
-      - args
       - json
+      - query_string
 
 formatters:
   standard:
-    (): logging_utilities.formatters.extra_formatter.ExtraFormatter
     format: "[%(asctime)s] %(levelname)-8s - %(name)-26s : %(message)s"
   verbose:
     (): logging_utilities.formatters.extra_formatter.ExtraFormatter
     format: "[%(asctime)s] %(levelname)-8s - %(name)-26s : %(message)s"
-    extra_fmt: " : path=%(flask_request_path)s headers=%(flask_request_headers)s query=%(flask_request_args)s payload=%(flask_request_json)s"
+    extra_fmt: " : path=%(flask_request_path)s headers=%(flask_request_headers)s payload=%(flask_request_json)s"
   json:
     (): logging_utilities.formatters.json_formatter.JsonFormatter
-    add_always_extra: True
+    add_always_extra: False
     filter_attributes:
       - utc_isotime
       - flask_request_path
       - flask_request_method
+      - flask_request_query_string
       - flask_request_headers
       - flask_request_json
       - flask_request_remote_addr
-      - flask_request_args
     remove_empty: True
+    ignore_missing: True
     fmt:
       time: utc_isotime
       level: levelname
       logger: name
       module: module
       function: funcName
-      process: process
-      thread: thread
+      pidTid: "%(process)x/%(thread)x"
+      excInfo: exc_info
       request:
-        path: flask_request_path
-        method: flask_request_method
-        headers: flask_request_headers
-        query: flask_request_args
-        data: flask_request_json
-        remote: flask_request_remote_addr
-      exc_info: exc_info
+        id: flask_request_headers.X-Amz-Cf-Id
+        path: "%(flask_request_path)s"
+        method: "%(flask_request_method)s"
+        queryString: "%(flask_request_query_string)s"
+        headers: flask_request_headers.
+        remoteAddr: "%(flask_request_remote_addr)s"
+        payload: "%(flask_request_json).128s"
+      response:
+        statusCode: response.status_code
+        headers: response.headers.
+        duration: "%(duration)s"
+        payload: "%(response.json).128s"
       message: message
 
 handlers:
