@@ -278,7 +278,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                         self.assertIsInstance(
                             fraction, (int, float), msg='"anchor" fraction should be int or float'
                         )
-                        self.assertTrue(fraction > 0, msg='"anchor" fraction should be > 0')
+                        self.assertTrue(fraction >= 0, msg='"anchor" fraction should be >= 0')
 
     def test_all_icon_basic_image(self):
         """
