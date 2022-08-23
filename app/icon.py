@@ -17,6 +17,7 @@ DEFAULT_ICON_ANCHOR = [24/48, 24/48]
 ICON_ANCHORS = {
     '001-marker': [24/48, 42/48],
     '007-marker-stroked': [24/48, 42/48],
+    '011-cross': [24/48, 0],
 }
 # yapf: enable
 
