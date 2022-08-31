@@ -10,7 +10,7 @@ gunicorn = "~=20.1.0"
 Flask = "~=2.0.1"
 Pillow = "~=9.0.1"
 python-dotenv = "~=0.17.0"
-logging-utilities = "~=1.2.3"
+logging-utilities = "~=3.0"
 
 [dev-packages]
 yapf = "*"
