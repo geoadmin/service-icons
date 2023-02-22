@@ -32,7 +32,9 @@ if __name__ == '__main__':
     options = {
         'bind': f"0.0.0.0:{HTTP_PORT}",
         'worker_class': 'gevent',
-        'workers': 2,  # scaling horizontally is left to Kubernetes
+        'worker_tmp_dir': os.getenv("GUNICORN_TMPFS_DIR", None),
+        'workers': int(os.getenv('WSGI_WORKERS',
+                                 '2')),  # scaling horizontally is left to Kubernetes
         'timeout': int(os.getenv('WSGI_TIMEOUT', '5')),
         'logconfig_dict': get_logging_cfg(),
         'forwarded_allow_ips': os.getenv('FORWARED_ALLOW_IPS', '*'),
