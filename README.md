@@ -172,3 +172,5 @@ The service is configured by Environment Variable:
 | FORWARDED_PROTO_HEADER_NAME | `X-Forwarded-Proto` | Sets gunicorn `secure_scheme_headers` parameter to `{${FORWARDED_PROTO_HEADER_NAME}: 'https'}`. This settings is required in order to generate correct URLs in the service responses. See [Gunicorn Doc](https://docs.gunicorn.org/en/stable/settings.html#secure-scheme-headers). |
 | SCRIPT_NAME | `''` | If the service is behind a reverse proxy and not served at the root, the route prefix must be set in `SCRIPT_NAME`. |
 | WSGI_TIMEOUT | `5` | WSGI timeout. |
+| GUNICORN_TMPFS_DIR | `None` |The working directory for the gunicorn workers. |
+| WSGI_WORKERS | `2` | The number of workers per CPU. | 
