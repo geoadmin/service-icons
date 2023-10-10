@@ -81,16 +81,20 @@ def validate_origin():
         logger.error('Origin=%s does not match %s', origin, ALLOWED_DOMAINS_PATTERN)
         abort(403, 'Permission denied')
 
-    if sec_fetch_site is not None:
-        if sec_fetch_site in ['same-origin', 'same-site']:
-            return
-        logger.error('Sec-Fetch-Site=%s is not allowed', sec_fetch_site)
-        abort(403, 'Permission denied')
-
+    # BGDIINF_SB-3115: Apparently IOS 16 has a bug and set Sec-Fetch-Site=cross-site even if the
+    # request is originated (same origin and/or referrer) from the same site ! Therefore to avoid
+    # issue on IOS we first checks the referrer before checking Sec-Fetch-Site even if this not
+    # correct.
     if referrer is not None:
         if is_domain_allowed(referrer):
             return
         logger.error('Referer=%s does not match %s', referrer, ALLOWED_DOMAINS_PATTERN)
+        abort(403, 'Permission denied')
+
+    if sec_fetch_site is not None:
+        if sec_fetch_site in ['same-origin', 'same-site']:
+            return
+        logger.error('Sec-Fetch-Site=%s is not allowed', sec_fetch_site)
         abort(403, 'Permission denied')
 
     logger.error('Referer and/or Origin and/or Sec-Fetch-Site headers not set')
