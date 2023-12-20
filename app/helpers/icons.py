@@ -12,5 +12,6 @@ def get_icon_template_url(base_url='', with_color=True):
     color_part = ""
     if with_color:
         color_part = "-{r},{g},{b}"
+    # TODO the service is only expecting png
     return f"{get_icon_set_template_url(base_url)}/icons/{{icon_name}}" \
            f"@{{icon_scale}}{color_part}.png"

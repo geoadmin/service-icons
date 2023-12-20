@@ -64,7 +64,7 @@ def icon_metadata(icon_set_name, icon_name):
     icon = get_and_check_icon(icon_set, icon_name)
     return make_api_compliant_response(icon)
 
-
+# TODO the service is only expecting png
 @app.route(
     '/sets/<icon_set_name>/icons/<icon_name>.png',
 )
