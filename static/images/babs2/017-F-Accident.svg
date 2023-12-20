@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75 64.37">
+  <defs>
+    <style>
+      .cls-1 {
+        letter-spacing: 0em;
+      }
+
+      .cls-2, .cls-3 {
+        fill: #f90;
+      }
+
+      .cls-2, .cls-4 {
+        fill-rule: evenodd;
+      }
+
+      .cls-5 {
+        letter-spacing: 0em;
+      }
+
+      .cls-6 {
+        stroke: #fff;
+        stroke-miterlimit: 10;
+        stroke-width: .35px;
+      }
+
+      .cls-6, .cls-4 {
+        fill: #fff;
+      }
+
+      .cls-3 {
+        font-family: Arial-BoldMT, Arial;
+        font-size: 19.42px;
+        font-weight: 700;
+      }
+
+      .cls-4 {
+        opacity: 0;
+      }
+
+      .cls-7 {
+        letter-spacing: 0em;
+      }
+    </style>
+  </defs>
+  <polygon class="cls-6" points="37.99 9.71 52.67 35.53 67.35 61.35 38.21 60.84 9.07 60.32 23.53 35.02 37.99 9.71"/>
+  <g>
+    <polygon class="cls-4" points="0 0 75 0 75 64.37 0 64.37 0 0 0 0"/>
+    <path class="cls-2" d="m74.9,64.27H.1L37.5.1l37.4,64.18h0Zm-9.41-4.68L37.5,11.02,9.5,59.59h55.99Z"/>
+    <text class="cls-3" transform="translate(19.5 52.55)"><tspan class="cls-1" x="0" y="0">A</tspan><tspan class="cls-5" x="13.98" y="0">c</tspan><tspan class="cls-7" x="24.76" y="0">c</tspan></text>
+  </g>
+</svg>
