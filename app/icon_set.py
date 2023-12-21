@@ -76,14 +76,14 @@ class IconSet:
         """
         return url_for('icons_from_icon_set', icon_set_name=self.name, _external=True)
 
-    def get_icon(self, icon_name):
+    def get_icon(self, icon_name, icon_suffix):
         """
         Generate and return the URL to access the metadata of one specific icon of this icon set
 
         Returns:
             the URL to read metadata of one icon of this icon set
         """
-        return Icon(f"{icon_name}", self)
+        return Icon(f"{icon_name}", icon_suffix, self)
 
     def get_default_pixel_size(self):
         """

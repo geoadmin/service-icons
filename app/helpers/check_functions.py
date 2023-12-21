@@ -71,7 +71,7 @@ def get_and_check_icon_set(icon_set_name):
     return icon_set
 
 
-def get_and_check_icon(icon_set, icon_name):
+def get_and_check_icon(icon_set, icon_name, icon_suffix):
     """
     Checks that the icon with the name given in param exists in the icon set's folder.
     If so returns the metadata to this icon. Otherwise raises a flask error and abort the current
@@ -81,7 +81,7 @@ def get_and_check_icon(icon_set, icon_name):
         icon_set: (IconSet) the icon set in which belongs the icon we want
         icon_name: (str) the name of the icon
     """
-    icon = icon_set.get_icon(icon_name)
+    icon = icon_set.get_icon(icon_name, icon_suffix)
     # checking that the icon exists in the icon set's folder
     path = icon.get_icon_filepath()
     if not os.path.isfile(path):

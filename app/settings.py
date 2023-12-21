@@ -13,6 +13,7 @@ IMAGE_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), '../stati
 
 COLORABLE_ICON_SETS = ['default']
 DEFAULT_COLOR = {"r": '255', "g": '0', "b": '0'}
+DEFAULT_ICON_SUFFIX = "png"
 TRAP_HTTP_EXCEPTIONS = True
 LOGS_DIR = os.getenv('LOGS_DIR', str(BASE_DIR / 'logs'))
 os.environ['LOGS_DIR'] = LOGS_DIR  # Set default if not set

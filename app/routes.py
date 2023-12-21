@@ -2,6 +2,7 @@ import logging
 from io import BytesIO
 
 from PIL import Image
+import cairosvg
 
 from flask import Response
 from flask import jsonify
@@ -66,20 +67,21 @@ def icon_metadata(icon_set_name, icon_name):
 
 
 @app.route(
-    '/sets/<icon_set_name>/icons/<icon_name>.png',
+    '/sets/<icon_set_name>/icons/<icon_name>.<icon_suffix>',
 )
 @app.route(
-    '/sets/<icon_set_name>/icons/<icon_name>-<red>,<green>,<blue>.png',
+    '/sets/<icon_set_name>/icons/<icon_name>-<red>,<green>,<blue>.<icon_suffix>',
 )
 @app.route(
-    '/sets/<icon_set_name>/icons/<icon_name>@<scale>.png',
+    '/sets/<icon_set_name>/icons/<icon_name>@<scale>.<icon_suffix>',
 )
 @app.route(
-    '/sets/<icon_set_name>/icons/<icon_name>@<scale>-<red>,<green>,<blue>.png',
+    '/sets/<icon_set_name>/icons/<icon_name>@<scale>-<red>,<green>,<blue>.<icon_suffix>',
 )
 def colorized_icon(
     icon_set_name,
     icon_name,
+    icon_suffix,
     scale='1x',
     red=DEFAULT_COLOR['r'],
     green=DEFAULT_COLOR['g'],
@@ -87,11 +89,14 @@ def colorized_icon(
 ):
     red, green, blue = check_color_channels(red, green, blue)
     icon_set = get_and_check_icon_set(icon_set_name)
-    icon = get_and_check_icon(icon_set, icon_name)
+    icon = get_and_check_icon(icon_set, icon_name, icon_suffix)
     scale = check_scale(scale)
-
     with open(icon.get_icon_filepath(), 'rb') as fd:
-        image = Image.open(fd)
+        if icon_suffix == "svg":
+            svg = cairosvg.svg2png(bytestring=fd.read())
+            image = Image.open(BytesIO(svg))
+        else:
+            image = Image.open(fd)
         if image.mode == 'P':
             image = image.convert('RGBA')
         new_size = int(48 * scale)
