@@ -105,4 +105,4 @@ def colorized_icon(
         #image.save(output, format='PNG')
 
         #return Response(output.getvalue(), mimetype='image/svg')
-        return Response(fd.read(), mimetype='image/svg')
+        return Response(fd.read(), mimetype='image/svg+xml')
