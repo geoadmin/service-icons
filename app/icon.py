@@ -1,3 +1,4 @@
+import logging
 import os
 
 from flask import url_for
@@ -19,6 +20,8 @@ ICON_ANCHORS = {
     '007-marker-stroked': [24/48, 42/48],
 }
 # yapf: enable
+
+logger = logging.getLogger(__name__)
 
 
 class Icon:
@@ -77,9 +80,10 @@ class Icon:
         Returns:
             A path leading to the file for this icon (can be an invalid one, do check its validity!)
         """
+        # TODO the service does only expect .png
         name_with_extension = self.name
-        if not name_with_extension.endswith('.png'):
-            name_with_extension = f"{name_with_extension}.png"
+        if not name_with_extension.endswith('.svg'):
+            name_with_extension = f"{name_with_extension}.svg"
         return os.path.abspath(os.path.join(IMAGE_FOLDER, self.icon_set.name, name_with_extension))
 
     def serialize(self):
