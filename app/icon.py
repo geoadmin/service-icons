@@ -1,5 +1,5 @@
-import os
 import logging
+import os
 
 from flask import url_for
 
@@ -82,8 +82,8 @@ class Icon:
         """
         # TODO the service does only expect .png
         name_with_extension = self.name
-        if not name_with_extension.endswith('.png'):
-            name_with_extension = f"{name_with_extension}.png"
+        if not name_with_extension.endswith('.svg'):
+            name_with_extension = f"{name_with_extension}.svg"
         return os.path.abspath(os.path.join(IMAGE_FOLDER, self.icon_set.name, name_with_extension))
 
     def serialize(self):

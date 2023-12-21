@@ -1,7 +1,4 @@
 import logging
-from io import BytesIO
-
-from PIL import Image
 
 from flask import Response
 from flask import jsonify
@@ -17,6 +14,10 @@ from app.icon_set import IconSet
 from app.icon_set import get_all_icon_sets
 from app.settings import DEFAULT_COLOR
 from app.version import APP_VERSION
+
+#from io import BytesIO
+
+#from PIL import Image
 
 logger = logging.getLogger(__name__)
 
@@ -64,18 +65,19 @@ def icon_metadata(icon_set_name, icon_name):
     icon = get_and_check_icon(icon_set, icon_name)
     return make_api_compliant_response(icon)
 
+
 # TODO the service is only expecting png
 @app.route(
-    '/sets/<icon_set_name>/icons/<icon_name>.png',
+    '/sets/<icon_set_name>/icons/<icon_name>.svg',
 )
 @app.route(
-    '/sets/<icon_set_name>/icons/<icon_name>-<red>,<green>,<blue>.png',
+    '/sets/<icon_set_name>/icons/<icon_name>-<red>,<green>,<blue>.svg',
 )
 @app.route(
-    '/sets/<icon_set_name>/icons/<icon_name>@<scale>.png',
+    '/sets/<icon_set_name>/icons/<icon_name>@<scale>.svg',
 )
 @app.route(
-    '/sets/<icon_set_name>/icons/<icon_name>@<scale>-<red>,<green>,<blue>.png',
+    '/sets/<icon_set_name>/icons/<icon_name>@<scale>-<red>,<green>,<blue>.svg',
 )
 def colorized_icon(
     icon_set_name,
@@ -91,15 +93,16 @@ def colorized_icon(
     scale = check_scale(scale)
 
     with open(icon.get_icon_filepath(), 'rb') as fd:
-        image = Image.open(fd)
-        if image.mode == 'P':
-            image = image.convert('RGBA')
-        new_size = int(48 * scale)
-        if new_size != icon_set.get_default_pixel_size():
-            image = image.resize((new_size, new_size))
-        if icon_set.colorable:
-            image = Image.composite(Image.new("RGB", image.size, (red, green, blue)), image, image)
-        output = BytesIO()
-        image.save(output, format='PNG')
+        #image = Image.open(fd)
+        #if image.mode == 'P':
+        #    image = image.convert('RGBA')
+        #new_size = int(48 * scale)
+        #if new_size != icon_set.get_default_pixel_size():
+        #    image = image.resize((new_size, new_size))
+        #if icon_set.colorable:
+        #    image = Image.composite(Image.new("RGB", image.size, (red, green, blue)), image, image)
+        #output = BytesIO()
+        #image.save(output, format='PNG')
 
-        return Response(output.getvalue(), mimetype='image/png')
+        #return Response(output.getvalue(), mimetype='image/svg')
+        return Response(fd.read(), mimetype='image/svg')
