@@ -6,6 +6,7 @@ from app.helpers.icons import get_icon_template_url
 from app.helpers.url import get_base_url
 from app.settings import DEFAULT_COLOR
 from app.settings import IMAGE_FOLDER
+from app.settings import DEFAULT_ICON_SUFFIX
 
 # Here we disable yapf to avoid putting spaces between fractional parts
 # (`24/48` instead of `24 / 48`)
@@ -26,7 +27,7 @@ class Icon:
     Helper class that contains all relevant information for a given icon served by this service.
     """
 
-    def __init__(self, name, icon_set):
+    def __init__(self, name, icon_suffix, icon_set):
         """
         Args:
             name (str): The name of this icon (will be used to determine its filename)
@@ -35,6 +36,21 @@ class Icon:
         self.name = name
         self.icon_set = icon_set
         self.anchor = ICON_ANCHORS.get(name, DEFAULT_ICON_ANCHOR)
+        self.icon_suffix = icon_suffix
+
+    def get_original_icon_filepath(self):
+        """
+        Returns an absolute path to the icon specified by its category and its name.
+        It is advised to test if this path is valid after it is returned, there is no such
+        check made in this function.
+
+        Returns:
+            A path leading to the file for this icon (can be an invalid one, do check its validity!)
+        """
+        name_with_extension = self.name
+        if not name_with_extension.endswith(f'.{self.icon_suffix}'):
+            name_with_extension = f"{name_with_extension}.{self.icon_suffix}"
+        return os.path.abspath(os.path.join(IMAGE_FOLDER, self.icon_set.name, name_with_extension))
 
     def get_icon_url(
         self, red=DEFAULT_COLOR['r'], green=DEFAULT_COLOR['g'], blue=DEFAULT_COLOR['b']
@@ -58,6 +74,7 @@ class Icon:
                 red=red,
                 green=green,
                 blue=blue,
+                icon_suffix=self.icon_suffix,
                 _external=True
             )
         return url_for(
@@ -65,10 +82,11 @@ class Icon:
             icon_set_name=self.icon_set.name,
             icon_name=self.name,
             scale='1x',
+            icon_suffix=self.icon_suffix,
             _external=True
         )
 
-    def get_icon_filepath(self):
+    def get_icon_serverside_suffix(self):
         """
         Returns an absolute path to the icon specified by its category and its name.
         It is advised to test if this path is valid after it is returned, there is no such
@@ -77,10 +95,14 @@ class Icon:
         Returns:
             A path leading to the file for this icon (can be an invalid one, do check its validity!)
         """
+
+        # TODO go ahead
         name_with_extension = self.name
-        if not name_with_extension.endswith('.png'):
-            name_with_extension = f"{name_with_extension}.png"
+        if not name_with_extension.endswith(f'.{self.icon_suffix}'):
+            name_with_extension = f"{name_with_extension}.{self.icon_suffix}"
         return os.path.abspath(os.path.join(IMAGE_FOLDER, self.icon_set.name, name_with_extension))
+
+
 
     def serialize(self):
         """

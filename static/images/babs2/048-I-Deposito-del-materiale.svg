@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 78.92 79.2">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        stroke: blue;
+        stroke-miterlimit: 10;
+        stroke-width: 3.92px;
+      }
+
+      .cls-2 {
+        fill: blue;
+        font-family: Arial-BoldMT, Arial;
+        font-size: 26.64px;
+        font-weight: 700;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="m1.96,39.6C1.96,18.81,18.75,1.96,39.46,1.96h0c20.71,0,37.5,16.85,37.5,37.64h0c0,20.79-16.79,37.64-37.5,37.64h0,0C18.75,77.24,1.96,60.39,1.96,39.6h0Z"/>
+  <text class="cls-2" transform="translate(27.83 49.13)"><tspan x="0" y="0">M</tspan></text>
+</svg>
