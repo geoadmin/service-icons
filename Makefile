@@ -14,10 +14,8 @@ GIT_DIRTY = `git status --porcelain`
 GIT_TAG = `git describe --tags || echo "no version info"`
 AUTHOR = $(USER)
 
-
 # general targets
 LOGS_DIR = $(PWD)/logs
-
 
 # Docker variables
 DOCKER_REGISTRY = 974517877189.dkr.ecr.eu-central-1.amazonaws.com
@@ -128,7 +126,6 @@ format-lint: format lint
 test:
 	ENV_FILE=.env.test $(NOSE) -c tests/unittest.cfg --verbose -s tests/
 
-# Serve targets. Using these will run the application on your local machine. You can either serve with a wsgi front (like it would be within the container), or without.
 
 .PHONY: serve
 serve: clean_logs $(LOGS_DIR)

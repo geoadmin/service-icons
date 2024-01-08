@@ -11,12 +11,14 @@ Flask = "~=2.0.1"
 Pillow = "~=9.0.1"
 python-dotenv = "~=0.17.0"
 logging-utilities = "~=3.0"
+werkzeug = "~=2.2"
 
 [dev-packages]
 yapf = "*"
 nose2 = "*"
 pylint = "*"
 pylint-flask = "*"
+cairosvg = "*"
 
 [requires]
 python_version = "3.9"
