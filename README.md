@@ -18,6 +18,8 @@
   - [Linting and formatting your work](#linting-and-formatting-your-work)
   - [Test your work](#test-your-work)
 - [Docker](#docker)
+- [Maintenance](#maintenance)
+  - [Convert Symbols from svg to png](#convert-symbols-from-svg-to-png)
 - [Deployment](#deployment)
   - [Deployment configuration](#deployment-configuration)
 
@@ -154,6 +156,23 @@ You can also check these metadata on a running container as follows
 
 ```bash
 docker ps --format="table {{.ID}}\t{{.Image}}\t{{.Labels}}"
+```
+
+## Maintenance
+
+### Convert Symbols from svg to png
+
+Sometimes it may happen, that we get a new set of icons. In general these icons have to be quadratic in a resolution of 48px x 48px in the format .png. Neverthanless there is a script to convert .svg images towards .png images. This script is located in the folder `scripts/svg2png.py`. There is a help provided
+
+```bash
+pipenv run python scripts/svg2png.py --help
+```
+
+Here is an example of such a convertion
+
+```bash
+pipenv run python scripts/svg2png.py --help
+```pipenv run python scripts/svg2png.py -I ./tmp/new-icons -O ./static/images/babs2 -W 48 -H 48
 ```
 
 ## Deployment
