@@ -7,7 +7,7 @@ id_range = slice(0,3)
 name_range = slice(6,None)
 
 # read by default 1st sheet of an excel file
-df = pd.read_excel('../../tmp/Namenliste.xlsx')
+df = pd.read_excel('../../tmp/Namenliste.xlsx',sheet_name=1)
 print(df)
 
 json_dic = {}
