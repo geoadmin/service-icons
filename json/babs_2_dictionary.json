@@ -506,17 +506,17 @@
     },
     "ICON_102": {
         "de": "Motorfahrzeug",
-        "fr": "Vehicule-leger-(voiture)",
+        "fr": "Vehicule-leger-voiture",
         "it": "Automobile"
     },
     "ICON_103": {
         "de": "Lastwagen",
-        "fr": "Camion-(poids-lourd)",
+        "fr": "Camion-poids-lourd",
         "it": "Autocarro"
     },
     "ICON_104": {
         "de": "Transportfahrzeug",
-        "fr": "Vehicule-de-transport-(bus)",
+        "fr": "Vehicule-de-transport-bus",
         "it": "Veicoli-per-il-transporto"
     },
     "ICON_105": {
@@ -576,7 +576,7 @@
     },
     "ICON_116": {
         "de": "Notfalltreffpunkt",
-        "fr": "Point-de-rassemblement-d-urgence",
-        "it": "Punto-di-raccolta-d-urgenza"
+        "fr": "Point-de-rassemblement-durgence",
+        "it": "Punto-di-raccolta-durgenza"
     }
 }
