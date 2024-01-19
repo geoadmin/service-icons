@@ -20,5 +20,5 @@ for index, row in df.iterrows():
               }
     json_dic["ICON_"+string_id]=icon_dic
 
-with open("../json/babs_2_dictionary.json", "w") as outfile:
+with open("../json/babs2_dictionary.json", "w") as outfile:
     json.dump(json_dic, outfile, indent=4)
