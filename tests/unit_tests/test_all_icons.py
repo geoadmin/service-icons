@@ -168,6 +168,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                 self.assertIn('name', icon_set_metadata)
                 self.assertEqual(icon_set_name, icon_set_metadata['name'])
                 self.assertIn('colorable', icon_set_metadata)
+                self.assertIn('title', icon_set_metadata)
                 self.assertIn('icons_url', icon_set_metadata)
                 self.assertIsNotNone(icon_set_metadata['icons_url'])
                 self.assertEqual(

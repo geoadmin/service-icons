@@ -2,6 +2,12 @@ import json
 import os
 from app.settings import JSON_FOLDER
 
+def get_icon_set_translation(icon_set=''):
+    path = os.path.abspath(os.path.join(JSON_FOLDER, icon_set + '_dictionary.json'))
+    if(not(os.path.isfile(path))):
+        return "false"
+    else: return "true"
+
 def get_icon_translation(icon_name='', icon_set=''):
     path = os.path.abspath(os.path.join(JSON_FOLDER, icon_set + '_dictionary.json'))
     if(not(os.path.isfile(path))):
