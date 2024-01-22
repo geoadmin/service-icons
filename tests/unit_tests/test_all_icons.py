@@ -203,6 +203,11 @@ class AllIconsTest(ServiceIconsUnitTests):
                     json_response = response.json
                     self.assertIn('icon_set', json_response)
                     self.assertEqual(icon_set_name, json_response['icon_set'])
+                    self.assertIn('title', json_response)
+                    if(json_response['title']):
+                        self.assertIn('de', json_response['title'])
+                        self.assertIn('fr', json_response['title'])
+                        self.assertIn('it', json_response['title'])
                     self.assertIn('name', json_response)
                     self.assertEqual(icon_name, json_response['name'])
                     self.assertIn('template_url', json_response)

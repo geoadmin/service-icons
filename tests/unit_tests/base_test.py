@@ -64,24 +64,6 @@ class ServiceIconsUnitTests(unittest.TestCase):
             headers={"Origin": origin}
         )
 
-    def request_titled_icon(
-        self,
-        icon_name="001-D-Beschaedigung",
-        scale='1x',
-        icon_category="babs2",
-        # see .env.test
-        origin=ORIGIN_FOR_TESTING
-    ):
-        return self.app.get(
-            url_for(
-                'icon_metadata',
-                icon_set_name=icon_category,
-                icon_name=icon_name,
-                scale=scale
-            ),
-        headers=self.default_header
-        )
-
     def check_response_not_allowed(self, response, msg, is_checker=False):
         self.assertEqual(response.status_code, 403, msg=msg)
         if not is_checker:
