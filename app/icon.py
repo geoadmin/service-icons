@@ -3,8 +3,8 @@ import os
 from flask import url_for
 
 from app.helpers.icons import get_icon_template_url
-from app.helpers.url import get_base_url
 from app.helpers.translation import get_icon_translation
+from app.helpers.url import get_base_url
 from app.settings import DEFAULT_COLOR
 from app.settings import IMAGE_FOLDER
 
