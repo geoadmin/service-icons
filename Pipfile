@@ -19,6 +19,7 @@ nose2 = "*"
 pylint = "*"
 pylint-flask = "*"
 cairosvg = "*"
+pandas3 = "*"
 
 [requires]
 python_version = "3.9"
