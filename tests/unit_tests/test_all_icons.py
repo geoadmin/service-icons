@@ -110,25 +110,6 @@ class AllIconsTest(ServiceIconsUnitTests):
                     )
 
     @params(
-        None,
-        {'Origin': 'www.example'},
-        {
-            'Origin': 'www.example', 'Sec-Fetch-Site': 'cross-site'
-        },
-        {
-            'Origin': 'www.example', 'Sec-Fetch-Site': 'same-site'
-        },
-        {
-            'Origin': 'www.example', 'Sec-Fetch-Site': 'same-origin'
-        },
-        {'Referer': 'http://www.example'},
-    )
-    def test_icon_set_origin_not_allowed(self, headers):
-        response = self.app.get(url_for('all_icon_sets'), headers=headers)
-        self.assertEqual(response.status_code, 403, msg="Domain restriction not applied")
-        self.assertCors(response)
-
-    @params(
         {'Origin': 'map.geo.admin.ch'},
         {
             'Origin': 'map.geo.admin.ch', 'Sec-Fetch-Site': 'same-site'

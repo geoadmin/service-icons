@@ -184,7 +184,6 @@ The service is configured by Environment Variable:
 | Env         | Default               | Description                |
 | ----------- | --------------------- | -------------------------- |
 | LOGGING_CFG | `logging-cfg-local.yml` | Logging configuration file |
-| ALLOWED_DOMAINS | `.*` | Comma separated list of regex that are allowed as domain in Origin header |
 | CACHE_CONTROL | `public, max-age=86400` | Cache Control header value of the `GET /*` endpoints |
 | CACHE_CONTROL_4XX | `public, max-age=3600` | Cache Control header for 4XX responses |
 | FORWARED_ALLOW_IPS | `*` | Sets the gunicorn `forwarded_allow_ips`. See [Gunicorn Doc](https://docs.gunicorn.org/en/stable/settings.html#forwarded-allow-ips). This setting is required in order to `secure_scheme_headers` to work. |

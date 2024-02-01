@@ -12,9 +12,3 @@ class CheckerTests(ServiceIconsUnitTests):
         self.assertEqual(response.content_type, "application/json")
         self.assertNotIn('Cache-Control', response.headers)
         self.assertEqual(response.json, {"message": "OK", "success": True, "version": APP_VERSION})
-
-    def test_checker_denied_without_origin(self):
-        response = self.app.get(url_for('checker'), headers={"Origin": ""})
-        self.check_response_not_allowed(
-            response, msg="Should return HTTP 403 when origin is not authorized", is_checker=True
-        )

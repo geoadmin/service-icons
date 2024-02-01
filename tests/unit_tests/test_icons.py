@@ -81,16 +81,6 @@ class IconsTests(ServiceIconsUnitTests):
             }
         )
 
-    def test_colorized_icon_http_header_origin_restriction(self):
-        response = self.request_colorized_icon(origin="www.dummy.com")
-        self.check_response_not_allowed(
-            response, msg="Should return HTTP 403 when origin is not authorized"
-        )
-        response = self.request_colorized_icon(origin="")
-        self.check_response_not_allowed(
-            response, msg="Should return HTTP 403 when origin is not authorized"
-        )
-
     def test_colorized_icon_no_http_post_method_allowed_on_endpoint(self):
         response = self.app.post(
             url_for(
