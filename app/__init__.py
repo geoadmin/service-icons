@@ -1,17 +1,14 @@
 import logging
-import re
 import time
 
 from werkzeug.exceptions import HTTPException
 
 from flask import Flask
-from flask import abort
 from flask import g
 from flask import request
 
 from app.helpers import make_error_msg
 from app.helpers.service_icon_custom_serializer import CustomJSONEncoder
-from app.settings import ALLOWED_DOMAINS_PATTERN
 from app.settings import CACHE_CONTROL
 from app.settings import CACHE_CONTROL_4XX
 
@@ -25,12 +22,6 @@ app.config.from_object('app.settings')
 app.json_encoder = CustomJSONEncoder
 
 
-def is_domain_allowed(domain):
-    return re.match(ALLOWED_DOMAINS_PATTERN, domain) is not None
-
-
-# NOTE it is better to have this method registered first (before validate_origin) otherwise
-# the route might not be logged if another method reject the request.
 @app.before_request
 def log_route():
     g.setdefault('started', time.time())
@@ -44,7 +35,7 @@ def add_cors_header(response):
     if request.endpoint == 'checker':
         return response
 
-    response.headers['Access-Control-Allow-Origin'] = "*"
+    response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Vary'] = 'Origin'
     response.headers['Access-Control-Allow-Methods'] = 'GET, HEAD, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = '*'
@@ -59,6 +50,7 @@ def add_cache_control_header(response):
         else:
             response.headers.set('Cache-Control', CACHE_CONTROL)
     return response
+
 
 @app.after_request
 def log_response(response):

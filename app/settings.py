@@ -20,6 +20,5 @@ LOGGING_CFG = os.getenv('LOGGING_CFG', 'logging-cfg-local.yml')
 
 # Definition of the allowed domains for CORS implementation
 ALLOWED_DOMAINS = os.getenv('ALLOWED_DOMAINS', r'.*').split(',')
-ALLOWED_DOMAINS_PATTERN = f"({'|'.join(ALLOWED_DOMAINS)})"
 CACHE_CONTROL = os.getenv('CACHE_CONTROL', 'public, max-age=86400')
 CACHE_CONTROL_4XX = os.getenv('CACHE_CONTROL_4XX', 'public, max-age=3600')
