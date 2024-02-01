@@ -3,6 +3,7 @@ import os
 from flask import url_for
 
 from app.helpers.icons import get_icon_set_template_url
+from app.helpers.translation import get_icon_set_translation
 from app.helpers.url import get_base_url
 from app.icon import Icon
 from app.settings import COLORABLE_ICON_SETS
@@ -126,5 +127,6 @@ class IconSet:
             "name": self.name,
             "colorable": self.colorable,
             "icons_url": self.get_icons_url(),
-            "template_url": get_icon_set_template_url(get_base_url())
+            "template_url": get_icon_set_template_url(get_base_url()),
+            "title": get_icon_set_translation(self.name)
         }
