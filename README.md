@@ -18,6 +18,8 @@
   - [Linting and formatting your work](#linting-and-formatting-your-work)
   - [Test your work](#test-your-work)
 - [Docker](#docker)
+- [Maintenance](#maintenance)
+  - [Convert Symbols from svg to png](#convert-symbols-from-svg-to-png)
 - [Deployment](#deployment)
   - [Deployment configuration](#deployment-configuration)
 
@@ -156,6 +158,23 @@ You can also check these metadata on a running container as follows
 docker ps --format="table {{.ID}}\t{{.Image}}\t{{.Labels}}"
 ```
 
+## Maintenance
+
+### Convert Symbols from svg to png
+
+Sometimes it may happen, that we get a new set of icons. In general these icons have to be quadratic in a resolution of 48px x 48px in the format .png. Neverthanless there is a script to convert .svg images towards .png images. This script is located in the folder `scripts/svg2png.py`. There is a help provided
+
+```bash
+pipenv run python scripts/svg2png.py --help
+```
+
+Here is an example of such a convertion
+
+```bash
+pipenv run python scripts/svg2png.py --help
+```pipenv run python scripts/svg2png.py -I ./tmp/new-icons -O ./static/images/babs2 -W 48 -H 48
+```
+
 ## Deployment
 
 ### Deployment configuration
@@ -165,7 +184,6 @@ The service is configured by Environment Variable:
 | Env         | Default               | Description                |
 | ----------- | --------------------- | -------------------------- |
 | LOGGING_CFG | `logging-cfg-local.yml` | Logging configuration file |
-| ALLOWED_DOMAINS | `.*` | Comma separated list of regex that are allowed as domain in Origin header |
 | CACHE_CONTROL | `public, max-age=86400` | Cache Control header value of the `GET /*` endpoints |
 | CACHE_CONTROL_4XX | `public, max-age=3600` | Cache Control header for 4XX responses |
 | FORWARED_ALLOW_IPS | `*` | Sets the gunicorn `forwarded_allow_ips`. See [Gunicorn Doc](https://docs.gunicorn.org/en/stable/settings.html#forwarded-allow-ips). This setting is required in order to `secure_scheme_headers` to work. |

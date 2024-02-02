@@ -65,18 +65,10 @@ def icon_metadata(icon_set_name, icon_name):
     return make_api_compliant_response(icon)
 
 
-@app.route(
-    '/sets/<icon_set_name>/icons/<icon_name>.png',
-)
-@app.route(
-    '/sets/<icon_set_name>/icons/<icon_name>-<red>,<green>,<blue>.png',
-)
-@app.route(
-    '/sets/<icon_set_name>/icons/<icon_name>@<scale>.png',
-)
-@app.route(
-    '/sets/<icon_set_name>/icons/<icon_name>@<scale>-<red>,<green>,<blue>.png',
-)
+@app.route('/sets/<icon_set_name>/icons/<icon_name>.png',)
+@app.route('/sets/<icon_set_name>/icons/<icon_name>-<red>,<green>,<blue>.png',)
+@app.route('/sets/<icon_set_name>/icons/<icon_name>@<scale>.png',)
+@app.route('/sets/<icon_set_name>/icons/<icon_name>@<scale>-<red>,<green>,<blue>.png',)
 def colorized_icon(
     icon_set_name,
     icon_name,

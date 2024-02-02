@@ -1,10 +1,8 @@
-import re
 import unittest
 
 from flask import url_for
 
 from app import app
-from app.settings import ALLOWED_DOMAINS_PATTERN
 
 ORIGIN_FOR_TESTING = "some_random_domain"
 
@@ -28,11 +26,7 @@ class ServiceIconsUnitTests(unittest.TestCase):
 
     def assertCors(self, response):  # pylint: disable=invalid-name
         self.assertIn('Access-Control-Allow-Origin', response.headers)
-        self.assertIsNotNone(
-            re.match(ALLOWED_DOMAINS_PATTERN, response.headers['Access-Control-Allow-Origin']),
-            msg=f"Access-Control-Allow-Origin={response.headers['Access-Control-Allow-Origin']} "
-            f"doesn't match {ALLOWED_DOMAINS_PATTERN}"
-        )
+        self.assertEqual(response.headers['Access-Control-Allow-Origin'], '*')
         self.assertIn('Access-Control-Allow-Methods', response.headers)
         self.assertListEqual(
             sorted(['GET', 'HEAD', 'OPTIONS']),
