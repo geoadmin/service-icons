@@ -128,5 +128,5 @@ class IconSet:
             "colorable": self.colorable,
             "icons_url": self.get_icons_url(),
             "template_url": get_icon_set_template_url(get_base_url()),
-            "title": get_icon_set_translation(self.name)
+            "description": get_icon_set_translation(self.name)
         }

@@ -99,5 +99,5 @@ class Icon:
             "icon_set": self.icon_set.name,
             "url": self.get_icon_url(),
             "template_url": get_icon_template_url(get_base_url()),
-            "title": get_icon_translation(self.name, self.icon_set.name)
+            "description": get_icon_translation(self.name, self.icon_set.name)
         }
