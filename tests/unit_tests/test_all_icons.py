@@ -12,6 +12,7 @@ from app.helpers.url import get_base_url
 from app.icon_set import get_icon_set
 from app.settings import COLORABLE_ICON_SETS
 from app.settings import IMAGE_FOLDER
+from app.settings import NON_SQUARE_ICON_SETS
 from tests.unit_tests.base_test import ServiceIconsUnitTests
 
 
@@ -66,7 +67,15 @@ class AllIconsTest(ServiceIconsUnitTests):
                 self.all_icon_sets[icon_set_name].append(icon_name)
 
     def check_image(
-        self, icon_name, image_url, expected_size=48, check_color=False, red=255, green=0, blue=0
+        self,
+        icon_name,
+        icon_set_name,
+        image_url,
+        expected_size=48,
+        check_color=False,
+        red=255,
+        green=0,
+        blue=0
     ):
         """
         Retrieve an icon from the test instance and check everything related to this icon.
@@ -84,14 +93,15 @@ class AllIconsTest(ServiceIconsUnitTests):
         self.assertIn('max-age=', response.headers['Cache-Control'])
         # reading the icon image so that we can check its size in px and average color
         with Image.open(io.BytesIO(response.data)) as icon:
-            width, height = icon.size
-            self.assertEqual(
-                width,
-                height,
-                msg=f"Icons should be squares (wrong size of {width}px/{height}px"
-                f" for icon : {icon_name})"
-            )
-            self.assertEqual(width, expected_size)
+            if icon_set_name not in NON_SQUARE_ICON_SETS:
+                width, height = icon.size
+                self.assertEqual(
+                    width,
+                    height,
+                    msg=f"Icons should be squares (wrong size of {width}px/{height}px"
+                    f" for icon : {icon_name})"
+                )
+                self.assertEqual(width, expected_size)
             if check_color:
                 average_color = get_average_color(icon)
                 error_message = f"Color mismatch for icon {icon_name}"
@@ -271,7 +281,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                     icon_url = url_for(
                         'colorized_icon', icon_set_name=icon_set_name, icon_name=icon_name
                     )
-                    self.check_image(icon_name, icon_url)
+                    self.check_image(icon_name, icon_set_name, icon_url)
 
     def test_all_icon_double_size(self):
         """
@@ -283,7 +293,9 @@ class AllIconsTest(ServiceIconsUnitTests):
                     double_size_icon_url = url_for(
                         'colorized_icon', icon_set_name=icon_set_name, icon_name=icon_name, scale=2
                     )
-                    self.check_image(icon_name, double_size_icon_url, expected_size=96)
+                    self.check_image(
+                        icon_name, icon_set_name, double_size_icon_url, expected_size=96
+                    )
 
     def test_all_icon_half_size(self):
         """
@@ -298,7 +310,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                         icon_name=icon_name,
                         scale='0.5x'
                     )
-                    self.check_image(icon_name, half_size_icon_url, expected_size=24)
+                    self.check_image(icon_name, icon_set_name, half_size_icon_url, expected_size=24)
 
     def test_all_icons_colorized(self):
         """
@@ -316,6 +328,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                     colored_url = url_for('colorized_icon', **url_params)
                     self.check_image(
                         icon_name,
+                        icon_set_name,
                         colored_url,
                         check_color=icon_set.colorable,
                         red=0,
@@ -341,6 +354,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                     colored_url = url_for('colorized_icon', **url_params)
                     self.check_image(
                         icon_name,
+                        icon_set_name,
                         colored_url,
                         check_color=icon_set.colorable,
                         expected_size=96,
@@ -367,6 +381,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                     colored_url = url_for('colorized_icon', **url_params)
                     self.check_image(
                         icon_name,
+                        icon_set_name,
                         colored_url,
                         check_color=icon_set.colorable,
                         expected_size=24,
