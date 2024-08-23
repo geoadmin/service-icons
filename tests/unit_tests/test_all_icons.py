@@ -66,6 +66,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                     self.all_icon_sets[icon_set_name] = []
                 self.all_icon_sets[icon_set_name].append(icon_name)
 
+    # pylint: disable=too-many-locals
     def check_image(
         self,
         icon_name,
@@ -118,6 +119,8 @@ class AllIconsTest(ServiceIconsUnitTests):
                     self.assertAlmostEqual(
                         blue, average_color[2], delta=acceptable_color_delta, msg=error_message
                     )
+
+    # pylint: enable=too-many-locals
 
     @params(
         {'Origin': 'map.geo.admin.ch'},
