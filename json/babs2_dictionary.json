@@ -15,13 +15,13 @@
         "it": "Distruzione totale"
     },
     "ICON_004": {
-        "de": "Brand einzelnes Geb\u00e4ude Flamme",
+        "de": "Brand einzelnes Geb\u00e4ude",
         "fr": "Incendie isol\u00e9",
         "it": "Incendio di un singolo edificio"
     },
     "ICON_005": {
         "de": "Explosionsherd",
-        "fr": "Foyer d_explosion",
+        "fr": "Foyer d'explosion",
         "it": "Focolaio esplosione"
     },
     "ICON_006": {
@@ -36,7 +36,7 @@
     },
     "ICON_008": {
         "de": "Obdachlose",
-        "fr": "Sans_abri",
+        "fr": "Sans abri",
         "it": "Senzatetto"
     },
     "ICON_009": {
@@ -71,11 +71,11 @@
     },
     "ICON_015": {
         "de": "Feuerwehr",
-        "fr": "Sapeurs_pompiers",
+        "fr": "Sapeurs-pompiers",
         "it": "Corpo pompieri"
     },
     "ICON_016": {
-        "de": "TechnB",
+        "de": "Technische Betriebe",
         "fr": "Services techniques",
         "it": "Servizi tecniche"
     },
@@ -107,7 +107,7 @@
     "ICON_022": {
         "de": "Gefahr durch L\u00f6schen mit Wasser",
         "fr": "Danger si extinction avec eau",
-        "it": "Pericolo_spegnimento con acqua"
+        "it": "Pericolo spegnimento con acqua"
     },
     "ICON_023": {
         "de": "Radioaktive Stoffe",
@@ -161,8 +161,8 @@
     },
     "ICON_033": {
         "de": "Informationsstelle",
-        "fr": "Point d_information",
-        "it": "Posto d_informazione"
+        "fr": "Point d'information",
+        "it": "Posto d'informazione"
     },
     "ICON_034": {
         "de": "Sammelstelle",
@@ -171,8 +171,8 @@
     },
     "ICON_035": {
         "de": "Betreuungsstelle",
-        "fr": "Poste d_assistance",
-        "it": "Posto d_assistenza"
+        "fr": "Poste d'assistance",
+        "it": "Posto d'assistenza"
     },
     "ICON_036": {
         "de": "Patientensammelstelle",
@@ -201,7 +201,7 @@
     },
     "ICON_041": {
         "de": "KGS Notdepot",
-        "fr": "D\u00e9p\u00f4t d_urgence PBC",
+        "fr": "D\u00e9p\u00f4t d'urgence PBC",
         "it": "Deposito PBC di fortuna"
     },
     "ICON_042": {
@@ -226,8 +226,8 @@
     },
     "ICON_046": {
         "de": "Helikopterlandeplatz",
-        "fr": "Place d_atterrissage H\u00e9lico",
-        "it": "Piazza d_atterraggio elicotteri"
+        "fr": "Place d'atterrissage H\u00e9lico",
+        "it": "Piazza d'atterraggio elicotteri"
     },
     "ICON_047": {
         "de": "Fahrzeugplatz",
@@ -285,7 +285,7 @@
         "it": "Incendio"
     },
     "ICON_058": {
-        "de": "Explosion_pikt",
+        "de": "Explosion",
         "fr": "Explosion",
         "it": "Esplosione"
     },
@@ -375,87 +375,87 @@
         "it": "Attentato dinamitardo"
     },
     "ICON_076": {
-        "de": "Trupp_p_P",
+        "de": "Trupp P",
         "fr": "Patrouille P",
         "it": "Squadra P"
     },
     "ICON_077": {
-        "de": "Gruppe_p_P",
+        "de": "Grupp P",
         "fr": "Groupe P",
         "it": "Gruppo P"
     },
     "ICON_078": {
-        "de": "Zug_p_P",
+        "de": "Zug P",
         "fr": "Section P",
         "it": "Sezione P"
     },
     "ICON_079": {
-        "de": "Gruppenf\u00fchrer_P",
+        "de": "Gruppenf\u00fchrer P",
         "fr": "Chef de groupe P",
         "it": "Capogruppo P"
     },
     "ICON_080": {
-        "de": "Offizier_Zugf\u00fchrer_P",
+        "de": "Offizier_Zugf\u00fchrer P",
         "fr": "Officier Chef de section P",
-        "it": "Ufficiale_caposezione P"
+        "it": "Ufficiale caposezione P"
     },
     "ICON_081": {
-        "de": "Einsatzleiter_P",
-        "fr": "Chef d_intervention P",
+        "de": "Einsatzleiter P",
+        "fr": "Chef d'intervention P",
         "it": "Capointervento P"
     },
     "ICON_082": {
-        "de": "Trupp_p_FW",
+        "de": "Trupp FW",
         "fr": "Patrouille SP",
         "it": "Squadra CP"
     },
     "ICON_083": {
-        "de": "Gruppe_p-FW",
+        "de": "Gruppe FW",
         "fr": "Groupe SP",
         "it": "Gruppo CP"
     },
     "ICON_084": {
-        "de": "Zug_p_FW",
+        "de": "Zug FW",
         "fr": "Section SP",
         "it": "Sezione CP"
     },
     "ICON_085": {
-        "de": "Gruppenf\u00fchrer_FW",
+        "de": "Gruppenf\u00fchrer FW",
         "fr": "Chef de groupe SP",
         "it": "Capogruppo CP"
     },
     "ICON_086": {
-        "de": "Offizier_Zugf\u00fchrer_FW",
+        "de": "Offizier Zugf\u00fchrer FW",
         "fr": "Officier Chef de section SP",
-        "it": "Ufficiale_caposezione CP"
+        "it": "Ufficiale caposezione CP"
     },
     "ICON_087": {
-        "de": "Einsatzleiter_FW",
-        "fr": "Chef d_intervention SP",
+        "de": "Einsatzleiter FW",
+        "fr": "Chef d'intervention SP",
         "it": "Capointervento CP"
     },
     "ICON_088": {
-        "de": "Trupp_p_San",
+        "de": "Trupp San",
         "fr": "Patrouille San",
         "it": "Squadra San"
     },
     "ICON_089": {
-        "de": "Gruppe_p_San",
+        "de": "Gruppe San",
         "fr": "Groupe San",
         "it": "Gruppo San"
     },
     "ICON_090": {
-        "de": "Trupp_p",
+        "de": "Trupp ",
         "fr": "Patrouille",
         "it": "Squadra"
     },
     "ICON_091": {
-        "de": "Gruppe_p",
+        "de": "Gruppe ",
         "fr": "Groupe",
         "it": "Gruppo"
     },
     "ICON_092": {
-        "de": "Zug_p",
+        "de": "Zug ",
         "fr": "Section",
         "it": "Sezione"
     },
@@ -475,13 +475,13 @@
         "it": "Capogruppo"
     },
     "ICON_096": {
-        "de": "Offizier_Zugf\u00fchrer",
+        "de": "Offizier Zugf\u00fchrer",
         "fr": "Officier Chef de section",
-        "it": "Ufficiale_caposezione"
+        "it": "Ufficiale caposezione"
     },
     "ICON_097": {
         "de": "Einsatzleiter",
-        "fr": "Chef d_intervention",
+        "fr": "Chef d'intervention",
         "it": "Capointervento"
     },
     "ICON_098": {
@@ -506,17 +506,17 @@
     },
     "ICON_102": {
         "de": "Motorfahrzeug",
-        "fr": "V\u00e9hicule l\u00e9ger (voiture)",
+        "fr": "V\u00e9hicule l\u00e9ger",
         "it": "Automobile"
     },
     "ICON_103": {
         "de": "Lastwagen",
-        "fr": "Camion (poids-lourd)",
+        "fr": "Poids-lourd",
         "it": "Autocarro"
     },
     "ICON_104": {
         "de": "Transportfahrzeug",
-        "fr": "V\u00e9hicule de transport (bus)",
+        "fr": "V\u00e9hicule de transport",
         "it": "Veicoli per il transporto"
     },
     "ICON_105": {
@@ -531,7 +531,7 @@
     },
     "ICON_107": {
         "de": "Tankl\u00f6schfahrzeug",
-        "fr": "Fourgon tonne_pompe",
+        "fr": "Fourgon tonne-pompe",
         "it": "Autobotte"
     },
     "ICON_108": {
