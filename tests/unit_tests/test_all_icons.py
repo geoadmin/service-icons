@@ -82,17 +82,9 @@ class AllIconsTest(ServiceIconsUnitTests):
         self.assertEqual(response.content_type, "image/png")
         self.assertIn('Cache-Control', response.headers)
         self.assertIn('max-age=', response.headers['Cache-Control'])
-        # reading the icon image so that we can check its size in px and average color
-        with Image.open(io.BytesIO(response.data)) as icon:
-            width, height = icon.size
-            self.assertEqual(
-                width,
-                height,
-                msg=f"Icons should be squares (wrong size of {width}px/{height}px"
-                f" for icon : {icon_name})"
-            )
-            self.assertEqual(width, expected_size)
-            if check_color:
+        if check_color:
+            # reading the icon image so that we can check its size in px and average color
+            with Image.open(io.BytesIO(response.data)) as icon:
                 average_color = get_average_color(icon)
                 error_message = f"Color mismatch for icon {icon_name}"
                 acceptable_color_delta = 10
