@@ -58,6 +58,12 @@ def icons_from_icon_set(icon_set_name):
     return make_api_compliant_response(icon_set.get_all_icons())
 
 
+@app.route('/sets/<string:icon_set_name>/description', methods=['GET'])
+def description_from_icon_set(icon_set_name):
+    icon_set = get_and_check_icon_set(icon_set_name)
+    return make_api_compliant_response(icon_set.get_description())
+
+
 @app.route('/sets/<string:icon_set_name>/icons/<string:icon_name>', methods=['GET'])
 def icon_metadata(icon_set_name, icon_name):
     icon_set = get_and_check_icon_set(icon_set_name)

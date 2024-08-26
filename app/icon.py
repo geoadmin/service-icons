@@ -2,8 +2,8 @@ import os
 
 from flask import url_for
 
+from app.helpers.description import get_icon_description
 from app.helpers.icons import get_icon_template_url
-from app.helpers.translation import get_icon_translation
 from app.helpers.url import get_base_url
 from app.settings import DEFAULT_COLOR
 from app.settings import IMAGE_FOLDER
@@ -99,5 +99,5 @@ class Icon:
             "icon_set": self.icon_set.name,
             "url": self.get_icon_url(),
             "template_url": get_icon_template_url(get_base_url()),
-            "description": get_icon_translation(self.name, self.icon_set.name)
+            "description": get_icon_description(self.name, self.icon_set.name)
         }

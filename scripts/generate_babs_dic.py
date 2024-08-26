@@ -21,7 +21,9 @@ def generate_translation_file(args):
             }
             json_dic[string_id] = icon_dic
 
-        with open(destination+'-'+filename[-1]+'-dictionary.json', "w", encoding='utf-8') as outfile:
+        with open(
+            destination + '-' + filename[-1] + '-dictionary.json', "w", encoding='utf-8'
+        ) as outfile:
             json.dump(json_dic, outfile, indent=4)
 
 
