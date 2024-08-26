@@ -3,6 +3,7 @@ import os
 
 from flask import abort
 
+from app.helpers.description import find_descripton_file
 from app.icon_set import get_icon_set
 
 logger = logging.getLogger(__name__)
@@ -88,3 +89,20 @@ def get_and_check_icon(icon_set, icon_name):
         logger.error("The icon doesn't exist: %s", path)
         abort(404, "Icon not found in icon set")
     return icon
+
+
+def check_if_descripton_file_exists(icon_set):
+    """
+    Checks that the icon set has a corresponding dictionary containing description for all available
+    languages.
+    if not raises a flask error and abort the current request.
+
+    Args:
+        icon_set: (IconSet) the icon set in which belongs the icon we want
+        icon_name: (str) the name of the icon
+    """
+    # checking that the icon exists in the icon set's folder
+    path = find_descripton_file(icon_set)
+    if not os.path.isfile(path):
+        logger.error("The description dictionary doesn't exist: %s", path)
+        abort(404, "Description dictionary not found")

@@ -2,6 +2,7 @@ import os
 
 from flask import url_for
 
+from app.helpers.description import find_descripton_file
 from app.helpers.description import get_icon_set_description
 from app.helpers.icons import get_icon_set_template_url
 from app.helpers.url import get_base_url
@@ -83,9 +84,12 @@ class IconSet:
         of all available icons of this icon set.
 
         Returns:
-            the URL to the description in all available languages of all icons in this icon set
+            the URL to the description in all available languages of all icons in this icon set if
+            it exists, otherwise return None
         """
-        return url_for('description_from_icon_set', icon_set_name=self.name, _external=True)
+        if find_descripton_file(self.name):
+            return url_for('description_from_icon_set', icon_set_name=self.name, _external=True)
+        return None
 
     def get_icon(self, icon_name):
         """
@@ -129,8 +133,8 @@ class IconSet:
         belonging to this icon set.
 
         Returns:
-            A dictionary of all icon description in all available languages from this icon set, or
-            None if no json is found in the folder "json/"
+            A dictionary of all icon description in all available languages from this icon set it
+            it exists, otherwise return None
         """
         if not self.is_valid():
             return None
