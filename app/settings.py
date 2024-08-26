@@ -10,7 +10,9 @@ if ENV_FILE and Path(ENV_FILE).exists():
     load_dotenv(ENV_FILE, override=True, verbose=True)
 
 IMAGE_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), '../static/images/'))
-JSON_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), '../json/'))
+DESCRIPTION_FOLDER = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../metadata/description/')
+)
 
 COLORABLE_ICON_SETS = ['default']
 DEFAULT_COLOR = {"r": '255', "g": '0', "b": '0'}

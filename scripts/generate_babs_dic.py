@@ -29,7 +29,7 @@ def generate_translation_file(args):
 
 def main():
     # example command:
-    # python3 generate_babs_dic.py --input=../../tmp/Namenliste.xlsx --output=../json/babs
+    # python3 generate_babs_dic.py --input=../../tmp/babs.xlsx --output=../metadata/description/babs
     # (do not specify filetype for output since it creates a file for every language)
     parser = argparse.ArgumentParser(description='Create json translation file from excel file ')
     parser.add_argument('--input', action="store", dest='input', default=None)
