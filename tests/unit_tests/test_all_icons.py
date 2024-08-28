@@ -264,6 +264,19 @@ class AllIconsTest(ServiceIconsUnitTests):
                         )
                         self.assertTrue(fraction > 0, msg='"anchor" fraction should be > 0')
 
+                    self.assertIn('size', json_response)
+                    self.assertIsInstance(
+                        json_response['size'],
+                        list,
+                        msg='"size" should be a list with x and y dimension'
+                    )
+                    self.assertEqual(
+                        len(json_response['size']), 2, msg='"size" should have two items; x and y'
+                    )
+                    for elem in json_response['size']:
+                        self.assertIsInstance(elem, (int), msg='"size" should be int')
+                        self.assertTrue(elem > 0, msg='"size" should be > 0')
+
     def test_all_icon_basic_image(self):
         """
         Checking URLs without scale or color

@@ -1,5 +1,7 @@
 import os
 
+from PIL import Image
+
 from flask import url_for
 
 from app.helpers.description import get_icon_description
@@ -83,6 +85,16 @@ class Icon:
             name_with_extension = f"{name_with_extension}.png"
         return os.path.abspath(os.path.join(IMAGE_FOLDER, self.icon_set.name, name_with_extension))
 
+    def get_size(self):
+        """
+        Lazily open image of icon to get the size of the icon from the metadata.
+
+        Returns:
+            A tuple with the size of the specified icon (x,y)
+        """
+        with Image.open(self.get_icon_filepath()) as img:
+            return img.size
+
     def serialize(self):
         """
         As we want to add "url" to the __dict__, we can't really use a json.dumps to generate our
@@ -99,5 +111,6 @@ class Icon:
             "icon_set": self.icon_set.name,
             "url": self.get_icon_url(),
             "template_url": get_icon_template_url(get_base_url()),
-            "description": get_icon_description(self.name, self.icon_set.name)
+            "description": get_icon_description(self.name, self.icon_set.name),
+            "size": self.get_size()
         }
