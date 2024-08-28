@@ -5,6 +5,7 @@ from PIL import Image
 from flask import url_for
 
 from app.helpers.description import get_icon_description
+from app.helpers.icons import calculate_icon_size
 from app.helpers.icons import get_icon_template_url
 from app.helpers.url import get_base_url
 from app.settings import DEFAULT_COLOR
@@ -93,7 +94,7 @@ class Icon:
             A tuple with the size of the specified icon (x,y)
         """
         with Image.open(self.get_icon_filepath()) as img:
-            return img.size
+            return calculate_icon_size(img.size)
 
     def serialize(self):
         """

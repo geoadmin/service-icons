@@ -275,7 +275,12 @@ class AllIconsTest(ServiceIconsUnitTests):
                     )
                     for elem in json_response['size']:
                         self.assertIsInstance(elem, (int), msg='"size" should be int')
-                        self.assertTrue(elem > 0, msg='"size" should be > 0')
+                        self.assertTrue(elem >= 48, msg='"size" should be >= 48')
+                    self.assertEqual(
+                        min(json_response['size'][0], json_response['size'][1]),
+                        48,
+                        msg='size of smaller dimension of icon should be equal to 48'
+                    )
 
     def test_all_icon_basic_image(self):
         """

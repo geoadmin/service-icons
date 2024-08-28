@@ -13,6 +13,7 @@ from app.helpers.check_functions import check_if_descripton_file_exists
 from app.helpers.check_functions import check_scale
 from app.helpers.check_functions import get_and_check_icon
 from app.helpers.check_functions import get_and_check_icon_set
+from app.helpers.icons import calculate_icon_size
 from app.icon import Icon
 from app.icon_set import IconSet
 from app.icon_set import get_all_icon_sets
@@ -94,9 +95,10 @@ def colorized_icon(
         image = Image.open(fd)
         if image.mode == 'P':
             image = image.convert('RGBA')
-        new_size = int(48 * scale)
-        if new_size != icon_set.get_default_pixel_size():
-            image = image.resize((new_size, new_size))
+
+        new_size = calculate_icon_size(image.size, scale)
+        if new_size[0] != new_size[1] or new_size[0] != icon_set.get_default_pixel_size():
+            image = image.resize((new_size[0], new_size[1]))
         if icon_set.colorable:
             image = Image.composite(Image.new("RGB", image.size, (red, green, blue)), image, image)
         output = BytesIO()
