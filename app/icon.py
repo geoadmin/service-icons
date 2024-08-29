@@ -94,7 +94,7 @@ class Icon:
             A tuple with the size of the specified icon (x,y)
         """
         with Image.open(self.get_icon_filepath()) as img:
-            return calculate_icon_size(img.size)
+            return calculate_icon_size(img.size, self.icon_set)
 
     def serialize(self):
         """

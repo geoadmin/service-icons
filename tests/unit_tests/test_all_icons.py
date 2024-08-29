@@ -11,6 +11,7 @@ from app.helpers.icons import get_icon_template_url
 from app.helpers.url import get_base_url
 from app.icon_set import get_icon_set
 from app.settings import COLORABLE_ICON_SETS
+from app.settings import DEFAULT_ICON_SIZE
 from app.settings import IMAGE_FOLDER
 from tests.unit_tests.base_test import ServiceIconsUnitTests
 
@@ -278,7 +279,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                         self.assertTrue(elem >= 48, msg='"size" should be >= 48')
                     self.assertEqual(
                         min(json_response['size'][0], json_response['size'][1]),
-                        48,
+                        DEFAULT_ICON_SIZE,
                         msg='size of smaller dimension of icon should be equal to 48'
                     )
 
