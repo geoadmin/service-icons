@@ -1,7 +1,12 @@
 import json
+import logging
 import os
 
+from flask import abort
+
 from app.settings import DESCRIPTION_FOLDER
+
+logger = logging.getLogger(__name__)
 
 
 def get_icon_set_description(icon_set=''):
@@ -31,7 +36,12 @@ def get_icon_description(icon_name='', icon_set=''):
     with open(path, encoding='utf-8') as f:
         df = json.load(f)
 
-    icon_description = df[icon_name]
+    try:
+        icon_description = df[icon_name]
+    except KeyError:
+        logger.error("Description for icon not found: %s", icon_name)
+        abort(404, "Description for icon not found")
+
     return icon_description
 
 
