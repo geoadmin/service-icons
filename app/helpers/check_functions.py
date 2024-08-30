@@ -98,8 +98,7 @@ def check_if_descripton_file_exists(icon_set):
     if not raises a flask error and abort the current request.
 
     Args:
-        icon_set: (IconSet) the icon set in which belongs the icon we want
-        icon_name: (str) the name of the icon
+        icon_set: (IconSet) the icon set of which we want to check if it has a description file
     """
     # checking that the icon exists in the icon set's folder
     path = find_descripton_file(icon_set)

@@ -26,8 +26,8 @@ def get_icon_set_description(icon_set=''):
 
 def get_icon_description(icon_name='', icon_set=''):
     '''
-    Return json containing the description in all available languages for the specified icon of the
-    provided icon set
+    Return json containing the description in all available languages for an icon in the specified
+    icon set
     '''
     path = find_descripton_file(icon_set)
     if not os.path.isfile(path):
@@ -47,7 +47,7 @@ def get_icon_description(icon_name='', icon_set=''):
 
 def find_descripton_file(icon_set):
     '''
-    Return file path of description file if it exists
+    Return file path of description file if it exists or False in case it doesn't
     '''
     path = os.path.abspath(os.path.join(DESCRIPTION_FOLDER, icon_set)) + '-dictionary.json'
     if os.path.isfile(path):
