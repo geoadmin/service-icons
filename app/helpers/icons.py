@@ -19,7 +19,7 @@ def get_icon_template_url(base_url='', with_color=True):
            f"@{{icon_scale}}{color_part}.png"
 
 
-def calculate_icon_size(size, icon_set, scale=1):
+def calculate_icon_size(size, scale=1):
     """
     Calculate icon size so that the size of the smaller dimension is equal to the standard icon size
     multiplied by the scaling
