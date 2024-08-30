@@ -168,6 +168,12 @@ class AllIconsTest(ServiceIconsUnitTests):
                 self.assertIn('name', icon_set_metadata)
                 self.assertEqual(icon_set_name, icon_set_metadata['name'])
                 self.assertIn('colorable', icon_set_metadata)
+                self.assertIn('description_url', icon_set_metadata)
+                if icon_set_metadata['description_url']:
+                    r = self.app.get(
+                        icon_set_metadata['description_url'], headers=self.default_header
+                    )
+                    self.assertEqual(r.status_code, 200)
                 self.assertIn('icons_url', icon_set_metadata)
                 self.assertIsNotNone(icon_set_metadata['icons_url'])
                 self.assertEqual(
@@ -202,6 +208,11 @@ class AllIconsTest(ServiceIconsUnitTests):
                     json_response = response.json
                     self.assertIn('icon_set', json_response)
                     self.assertEqual(icon_set_name, json_response['icon_set'])
+                    self.assertIn('description', json_response)
+                    if json_response['description']:
+                        self.assertIn('de', json_response['description'])
+                        self.assertIn('fr', json_response['description'])
+                        self.assertIn('it', json_response['description'])
                     self.assertIn('name', json_response)
                     self.assertEqual(icon_name, json_response['name'])
                     self.assertIn('template_url', json_response)

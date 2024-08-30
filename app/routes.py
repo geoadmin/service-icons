@@ -9,6 +9,7 @@ from flask import make_response
 
 from app import app
 from app.helpers.check_functions import check_color_channels
+from app.helpers.check_functions import check_if_descripton_file_exists
 from app.helpers.check_functions import check_scale
 from app.helpers.check_functions import get_and_check_icon
 from app.helpers.check_functions import get_and_check_icon_set
@@ -56,6 +57,13 @@ def icon_set_metadata(icon_set_name):
 def icons_from_icon_set(icon_set_name):
     icon_set = get_and_check_icon_set(icon_set_name)
     return make_api_compliant_response(icon_set.get_all_icons())
+
+
+@app.route('/sets/<string:icon_set_name>/description', methods=['GET'])
+def description_from_icon_set(icon_set_name):
+    icon_set = get_and_check_icon_set(icon_set_name)
+    check_if_descripton_file_exists(icon_set_name)
+    return make_api_compliant_response(icon_set.get_description())
 
 
 @app.route('/sets/<string:icon_set_name>/icons/<string:icon_name>', methods=['GET'])
