@@ -67,7 +67,14 @@ class AllIconsTest(ServiceIconsUnitTests):
                 self.all_icon_sets[icon_set_name].append(icon_name)
 
     def check_image(
-        self, icon_name, image_url, expected_size=48, check_color=False, red=255, green=0, blue=0
+        self,
+        icon_name,
+        image_url,
+        expected_size=DEFAULT_ICON_SIZE,
+        check_color=False,
+        red=255,
+        green=0,
+        blue=0
     ):
         """
         Retrieve an icon from the test instance and check everything related to this icon.
@@ -83,9 +90,17 @@ class AllIconsTest(ServiceIconsUnitTests):
         self.assertEqual(response.content_type, "image/png")
         self.assertIn('Cache-Control', response.headers)
         self.assertIn('max-age=', response.headers['Cache-Control'])
-        if check_color:
-            # reading the icon image so that we can check its size in px and average color
-            with Image.open(io.BytesIO(response.data)) as icon:
+        # reading the icon image so that we can check its size in px and average color
+        with Image.open(io.BytesIO(response.data)) as icon:
+            width, height = icon.size
+            self.assertEqual(
+                width,
+                height,
+                msg=f"Icons should be squares (wrong size of {width}px/{height}px"
+                f" for icon : {icon_name})"
+            )
+            self.assertEqual(width, expected_size)
+            if check_color:
                 average_color = get_average_color(icon)
                 error_message = f"Color mismatch for icon {icon_name}"
                 acceptable_color_delta = 10
@@ -276,12 +291,9 @@ class AllIconsTest(ServiceIconsUnitTests):
                     )
                     for elem in json_response['size']:
                         self.assertIsInstance(elem, (int), msg='"size" should be int')
-                        self.assertTrue(elem >= 48, msg='"size" should be >= 48')
-                    self.assertEqual(
-                        min(json_response['size'][0], json_response['size'][1]),
-                        DEFAULT_ICON_SIZE,
-                        msg='size of smaller dimension of icon should be equal to 48'
-                    )
+                        self.assertTrue(
+                            elem == DEFAULT_ICON_SIZE, msg='"size" should be equal to 48'
+                        )
 
     def test_all_icon_basic_image(self):
         """
@@ -305,7 +317,9 @@ class AllIconsTest(ServiceIconsUnitTests):
                     double_size_icon_url = url_for(
                         'colorized_icon', icon_set_name=icon_set_name, icon_name=icon_name, scale=2
                     )
-                    self.check_image(icon_name, double_size_icon_url, expected_size=96)
+                    self.check_image(
+                        icon_name, double_size_icon_url, expected_size=DEFAULT_ICON_SIZE * 2
+                    )
 
     def test_all_icon_half_size(self):
         """
@@ -320,7 +334,9 @@ class AllIconsTest(ServiceIconsUnitTests):
                         icon_name=icon_name,
                         scale='0.5x'
                     )
-                    self.check_image(icon_name, half_size_icon_url, expected_size=24)
+                    self.check_image(
+                        icon_name, half_size_icon_url, expected_size=DEFAULT_ICON_SIZE * 0.5
+                    )
 
     def test_all_icons_colorized(self):
         """
@@ -365,7 +381,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                         icon_name,
                         colored_url,
                         check_color=icon_set.colorable,
-                        expected_size=96,
+                        expected_size=DEFAULT_ICON_SIZE * 2,
                         red=0,
                         green=0,
                         blue=255
@@ -391,7 +407,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                         icon_name,
                         colored_url,
                         check_color=icon_set.colorable,
-                        expected_size=24,
+                        expected_size=DEFAULT_ICON_SIZE * 0.5,
                         red=0,
                         green=255,
                         blue=0
