@@ -21,7 +21,7 @@ def get_icon_set_description(icon_set=''):
     with open(path, encoding='utf-8') as f:
         icon_set_descriptions = json.load(f)
 
-    return icon_set_descriptions
+    return [icon_set_descriptions]
 
 
 def get_icon_description(icon_name='', icon_set=''):
