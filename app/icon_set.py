@@ -100,16 +100,6 @@ class IconSet:
         """
         return Icon(f"{icon_name}", self)
 
-    def get_default_pixel_size(self):
-        """
-        Returns:
-            the size in pixel of this icon set's icon (icons are always square images). This is
-                helpful to calculate if an icon requires a resize before being served to the user.
-        """
-        if self.name == 'default':
-            return 96
-        return 48
-
     def get_all_icons(self):
         """
         Generate a list of all icons belonging to this icon set.
