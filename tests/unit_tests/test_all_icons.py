@@ -13,6 +13,7 @@ from app.icon_set import get_icon_set
 from app.settings import COLORABLE_ICON_SETS
 from app.settings import DEFAULT_ICON_SIZE
 from app.settings import IMAGE_FOLDER
+from app.settings import LEGACY_ICON_SETS
 from tests.unit_tests.base_test import ServiceIconsUnitTests
 
 
@@ -145,7 +146,7 @@ class AllIconsTest(ServiceIconsUnitTests):
 
     def test_all_icon_sets_endpoint(self):
         """
-        Checking that the endpoint /sets returns all available icon sets
+        Checking that the endpoint /sets returns all non-legacy icon sets
         """
         response = self.app.get(url_for('all_icon_sets'), headers=self.default_header)
         self.assertEqual(response.status_code, 200)
@@ -157,7 +158,13 @@ class AllIconsTest(ServiceIconsUnitTests):
         self.assertIn('items', response.json)
         self.assertTrue(response.json['items'])
         icon_sets_from_endpoint = response.json['items']
-        self.assertEqual(len(icon_sets_from_endpoint), len(self.all_icon_sets))
+        self.assertEqual(
+            len(icon_sets_from_endpoint), len(self.all_icon_sets) - len(LEGACY_ICON_SETS)
+        )
+        for legacy_icon_set in LEGACY_ICON_SETS:
+            self.assertNotIn(
+                legacy_icon_set, icon_sets_from_endpoint, msg="Icon set should not be listed"
+            )
         for icon_set in icon_sets_from_endpoint:
             self.assertIn('name', icon_set)
             self.assertTrue(icon_set['name'] in self.all_icon_sets)
