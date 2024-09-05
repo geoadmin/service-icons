@@ -15,6 +15,7 @@ DESCRIPTION_FOLDER = os.path.abspath(
 )
 
 COLORABLE_ICON_SETS = ['default']
+LEGACY_ICON_SETS = ['babs']
 DEFAULT_COLOR = {"r": '255', "g": '0', "b": '0'}
 DEFAULT_ICON_SIZE = 48
 TRAP_HTTP_EXCEPTIONS = True

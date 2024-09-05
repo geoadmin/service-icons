@@ -9,6 +9,7 @@ from app.helpers.url import get_base_url
 from app.icon import Icon
 from app.settings import COLORABLE_ICON_SETS
 from app.settings import IMAGE_FOLDER
+from app.settings import LEGACY_ICON_SETS
 
 
 def get_icon_set(icon_set_name):
@@ -30,7 +31,9 @@ def get_all_icon_sets():
     icon_sets = []
     for root, dirs, files in os.walk(IMAGE_FOLDER):
         for icon_set_name in dirs:
-            icon_sets.append(get_icon_set(icon_set_name))
+            # icons of legacy icon sets are still available, but the icon set will not be listed
+            if icon_set_name not in LEGACY_ICON_SETS:
+                icon_sets.append(get_icon_set(icon_set_name))
     return icon_sets
 
 
