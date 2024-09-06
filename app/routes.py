@@ -29,6 +29,12 @@ def make_api_compliant_response(response_object):
     """
     if isinstance(response_object, (Icon, IconSet)):
         return make_response(jsonify({'success': True, **response_object.serialize()}))
+    if all(isinstance(r, (Icon, IconSet)) for r in response_object):
+        return make_response(
+            jsonify({
+                'success': True, "items": [r.serialize() for r in response_object]
+            })
+        )
     if isinstance(response_object, list):
         return make_response(jsonify({'success': True, "items": response_object}))
     return make_response(jsonify({'success': True, **response_object}))
