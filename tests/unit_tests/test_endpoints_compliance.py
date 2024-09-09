@@ -37,14 +37,6 @@ class CheckerTests(ServiceIconsUnitTests):
             )
         )
 
-    def test_icon_set_description(self):
-        self.check_response_compliance(
-            self.app.get(
-                url_for('description_from_icon_set', icon_set_name='babs-I'),
-                headers=self.default_header
-            )
-        )
-
     def test_icons_list(self):
         self.check_response_compliance(
             self.app.get(

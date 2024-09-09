@@ -3,7 +3,6 @@ import os
 from flask import url_for
 
 from app.helpers.description import find_descripton_file
-from app.helpers.description import get_icon_set_description
 from app.helpers.icons import get_icon_set_template_url
 from app.helpers.url import get_base_url
 from app.icon import Icon
@@ -81,19 +80,6 @@ class IconSet:
         """
         return url_for('icons_from_icon_set', icon_set_name=self.name, _external=True)
 
-    def get_icon_set_description_url(self):
-        """
-        Generate and return the URL that will list the description in all available lanaguages
-        of all available icons of this icon set.
-
-        Returns:
-            the URL to the description in all available languages of all icons in this icon set if
-            it exists, otherwise return None
-        """
-        if find_descripton_file(self.name):
-            return url_for('description_from_icon_set', icon_set_name=self.name, _external=True)
-        return None
-
     def get_icon(self, icon_name):
         """
         Generate and return the URL to access the metadata of one specific icon of this icon set
@@ -120,19 +106,6 @@ class IconSet:
                 icons.append(self.get_icon(name_without_extension))
         return icons
 
-    def get_description(self):
-        """
-        Generate a dictionary containing the description in all available languages of all icons
-        belonging to this icon set.
-
-        Returns:
-            A dictionary of all icon description in all available languages from this icon set it
-            it exists, otherwise return None
-        """
-        if not self.is_valid():
-            return None
-        return get_icon_set_description(self.name)
-
     def serialize(self):
         """
         As we want to add "icons_url" to the __dict__, we can't really use a json.dumps to generate
@@ -148,5 +121,5 @@ class IconSet:
             "colorable": self.colorable,
             "icons_url": self.get_icons_url(),
             "template_url": get_icon_set_template_url(get_base_url()),
-            "description_url": self.get_icon_set_description_url()
+            "has_description": bool(find_descripton_file(self.name))
         }

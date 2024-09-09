@@ -1,8 +1,6 @@
 import json
 import os
 
-from flask import url_for
-
 from app.settings import DESCRIPTION_FOLDER
 from tests.unit_tests.base_test import ServiceIconsUnitTests
 
@@ -28,30 +26,3 @@ class IconsTests(ServiceIconsUnitTests):
                     self.assertTrue(
                         validate_json(json_file), "validation failed of json file: " + file
                     )
-
-    def test_get_icon_set_description_valid(self):
-        response = self.app.get(
-            url_for(
-                'description_from_icon_set',
-                icon_set_name='babs-I',
-            ),
-            headers={"Origin": 'www.example.com'}
-        )
-        self.assertEqual(response.status_code, 200)
-
-    def test_get_icon_set_description_invalid(self):
-        response = self.app.get(
-            url_for(
-                'description_from_icon_set',
-                icon_set_name='default',
-            ),
-            headers={"Origin": 'www.example.com'}
-        )
-        self.assertEqual(
-            response.json, {
-                "error": {
-                    "code": 404, "message": "Description dictionary not found"
-                },
-                "success": False
-            }
-        )
