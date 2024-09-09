@@ -9,21 +9,6 @@ from app.settings import DESCRIPTION_FOLDER
 logger = logging.getLogger(__name__)
 
 
-def get_icon_set_description(icon_set=''):
-    '''
-    Return json containing the description in all available languages for all icons of the
-    provided icon set
-    '''
-    path = find_descripton_file(icon_set)
-    if not os.path.isfile(path):
-        return None
-
-    with open(path, encoding='utf-8') as f:
-        icon_set_descriptions = json.load(f)
-
-    return [icon_set_descriptions]
-
-
 def get_icon_description(icon_name='', icon_set=''):
     '''
     Return json containing the description in all available languages for an icon in the specified
