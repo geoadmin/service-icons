@@ -57,7 +57,7 @@ See also [Git Flow - Versioning](https://github.com/geoadmin/doc-guidelines/blob
 
 ### Make Dependencies
 
-The **Make** targets assume you have **python3.9**, **pipenv**, **bash**, **curl**, **tar**, **docker** and **docker-compose** installed.
+The **Make** targets assume you have **python3.12**, **pipenv**, **bash**, **curl**, **tar**, **docker** and **docker-compose** installed.
 
 ### Setting up to work
 
