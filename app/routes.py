@@ -94,7 +94,7 @@ def colorized_icon(
             image = image.convert('RGBA')
         if scale != 1:
             new_size = map(lambda s: int(s * scale), icon.get_size())
-            image = image.resize(new_size)
+            image = image.resize(tuple(new_size))
         if icon_set.colorable:
             image = Image.composite(Image.new("RGB", image.size, (red, green, blue)), image, image)
         output = BytesIO()
