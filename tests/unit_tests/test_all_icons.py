@@ -170,6 +170,8 @@ class AllIconsTest(ServiceIconsUnitTests):
             self.assertTrue(icon_set['name'] in self.all_icon_sets)
             self.assertIn('colorable', icon_set)
             self.assertIn('icons_url', icon_set)
+            self.assertIn('has_description', icon_set)
+            self.assertIn('language', icon_set)
 
     def test_all_icon_sets_metadata_endpoint(self):
         """
@@ -192,6 +194,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                 self.assertEqual(icon_set_name, icon_set_metadata['name'])
                 self.assertIn('colorable', icon_set_metadata)
                 self.assertIn('has_description', icon_set_metadata)
+                self.assertIn('language', icon_set_metadata)
                 self.assertIn('icons_url', icon_set_metadata)
                 self.assertIsNotNone(icon_set_metadata['icons_url'])
                 self.assertEqual(
