@@ -7,6 +7,7 @@ from app.helpers.icons import get_icon_set_template_url
 from app.helpers.url import get_base_url
 from app.icon import Icon
 from app.settings import COLORABLE_ICON_SETS
+from app.settings import ICON_SET_LANGUAGE
 from app.settings import IMAGE_FOLDER
 from app.settings import LEGACY_ICON_SETS
 
@@ -122,5 +123,5 @@ class IconSet:
             "icons_url": self.get_icons_url(),
             "template_url": get_icon_set_template_url(get_base_url()),
             "has_description": bool(find_descripton_file(self.name)),
-            "language": self.name.split('-')[-1] if '-' in self.name else None
+            "language": ICON_SET_LANGUAGE[self.name] if self.name in ICON_SET_LANGUAGE else None
         }
