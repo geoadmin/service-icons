@@ -2,11 +2,14 @@ import os
 
 from flask import url_for
 
+from app.helpers.description import find_descripton_file
 from app.helpers.icons import get_icon_set_template_url
 from app.helpers.url import get_base_url
 from app.icon import Icon
 from app.settings import COLORABLE_ICON_SETS
+from app.settings import ICON_SET_LANGUAGE
 from app.settings import IMAGE_FOLDER
+from app.settings import UNLISTED_ICON_SETS
 
 
 def get_icon_set(icon_set_name):
@@ -28,7 +31,9 @@ def get_all_icon_sets():
     icon_sets = []
     for root, dirs, files in os.walk(IMAGE_FOLDER):
         for icon_set_name in dirs:
-            icon_sets.append(get_icon_set(icon_set_name))
+            # icons of legacy icon sets are still available, but the icon set will not be listed
+            if icon_set_name not in UNLISTED_ICON_SETS:
+                icon_sets.append(get_icon_set(icon_set_name))
     return icon_sets
 
 
@@ -85,16 +90,6 @@ class IconSet:
         """
         return Icon(f"{icon_name}", self)
 
-    def get_default_pixel_size(self):
-        """
-        Returns:
-            the size in pixel of this icon set's icon (icons are always square images). This is
-                helpful to calculate if an icon requires a resize before being served to the user.
-        """
-        if self.name == 'default':
-            return 96
-        return 48
-
     def get_all_icons(self):
         """
         Generate a list of all icons belonging to this icon set.
@@ -126,5 +121,7 @@ class IconSet:
             "name": self.name,
             "colorable": self.colorable,
             "icons_url": self.get_icons_url(),
-            "template_url": get_icon_set_template_url(get_base_url())
+            "template_url": get_icon_set_template_url(get_base_url()),
+            "has_description": bool(find_descripton_file(self.name)),
+            "language": ICON_SET_LANGUAGE[self.name] if self.name in ICON_SET_LANGUAGE else None
         }

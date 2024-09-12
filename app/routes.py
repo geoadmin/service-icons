@@ -28,6 +28,12 @@ def make_api_compliant_response(response_object):
     """
     if isinstance(response_object, (Icon, IconSet)):
         return make_response(jsonify({'success': True, **response_object.serialize()}))
+    if all(isinstance(r, (Icon, IconSet)) for r in response_object):
+        return make_response(
+            jsonify({
+                'success': True, "items": [r.serialize() for r in response_object]
+            })
+        )
     if isinstance(response_object, list):
         return make_response(jsonify({'success': True, "items": response_object}))
     return make_response(jsonify({'success': True, **response_object}))
@@ -86,9 +92,9 @@ def colorized_icon(
         image = Image.open(fd)
         if image.mode == 'P':
             image = image.convert('RGBA')
-        new_size = int(48 * scale)
-        if new_size != icon_set.get_default_pixel_size():
-            image = image.resize((new_size, new_size))
+        if scale != 1:
+            new_size = map(lambda s: int(s * scale), icon.get_size())
+            image = image.resize(tuple(new_size))
         if icon_set.colorable:
             image = Image.composite(Image.new("RGB", image.size, (red, green, blue)), image, image)
         output = BytesIO()

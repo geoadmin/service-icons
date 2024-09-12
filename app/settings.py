@@ -10,9 +10,15 @@ if ENV_FILE and Path(ENV_FILE).exists():
     load_dotenv(ENV_FILE, override=True, verbose=True)
 
 IMAGE_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), '../static/images/'))
+DESCRIPTION_FOLDER = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../metadata/description/')
+)
 
 COLORABLE_ICON_SETS = ['default']
+UNLISTED_ICON_SETS = os.environ.get('UNLISTED_ICON_SETS', 'babs').split(',')
+ICON_SET_LANGUAGE = {'babs-de': 'de', 'babs-fr': 'fr', 'babs-it': 'it'}
 DEFAULT_COLOR = {"r": '255', "g": '0', "b": '0'}
+DEFAULT_ICON_SIZE = 48
 TRAP_HTTP_EXCEPTIONS = True
 LOGS_DIR = os.getenv('LOGS_DIR', str(BASE_DIR / 'logs'))
 os.environ['LOGS_DIR'] = LOGS_DIR  # Set default if not set

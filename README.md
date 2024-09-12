@@ -57,7 +57,7 @@ See also [Git Flow - Versioning](https://github.com/geoadmin/doc-guidelines/blob
 
 ### Make Dependencies
 
-The **Make** targets assume you have **python3.9**, **pipenv**, **bash**, **curl**, **tar**, **docker** and **docker-compose** installed.
+The **Make** targets assume you have **python3.12**, **pipenv**, **bash**, **curl**, **tar**, **docker** and **docker-compose** installed.
 
 ### Setting up to work
 
@@ -192,3 +192,4 @@ The service is configured by Environment Variable:
 | WSGI_TIMEOUT | `5` | WSGI timeout. |
 | GUNICORN_TMPFS_DIR | `None` |The working directory for the gunicorn workers. |
 | WSGI_WORKERS | `2` | The number of workers per CPU. | 
+| UNLISTED_ICON_SETS | `'babs'`| Comma separated list of icon set to un-list. Those sets won't be listed in the /sets endpoint.  |

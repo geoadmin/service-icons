@@ -11,7 +11,9 @@ from app.helpers.icons import get_icon_template_url
 from app.helpers.url import get_base_url
 from app.icon_set import get_icon_set
 from app.settings import COLORABLE_ICON_SETS
+from app.settings import DEFAULT_ICON_SIZE
 from app.settings import IMAGE_FOLDER
+from app.settings import UNLISTED_ICON_SETS
 from tests.unit_tests.base_test import ServiceIconsUnitTests
 
 
@@ -66,7 +68,14 @@ class AllIconsTest(ServiceIconsUnitTests):
                 self.all_icon_sets[icon_set_name].append(icon_name)
 
     def check_image(
-        self, icon_name, image_url, expected_size=48, check_color=False, red=255, green=0, blue=0
+        self,
+        icon_name,
+        image_url,
+        expected_size=DEFAULT_ICON_SIZE,
+        check_color=False,
+        red=255,
+        green=0,
+        blue=0
     ):
         """
         Retrieve an icon from the test instance and check everything related to this icon.
@@ -137,7 +146,7 @@ class AllIconsTest(ServiceIconsUnitTests):
 
     def test_all_icon_sets_endpoint(self):
         """
-        Checking that the endpoint /sets returns all available icon sets
+        Checking that the endpoint /sets returns all non-legacy icon sets
         """
         response = self.app.get(url_for('all_icon_sets'), headers=self.default_header)
         self.assertEqual(response.status_code, 200)
@@ -149,12 +158,20 @@ class AllIconsTest(ServiceIconsUnitTests):
         self.assertIn('items', response.json)
         self.assertTrue(response.json['items'])
         icon_sets_from_endpoint = response.json['items']
-        self.assertEqual(len(icon_sets_from_endpoint), len(self.all_icon_sets))
+        self.assertEqual(
+            len(icon_sets_from_endpoint), len(self.all_icon_sets) - len(UNLISTED_ICON_SETS)
+        )
+        for unlisted_icon_set in UNLISTED_ICON_SETS:
+            self.assertNotIn(
+                unlisted_icon_set, icon_sets_from_endpoint, msg="Icon set should not be listed"
+            )
         for icon_set in icon_sets_from_endpoint:
             self.assertIn('name', icon_set)
             self.assertTrue(icon_set['name'] in self.all_icon_sets)
             self.assertIn('colorable', icon_set)
             self.assertIn('icons_url', icon_set)
+            self.assertIn('has_description', icon_set)
+            self.assertIn('language', icon_set)
 
     def test_all_icon_sets_metadata_endpoint(self):
         """
@@ -176,6 +193,8 @@ class AllIconsTest(ServiceIconsUnitTests):
                 self.assertIn('name', icon_set_metadata)
                 self.assertEqual(icon_set_name, icon_set_metadata['name'])
                 self.assertIn('colorable', icon_set_metadata)
+                self.assertIn('has_description', icon_set_metadata)
+                self.assertIn('language', icon_set_metadata)
                 self.assertIn('icons_url', icon_set_metadata)
                 self.assertIsNotNone(icon_set_metadata['icons_url'])
                 self.assertEqual(
@@ -210,6 +229,11 @@ class AllIconsTest(ServiceIconsUnitTests):
                     json_response = response.json
                     self.assertIn('icon_set', json_response)
                     self.assertEqual(icon_set_name, json_response['icon_set'])
+                    self.assertIn('description', json_response)
+                    if json_response['description']:
+                        self.assertIn('de', json_response['description'])
+                        self.assertIn('fr', json_response['description'])
+                        self.assertIn('it', json_response['description'])
                     self.assertIn('name', json_response)
                     self.assertEqual(icon_name, json_response['name'])
                     self.assertIn('template_url', json_response)
@@ -261,6 +285,21 @@ class AllIconsTest(ServiceIconsUnitTests):
                         )
                         self.assertTrue(fraction > 0, msg='"anchor" fraction should be > 0')
 
+                    self.assertIn('size', json_response)
+                    self.assertIsInstance(
+                        json_response['size'],
+                        list,
+                        msg='"size" should be a list with x and y dimension'
+                    )
+                    self.assertEqual(
+                        len(json_response['size']), 2, msg='"size" should have two items; x and y'
+                    )
+                    for elem in json_response['size']:
+                        self.assertIsInstance(elem, (int), msg='"size" should be int')
+                        self.assertTrue(
+                            elem == DEFAULT_ICON_SIZE, msg='"size" should be equal to 48'
+                        )
+
     def test_all_icon_basic_image(self):
         """
         Checking URLs without scale or color
@@ -283,7 +322,9 @@ class AllIconsTest(ServiceIconsUnitTests):
                     double_size_icon_url = url_for(
                         'colorized_icon', icon_set_name=icon_set_name, icon_name=icon_name, scale=2
                     )
-                    self.check_image(icon_name, double_size_icon_url, expected_size=96)
+                    self.check_image(
+                        icon_name, double_size_icon_url, expected_size=DEFAULT_ICON_SIZE * 2
+                    )
 
     def test_all_icon_half_size(self):
         """
@@ -298,7 +339,9 @@ class AllIconsTest(ServiceIconsUnitTests):
                         icon_name=icon_name,
                         scale='0.5x'
                     )
-                    self.check_image(icon_name, half_size_icon_url, expected_size=24)
+                    self.check_image(
+                        icon_name, half_size_icon_url, expected_size=DEFAULT_ICON_SIZE * 0.5
+                    )
 
     def test_all_icons_colorized(self):
         """
@@ -343,7 +386,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                         icon_name,
                         colored_url,
                         check_color=icon_set.colorable,
-                        expected_size=96,
+                        expected_size=DEFAULT_ICON_SIZE * 2,
                         red=0,
                         green=0,
                         blue=255
@@ -369,7 +412,7 @@ class AllIconsTest(ServiceIconsUnitTests):
                         icon_name,
                         colored_url,
                         check_color=icon_set.colorable,
-                        expected_size=24,
+                        expected_size=DEFAULT_ICON_SIZE * 0.5,
                         red=0,
                         green=255,
                         blue=0
