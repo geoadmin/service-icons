@@ -15,7 +15,7 @@ DESCRIPTION_FOLDER = os.path.abspath(
 )
 
 COLORABLE_ICON_SETS = ['default']
-LEGACY_ICON_SETS = ['babs']
+UNLISTED_ICON_SETS = os.environ.get('UNLISTED_ICON_SETS', 'babs').split(',')
 ICON_SET_LANGUAGE = {'babs-de': 'de', 'babs-fr': 'fr', 'babs-it': 'it'}
 DEFAULT_COLOR = {"r": '255', "g": '0', "b": '0'}
 DEFAULT_ICON_SIZE = 48

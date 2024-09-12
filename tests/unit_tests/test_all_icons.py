@@ -13,7 +13,7 @@ from app.icon_set import get_icon_set
 from app.settings import COLORABLE_ICON_SETS
 from app.settings import DEFAULT_ICON_SIZE
 from app.settings import IMAGE_FOLDER
-from app.settings import LEGACY_ICON_SETS
+from app.settings import UNLISTED_ICON_SETS
 from tests.unit_tests.base_test import ServiceIconsUnitTests
 
 
@@ -159,11 +159,11 @@ class AllIconsTest(ServiceIconsUnitTests):
         self.assertTrue(response.json['items'])
         icon_sets_from_endpoint = response.json['items']
         self.assertEqual(
-            len(icon_sets_from_endpoint), len(self.all_icon_sets) - len(LEGACY_ICON_SETS)
+            len(icon_sets_from_endpoint), len(self.all_icon_sets) - len(UNLISTED_ICON_SETS)
         )
-        for legacy_icon_set in LEGACY_ICON_SETS:
+        for unlisted_icon_set in UNLISTED_ICON_SETS:
             self.assertNotIn(
-                legacy_icon_set, icon_sets_from_endpoint, msg="Icon set should not be listed"
+                unlisted_icon_set, icon_sets_from_endpoint, msg="Icon set should not be listed"
             )
         for icon_set in icon_sets_from_endpoint:
             self.assertIn('name', icon_set)
