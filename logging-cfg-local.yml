@@ -1,5 +1,5 @@
 version: 1
-disable_existing_loggers: false # this allow to get logger at module level
+disable_existing_loggers: False # this allow to get logger at module level
 
 root:
   handlers:
@@ -7,7 +7,7 @@ root:
     - file-standard
     - file-json
   level: DEBUG
-  propagate: true
+  propagate: True
 
 # Remove all handlers for werkzeug log entries - prevents duplicated logging
 loggers:
@@ -29,8 +29,8 @@ loggers:
 filters:
   isotime:
     (): logging_utilities.filters.TimeAttribute
-    isotime: false
-    utc_isotime: true
+    isotime: False
+    utc_isotime: True
   flask:
     (): logging_utilities.filters.flask_attribute.FlaskRequestAttribute
     attributes:
@@ -50,7 +50,7 @@ formatters:
     extra_fmt: " : path=%(flask_request_path)s headers=%(flask_request_headers)s payload=%(flask_request_json)s"
   json:
     (): logging_utilities.formatters.json_formatter.JsonFormatter
-    add_always_extra: false
+    add_always_extra: False
     filter_attributes:
       - utc_isotime
       - flask_request_path
@@ -59,8 +59,8 @@ formatters:
       - flask_request_headers
       - flask_request_json
       - flask_request_remote_addr
-    remove_empty: true
-    ignore_missing: true
+    remove_empty: True
+    ignore_missing: True
     fmt:
       time: utc_isotime
       level: levelname
