@@ -1,6 +1,3 @@
-import os
-
-
 def get_icon_set_template_url(base_url=''):
     """
     Generate and return a template URL to access icon_sets' metadata
@@ -19,7 +16,7 @@ def get_icon_template_url(base_url='', with_color=True):
            f"@{{icon_scale}}{color_part}.png"
 
 
-def fetch_and_clean_unlisted_sets():
-    unlisted_icon_sets = os.environ.get('UNLISTED_ICON_SETS', '').split(',')
-    cleaned_unlisted_icon_sets = [icon_set for icon_set in unlisted_icon_sets if icon_set]
-    return cleaned_unlisted_icon_sets
+def split_and_clean_string(input_string):
+    split_string = input_string.split(',')
+    cleaned_split_string = [string_item for string_item in split_string if string_item]
+    return cleaned_split_string
