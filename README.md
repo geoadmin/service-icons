@@ -192,4 +192,4 @@ The service is configured by Environment Variable:
 | WSGI_TIMEOUT | `5` | WSGI timeout. |
 | GUNICORN_TMPFS_DIR | `None` |The working directory for the gunicorn workers. |
 | WSGI_WORKERS | `2` | The number of workers per CPU. | 
-| UNLISTED_ICON_SETS | `'babs'`| Comma separated list of icon set to un-list. Those sets won't be listed in the /sets endpoint.  |
+| UNLISTED_ICON_SETS | | Comma separated list of icon set to un-list. Those sets won't be listed in the /sets endpoint.  |
