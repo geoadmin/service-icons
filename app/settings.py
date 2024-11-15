@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 from app.helpers.icons import fetch_and_clean_unlisted_sets
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
