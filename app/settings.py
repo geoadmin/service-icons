@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+from app.helpers.icons import split_and_clean_string
+
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 ENV_FILE = os.getenv('ENV_FILE', f'{BASE_DIR}/.env.local')
 if ENV_FILE and Path(ENV_FILE).exists():
@@ -15,7 +17,9 @@ DESCRIPTION_FOLDER = os.path.abspath(
 )
 
 COLORABLE_ICON_SETS = ['default']
-UNLISTED_ICON_SETS = os.environ.get('UNLISTED_ICON_SETS', 'babs').split(',')
+
+UNLISTED_ICON_SETS = split_and_clean_string(os.environ.get('UNLISTED_ICON_SETS', ''))
+
 ICON_SET_LANGUAGE = {'babs-v2-de': 'de', 'babs-v2-fr': 'fr', 'babs-v2-it': 'it'}
 DEFAULT_COLOR = {"r": '255', "g": '0', "b": '0'}
 DEFAULT_ICON_SIZE = 48
