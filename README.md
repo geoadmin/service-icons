@@ -2,8 +2,8 @@
 
 | Branch  | Status                                                                                                                                                                                                                                                                                                                      |
 | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| develop | ![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoianNmckV3aUxNR01rMDBCNWpwQlBjY3lvRDh0d1pXeExJc0EzTG82d0IxbUJYNEVjaDdiR3VsY1VqS1dXVlFQOHBsZW81cVo3WTkvOHVnd1dreC9sWDZFPSIsIml2UGFyYW1ldGVyU3BlYyI6IkNLS1hoTFB1bitMQkYxNTEiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=develop) |
-| master  | ![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoianNmckV3aUxNR01rMDBCNWpwQlBjY3lvRDh0d1pXeExJc0EzTG82d0IxbUJYNEVjaDdiR3VsY1VqS1dXVlFQOHBsZW81cVo3WTkvOHVnd1dreC9sWDZFPSIsIml2UGFyYW1ldGVyU3BlYyI6IkNLS1hoTFB1bitMQkYxNTEiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)  |
+| develop | ![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiRmo5bFozbUlSKzdZQ2xIQ1JYL1lDKzBJM2hNS2FBZkNVeFo1WS82ZnNrL2hjVHRqTTJzYmJWRGxaRGdTeFRmWFFDYlNIeU5sa3FDVVVIMjlBMHFtL1BZPSIsIml2UGFyYW1ldGVyU3BlYyI6ImdSMlBoSEJZYlBVYW9UVVIiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=develop) |
+| master  | ![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiRmo5bFozbUlSKzdZQ2xIQ1JYL1lDKzBJM2hNS2FBZkNVeFo1WS82ZnNrL2hjVHRqTTJzYmJWRGxaRGdTeFRmWFFDYlNIeU5sa3FDVVVIMjlBMHFtL1BZPSIsIml2UGFyYW1ldGVyU3BlYyI6ImdSMlBoSEJZYlBVYW9UVVIiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)  |
 
 ## Table of content
 
