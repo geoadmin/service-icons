@@ -193,3 +193,4 @@ The service is configured by Environment Variable:
 | GUNICORN_TMPFS_DIR | `None` |The working directory for the gunicorn workers. |
 | WSGI_WORKERS | `2` | The number of workers per CPU. | 
 | UNLISTED_ICON_SETS | | Comma separated list of icon set to un-list. Those sets won't be listed in the /sets endpoint.  |
+| GUNICORN_KEEPALIVE | `2` | The [`keepalive`](https://docs.gunicorn.org/en/stable/settings.html#keepalive) setting passed to gunicorn. |
