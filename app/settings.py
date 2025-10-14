@@ -28,6 +28,8 @@ LOGS_DIR = os.getenv('LOGS_DIR', str(BASE_DIR / 'logs'))
 os.environ['LOGS_DIR'] = LOGS_DIR  # Set default if not set
 LOGGING_CFG = os.getenv('LOGGING_CFG', 'logging-cfg-local.yml')
 
+GUNICORN_KEEPALIVE = int(os.getenv('GUNICORN_KEEPALIVE', '2'))
+
 # Definition of the allowed domains for CORS implementation
 ALLOWED_DOMAINS = os.getenv('ALLOWED_DOMAINS', r'.*').split(',')
 CACHE_CONTROL = os.getenv('CACHE_CONTROL', 'public, max-age=86400')

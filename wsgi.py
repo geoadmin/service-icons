@@ -4,6 +4,7 @@ from gunicorn.app.base import BaseApplication
 
 from app import app as application
 from app.helpers import get_logging_cfg
+from app.settings import GUNICORN_KEEPALIVE
 
 
 class StandaloneApplication(BaseApplication):  # pylint: disable=abstract-method
@@ -36,6 +37,7 @@ if __name__ == '__main__':
         'workers': int(os.getenv('WSGI_WORKERS',
                                  '2')),  # scaling horizontally is left to Kubernetes
         'timeout': int(os.getenv('WSGI_TIMEOUT', '5')),
+        'keepalive': GUNICORN_KEEPALIVE,
         'logconfig_dict': get_logging_cfg(),
         'forwarded_allow_ips': os.getenv('FORWARED_ALLOW_IPS', '*'),
         'secure_scheme_headers': {
