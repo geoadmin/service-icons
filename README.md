@@ -2,8 +2,8 @@
 
 | Branch  | Status                                                                                                                                                                                                                                                                                                                      |
 | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| develop | ![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoianNmckV3aUxNR01rMDBCNWpwQlBjY3lvRDh0d1pXeExJc0EzTG82d0IxbUJYNEVjaDdiR3VsY1VqS1dXVlFQOHBsZW81cVo3WTkvOHVnd1dreC9sWDZFPSIsIml2UGFyYW1ldGVyU3BlYyI6IkNLS1hoTFB1bitMQkYxNTEiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=develop) |
-| master  | ![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoianNmckV3aUxNR01rMDBCNWpwQlBjY3lvRDh0d1pXeExJc0EzTG82d0IxbUJYNEVjaDdiR3VsY1VqS1dXVlFQOHBsZW81cVo3WTkvOHVnd1dreC9sWDZFPSIsIml2UGFyYW1ldGVyU3BlYyI6IkNLS1hoTFB1bitMQkYxNTEiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)  |
+| develop | ![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiRmo5bFozbUlSKzdZQ2xIQ1JYL1lDKzBJM2hNS2FBZkNVeFo1WS82ZnNrL2hjVHRqTTJzYmJWRGxaRGdTeFRmWFFDYlNIeU5sa3FDVVVIMjlBMHFtL1BZPSIsIml2UGFyYW1ldGVyU3BlYyI6ImdSMlBoSEJZYlBVYW9UVVIiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=develop) |
+| master  | ![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiRmo5bFozbUlSKzdZQ2xIQ1JYL1lDKzBJM2hNS2FBZkNVeFo1WS82ZnNrL2hjVHRqTTJzYmJWRGxaRGdTeFRmWFFDYlNIeU5sa3FDVVVIMjlBMHFtL1BZPSIsIml2UGFyYW1ldGVyU3BlYyI6ImdSMlBoSEJZYlBVYW9UVVIiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)  |
 
 ## Table of content
 
@@ -193,3 +193,4 @@ The service is configured by Environment Variable:
 | GUNICORN_TMPFS_DIR | `None` |The working directory for the gunicorn workers. |
 | WSGI_WORKERS | `2` | The number of workers per CPU. | 
 | UNLISTED_ICON_SETS | | Comma separated list of icon set to un-list. Those sets won't be listed in the /sets endpoint.  |
+| GUNICORN_KEEPALIVE | `2` | The [`keepalive`](https://docs.gunicorn.org/en/stable/settings.html#keepalive) setting passed to gunicorn. |
