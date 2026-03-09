@@ -17,14 +17,6 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 
-def normalize_umlauts(text):
-    # Mapping of umlauts to their multi-letter equivalents
-    mapping = {'ä': 'ae', 'ö': 'oe', 'ü': 'ue', 'Ä': 'Ae', 'Ö': 'Oe', 'Ü': 'Ue', 'ß': 'ss'}
-    for char, replacement in mapping.items():
-        text = text.replace(char, replacement)
-    return text
-
-
 def create_parser():
     parser = ap.ArgumentParser(
         description=dedent(

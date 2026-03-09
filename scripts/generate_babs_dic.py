@@ -8,13 +8,6 @@ from utils import sanitize_name
 lang_map = {'D': 'de', 'F': 'fr', 'I': 'it'}
 
 
-def normalize_umlauts(text):
-    mapping = {'ä': 'ae', 'ö': 'oe', 'ü': 'ue', 'Ä': 'Ae', 'Ö': 'Oe', 'Ü': 'Ue', 'ß': 'ss'}
-    for char, replacement in mapping.items():
-        text = text.replace(char, replacement)
-    return text
-
-
 def generate_translation_file(args):
     id_range = slice(0, -4)
     source = args.input
