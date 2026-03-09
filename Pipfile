@@ -16,9 +16,11 @@ werkzeug = "~=3.0.4"
 [dev-packages]
 yapf = "*"
 nose2 = "*"
-pylint = "*"
 pylint-flask = "*"
 cairosvg = "*"
+pandas = "*"
+openpyxl = "*"
+pylint = "*"
 
 [requires]
 python_version = "3.12"

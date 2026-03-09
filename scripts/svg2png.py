@@ -5,6 +5,7 @@ import sys
 from textwrap import dedent
 
 import cairosvg
+from utils import sanitize_name
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -14,6 +15,14 @@ handler.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
+
+
+def normalize_umlauts(text):
+    # Mapping of umlauts to their multi-letter equivalents
+    mapping = {'ä': 'ae', 'ö': 'oe', 'ü': 'ue', 'Ä': 'Ae', 'Ö': 'Oe', 'Ü': 'Ue', 'ß': 'ss'}
+    for char, replacement in mapping.items():
+        text = text.replace(char, replacement)
+    return text
 
 
 def create_parser():
@@ -91,8 +100,8 @@ def create_parser():
         '-D',
         '--dryrun',
         dest='dryrun',
-        action='store_false',
-        default=True,
+        action='store_true',
+        default=False,
         help='The width in pixel of the png image'
     )
 
@@ -130,15 +139,30 @@ def validate_args(argv):
 
 def svg2png():
     # create output folder if not exists
-    if not os.path.exists(opts.output):
+    if not os.path.exists(opts.output) and not opts.dryrun:
         os.makedirs(opts.output)
 
     for file in os.listdir(opts.input):
         if file.endswith(".svg"):
             svg_image = os.path.join(opts.input, file)
-            png_image = os.path.join(opts.output, file[:-3] + 'png')
+            # we replace all other non-allowed special characters
+            # with hyphens.
+            base_name = os.path.splitext(file)[0]
+            clean_name = sanitize_name(base_name)
+            png_image = os.path.join(opts.output, f"{clean_name}.png")
             if opts.dryrun:
+                logger.debug("dryrun image: %s > %s", svg_image, png_image)
+            else:
                 logger.debug("Treating image: %s > %s", svg_image, png_image)
+                with open(svg_image, "rb") as f:
+                    cairosvg.svg2png(
+                        dpi=opts.dpi,
+                        file_obj=f,
+                        write_to=png_image,
+                        output_height=opts.height,
+                        output_width=opts.width
+                    )
+
                 cairosvg.svg2png(
                     dpi=opts.dpi,
                     file_obj=open(svg_image, "rb"),  # pylint: disable=consider-using-with
@@ -146,8 +170,6 @@ def svg2png():
                     output_height=opts.height,
                     output_width=opts.width
                 )
-            else:
-                logger.debug("dryrun image: %s > %s", svg_image, png_image)
 
 
 def main():

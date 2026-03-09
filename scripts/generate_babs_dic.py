@@ -3,6 +3,16 @@ import json
 
 # pylint: disable=import-error
 import pandas as pd
+from utils import sanitize_name
+
+lang_map = {'D': 'de', 'F': 'fr', 'I': 'it'}
+
+
+def normalize_umlauts(text):
+    mapping = {'ä': 'ae', 'ö': 'oe', 'ü': 'ue', 'Ä': 'Ae', 'Ö': 'Oe', 'Ü': 'Ue', 'ß': 'ss'}
+    for char, replacement in mapping.items():
+        text = text.replace(char, replacement)
+    return text
 
 
 def generate_translation_file(args):
@@ -13,8 +23,11 @@ def generate_translation_file(args):
     for filename in ['Dateiname - D', 'Dateiname - F', 'Dateiname - I']:
         # read by default 1st sheet of an excel file
         json_dic = {}
-        for index, row in df.iterrows():
-            string_id = row[filename][id_range]
+        for _, row in df.iterrows():
+            raw_val = str(row[filename])
+            # Remove .svg if present to get the base ID
+            base_name = raw_val[:-4] if raw_val.lower().endswith(".svg") else raw_val
+            string_id = sanitize_name(base_name)
             icon_dic = {
                 "de": row['Text Mouseover - D'],
                 "fr": row['Text Mouseover - F'],
@@ -23,7 +36,7 @@ def generate_translation_file(args):
             json_dic[string_id] = icon_dic
 
         with open(
-            destination + '-' + filename[-1] + '-dictionary.json', "w", encoding='utf-8'
+            f"{destination}-{lang_map[filename[-1]]}-dictionary.json", "w", encoding='utf-8'
         ) as outfile:
             json.dump(json_dic, outfile, indent=4)
 
