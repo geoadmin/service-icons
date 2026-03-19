@@ -1,0 +1,822 @@
+{
+    "001-I-Danneggiamento": {
+        "de": "Besch\u00e4digung",
+        "fr": "D\u00e9g\u00e2t",
+        "it": "Danneggiamento"
+    },
+    "002-I-Distruzione-parziale": {
+        "de": "Teilzerst\u00f6rung",
+        "fr": "Destruction partielle",
+        "it": "Distruzione parziale"
+    },
+    "003-I-Distruzione-totale": {
+        "de": "Totalzerst\u00f6rung",
+        "fr": "Destruction totale",
+        "it": "Distruzione totale"
+    },
+    "004-I-Incendio-di-un-singolo-edificio": {
+        "de": "Brand einzelnes Geb\u00e4ude",
+        "fr": "Incendie isol\u00e9",
+        "it": "Incendio di un singolo edificio"
+    },
+    "005-I-Focolaio-esplosione": {
+        "de": "Explosionsherd",
+        "fr": "Foyer d'explosion",
+        "it": "Focolaio esplosione"
+    },
+    "006-I-Feriti": {
+        "de": "Verletzte",
+        "fr": "Bless\u00e9s",
+        "it": "Feriti"
+    },
+    "007-I-Persone-imprigionate": {
+        "de": "Eingesperrte",
+        "fr": "Enferm\u00e9s",
+        "it": "Persone imprigionate"
+    },
+    "008-I-Senzatetto": {
+        "de": "Obdachlose",
+        "fr": "Sans abri",
+        "it": "Senzatetto"
+    },
+    "009-I-Morti": {
+        "de": "Tote",
+        "fr": "Morts",
+        "it": "Morti"
+    },
+    "010-I-Dispersi": {
+        "de": "Vermisste",
+        "fr": "Disparus",
+        "it": "Dispersi"
+    },
+    "011-I-Esercito": {
+        "de": "Armee",
+        "fr": "Arm\u00e9e",
+        "it": "Esercito"
+    },
+    "012-I-Polizia": {
+        "de": "Polizei",
+        "fr": "Police",
+        "it": "Polizia"
+    },
+    "013-I-Protezione-civile": {
+        "de": "Zivilschutz",
+        "fr": "Protection civile",
+        "it": "Protezione civile"
+    },
+    "014-I-Sanita": {
+        "de": "Sanit\u00e4r",
+        "fr": "Sanitaire",
+        "it": "Sanit\u00e0"
+    },
+    "015-I-Corpo-pompieri": {
+        "de": "Feuerwehr",
+        "fr": "Sapeurs-pompiers",
+        "it": "Corpo pompieri"
+    },
+    "016-I-Servizi-tecniche": {
+        "de": "Technische Betriebe",
+        "fr": "Services techniques",
+        "it": "Servizi tecniche"
+    },
+    "017-I-Incidente": {
+        "de": "Unfall",
+        "fr": "Accident",
+        "it": "Incidente"
+    },
+    "018-I-Sostanze-chimiche": {
+        "de": "Chemikalien",
+        "fr": "Chimique",
+        "it": "Sostanze chimiche"
+    },
+    "019-I-Elettricita": {
+        "de": "Elektrizit\u00e4t",
+        "fr": "Electricit\u00e9",
+        "it": "Elettricit\u00e0"
+    },
+    "020-I-Esplosione": {
+        "de": "Explosion",
+        "fr": "Explosion",
+        "it": "Esplosione"
+    },
+    "021-I-Gas": {
+        "de": "Gas",
+        "fr": "Gaz",
+        "it": "Gas"
+    },
+    "022-I-Pericolo-spegnimento-con-acqua": {
+        "de": "Gefahr durch L\u00f6schen mit Wasser",
+        "fr": "Danger si extinction avec eau",
+        "it": "Pericolo spegnimento con acqua"
+    },
+    "023-I-Sostanze-radioattive": {
+        "de": "Radioaktive Stoffe",
+        "fr": "Substances radioactives",
+        "it": "Sostanze radioattive"
+    },
+    "024-I-Pericolo-per-le-acque": {
+        "de": "Gefahr f\u00fcr Grundwasser",
+        "fr": "Danger pour les eaux",
+        "it": "Pericolo per le acque"
+    },
+    "025-I-OCC": {
+        "de": "KFO",
+        "fr": "OCC",
+        "it": "OCC"
+    },
+    "026-I-OCRg": {
+        "de": "RFO",
+        "fr": "OCRg",
+        "it": "OCRg"
+    },
+    "027-I-OCCm": {
+        "de": "GFO",
+        "fr": "OCCm",
+        "it": "OCCm"
+    },
+    "028-I-CI": {
+        "de": "EZ",
+        "fr": "CE",
+        "it": "CI"
+    },
+    "029-I-CIM": {
+        "de": "MEZ",
+        "fr": "CEM",
+        "it": "CIM"
+    },
+    "030-I-DI": {
+        "de": "EL",
+        "fr": "DI",
+        "it": "DI"
+    },
+    "031-I-Posto-comando-operazioni": {
+        "de": "R\u00fcck",
+        "fr": "PCO",
+        "it": "Posto comando operazioni"
+    },
+    "032-I-Posto-comando-intervento": {
+        "de": "Front",
+        "fr": "PCE",
+        "it": "Posto comando intervento"
+    },
+    "033-I-Posto-d-informazione": {
+        "de": "Informationsstelle",
+        "fr": "Point d'information",
+        "it": "Posto d'informazione"
+    },
+    "034-I-Posto-collettore": {
+        "de": "Sammelstelle",
+        "fr": "Poste collecteur",
+        "it": "Posto collettore"
+    },
+    "035-I-Posto-d-assistenza": {
+        "de": "Betreuungsstelle",
+        "fr": "Poste d'assistance",
+        "it": "Posto d'assistenza"
+    },
+    "036-I-Posto-collettore-dei-pazienti": {
+        "de": "Patientensammelstelle",
+        "fr": "Poste collecteur de patients",
+        "it": "Posto collettore dei pazienti"
+    },
+    "037-I-Posto-di-soccorso-sanitario": {
+        "de": "Sanit\u00e4tshilfsstelle",
+        "fr": "Poste m\u00e9dical avanc\u00e9",
+        "it": "Posto di soccorso sanitario"
+    },
+    "038-I-Posto-colletore-dei-morti": {
+        "de": "Totensammelstelle",
+        "fr": "Poste collecteur de cadavres",
+        "it": "Posto colletore dei morti"
+    },
+    "039-I-Posto-distribuzione-sussistenza": {
+        "de": "Verpflegungsabgabestelle",
+        "fr": "Poste de distribution",
+        "it": "Posto distribuzione sussistenza"
+    },
+    "040-I-Posto-distribuzione-carburante": {
+        "de": "Betriebsstoffabgabestelle",
+        "fr": "Station de carburant",
+        "it": "Posto distribuzione carburante"
+    },
+    "041-I-Centro-informazioni": {
+        "de": "Informationszentrum",
+        "fr": "Centre de presse",
+        "it": "Centro informazioni"
+    },
+    "042-I-Posto-di-d-briefing": {
+        "de": "Debriefingstelle",
+        "fr": "Poste de d\u00e9briefing",
+        "it": "Posto di d\u00e9briefing"
+    },
+    "043-I-Posto-colletore-dei-famigliari": {
+        "de": "Angeh\u00f6rigensammelstelle",
+        "fr": "Poste collecteur pour les proches",
+        "it": "Posto colletore dei famigliari"
+    },
+    "044-I-Posto-collettore-dei-cadaveri-di-animali": {
+        "de": "Kadaversammelstelle",
+        "fr": "Poste collecteur de cadavres d'animaux",
+        "it": "Posto collettore dei cadaveri di animali"
+    },
+    "045-I-Posto-colletore-degli-aggretti-trovati": {
+        "de": "Streugutsammelstelle",
+        "fr": "Poste collecteur des objets trouv\u00e9s",
+        "it": "Posto colletore degli aggretti trovati"
+    },
+    "046-I-Posto-di-distribuzione-acqua-potabile": {
+        "de": "Trinkwasserabgabestelle",
+        "fr": "Poste de distribution d'eau potable",
+        "it": "Posto di distribuzione acqua potabile"
+    },
+    "047-I-Deposito-PBC-di-fortuna": {
+        "de": "KGS Notdepot",
+        "fr": "D\u00e9p\u00f4t d'urgence PBC",
+        "it": "Deposito PBC di fortuna"
+    },
+    "048-I-Deviazione": {
+        "de": "Umleitung",
+        "fr": "D\u00e9viations",
+        "it": "Deviazione"
+    },
+    "049-I-Sbarramento": {
+        "de": "Sperre",
+        "fr": "Barrage",
+        "it": "Sbarramento"
+    },
+    "050-I-Piazza-d-atterraggio-elicotteri": {
+        "de": "Helikopterlandeplatz",
+        "fr": "Place d'atterrissage H\u00e9lico",
+        "it": "Piazza d'atterraggio elicotteri"
+    },
+    "051-I-Posteggio-veicoli": {
+        "de": "Fahrzeugplatz",
+        "fr": "Place pour v\u00e9hicules",
+        "it": "Posteggio veicoli"
+    },
+    "052-I-Deposito-del-materiale": {
+        "de": "Materialdepot",
+        "fr": "D\u00e9p\u00f4t mat\u00e9riel",
+        "it": "Deposito del materiale"
+    },
+    "053-I-Osservazione": {
+        "de": "Beobachtung",
+        "fr": "Observation",
+        "it": "Osservazione"
+    },
+    "054-I-Sorveglianza": {
+        "de": "\u00dcberwachung",
+        "fr": "Surveillance",
+        "it": "Sorveglianza"
+    },
+    "055-I-Tempesta": {
+        "de": "Sturm",
+        "fr": "Temp\u00eate",
+        "it": "Tempesta"
+    },
+    "056-I-Piogge-intense": {
+        "de": "Starkniederschlag",
+        "fr": "Fortes pr\u00e9cipitations",
+        "it": "Piogge intense"
+    },
+    "057-I-Piena": {
+        "de": "\u00dcberschwemmung",
+        "fr": "Inondation",
+        "it": "Piena"
+    },
+    "058-I-Frana": {
+        "de": "Erdrutsch",
+        "fr": "Glissement de terrain",
+        "it": "Frana"
+    },
+    "059-I-Valanga": {
+        "de": "Lawine",
+        "fr": "Avalanche",
+        "it": "Valanga"
+    },
+    "060-I-Terremoto": {
+        "de": "Erdbeben",
+        "fr": "Tremblement de terre",
+        "it": "Terremoto"
+    },
+    "061-I-Crollo-di-edificio": {
+        "de": "Geb\u00e4udeeinsturz",
+        "fr": "Immeuble effondr\u00e9",
+        "it": "Crollo di edificio"
+    },
+    "062-I-Siccit": {
+        "de": "D\u00fcrre",
+        "fr": "S\u00e9cheresse",
+        "it": "Siccit\u00e0"
+    },
+    "063-I-Epidemia": {
+        "de": "Epidemie",
+        "fr": "Epid\u00e9mie",
+        "it": "Epidemia"
+    },
+    "064-I-Epizoozia": {
+        "de": "Tierseuche",
+        "fr": "Epizootie",
+        "it": "Epizoozia"
+    },
+    "065-I-Influenza-suina": {
+        "de": "Schweingrippe",
+        "fr": "Grippe porcine",
+        "it": "Influenza suina"
+    },
+    "066-I-Anfibi-trasferiti": {
+        "de": "Amphibien verlegt",
+        "fr": "Amphibiens d\u00e9plac\u00e9s",
+        "it": "Anfibi trasferiti"
+    },
+    "067-I-Pesci-trasferiti": {
+        "de": "Fischen verlegt",
+        "fr": "Poissons d\u00e9plac\u00e9s",
+        "it": "Pesci trasferiti"
+    },
+    "068-I-Inquinamento-delle-acque": {
+        "de": "Gew\u00e4sserverschmutzung",
+        "fr": "Pollution des eaux",
+        "it": "Inquinamento delle acque"
+    },
+    "069-I-Livello-dell-acqua-sale": {
+        "de": "Wasserstand gestiegen",
+        "fr": "Niveau d'eau monte",
+        "it": "Livello dell'acqua sale"
+    },
+    "070-I-Livello-dell-acqua-in-calo": {
+        "de": "Wasserstand gesunken",
+        "fr": "Niveau d'eau descent",
+        "it": "Livello dell'acqua in calo"
+    },
+    "071-I-Riverse-prosciugati": {
+        "de": "Bach ausgetroknet",
+        "fr": "Ruisseau ass\u00e9ch\u00e9",
+        "it": "Riverse prosciugati"
+    },
+    "075-I-Incendio": {
+        "de": "Brand",
+        "fr": "Incendie",
+        "it": "Incendio"
+    },
+    "076-I-Esplosione": {
+        "de": "Explosion",
+        "fr": "Explosion",
+        "it": "Esplosione"
+    },
+    "077-I-Colonna": {
+        "de": "Stau",
+        "fr": "Embouteillage",
+        "it": "Colonna"
+    },
+    "078-I-Incidente-della-circolazione": {
+        "de": "Autounfall",
+        "fr": "Accident auto",
+        "it": "Incidente della circolazione"
+    },
+    "079-I-Incidente-ferroviario": {
+        "de": "Eisenbahnungl\u00fcck",
+        "fr": "Accident ferroviaire",
+        "it": "Incidente ferroviario"
+    },
+    "080-I-Catastrofe-aerea": {
+        "de": "Flugzeugabsturz",
+        "fr": "Catastrophe a\u00e9rienne",
+        "it": "Catastrofe aerea"
+    },
+    "081-I-Interruzione-dell-energia-elettrica": {
+        "de": "Energieausfall",
+        "fr": "Panne \u00e9nerg\u00e9tique",
+        "it": "Interruzione dell'energia elettrica"
+    },
+    "082-I-Disturbo-della-comunicazione": {
+        "de": "Kommunikationsst\u00f6rung",
+        "fr": "Perturbation de la communication",
+        "it": "Disturbo della comunicazione"
+    },
+    "083-I-Interruzione-dell-approvvigionamento-idrico": {
+        "de": "Ausfall Wasserversorgung",
+        "fr": "Interruption de l'approvisionnement en eau",
+        "it": "Interruzione dell'approvvigionamento idrico"
+    },
+    "084-I-Interruzione-della-canalizzazione": {
+        "de": "Kanalisationsausfall",
+        "fr": "Egouts d\u00e9fectueux",
+        "it": "Interruzione della canalizzazione"
+    },
+    "085-I-Incidente-nucleare": {
+        "de": "Atomunfall",
+        "fr": "Accident nucl\u00e9aire",
+        "it": "Incidente nucleare"
+    },
+    "086-I-Incidente-biologico": {
+        "de": "Biounfall",
+        "fr": "Accident biologique",
+        "it": "Incidente biologico"
+    },
+    "087-I-Incidente-chimico": {
+        "de": "Chemieunfall",
+        "fr": "Accident chimique",
+        "it": "Incidente chimico"
+    },
+    "088-I-Inquinamento-da-idrocarburi": {
+        "de": "\u00d6lverschmutzung",
+        "fr": "Pollution aux hydrocarbures",
+        "it": "Inquinamento da idrocarburi"
+    },
+    "089-I-Danni-alle-infrastrutture": {
+        "de": "Infrastrukturschaden",
+        "fr": "Dommages aux infrastructures",
+        "it": "Danni alle infrastrutture"
+    },
+    "090-I-Incidente-nautico": {
+        "de": "Schiffsversenkung",
+        "fr": "Accident navigation",
+        "it": "Incidente nautico"
+    },
+    "091-I-Fontana-chiusa": {
+        "de": "Brunnen eingestellt",
+        "fr": "Fontaine ferm\u00e9e",
+        "it": "Fontana chiusa"
+    },
+    "092-I-Interruzione-dei-trasporti-pubblici": {
+        "de": "Unterbruch \u00f6ffentlicher Verkehr",
+        "fr": "Interruption des transports publics",
+        "it": "Interruzione dei trasporti pubblici"
+    },
+    "100-I-Saccheggi": {
+        "de": "Pl\u00fcnderung",
+        "fr": "Pillage",
+        "it": "Saccheggi"
+    },
+    "101-I-Furto": {
+        "de": "Dieb",
+        "fr": "Vol",
+        "it": "Furto"
+    },
+    "102-I-Rapina-minaccia": {
+        "de": "Raub, Drohung",
+        "fr": "Vol, menaces",
+        "it": "Rapina, minaccia"
+    },
+    "103-I-Incidente-con-estremisti": {
+        "de": "Zwischenfall mit Extremisten",
+        "fr": "Incident avec des extr\u00e9mistes",
+        "it": "Incidente con estremisti"
+    },
+    "104-I-Dimostrazioni": {
+        "de": "Demo gewaltlos",
+        "fr": "Manifestation",
+        "it": "Dimostrazioni"
+    },
+    "105-I-Dimostrazioni-con-disordini": {
+        "de": "Demo gewaltsam",
+        "fr": "Manifestation avec exactions",
+        "it": "Dimostrazioni con disordini"
+    },
+    "106-I-Hooligans": {
+        "de": "Hooligans",
+        "fr": "Hooligans",
+        "it": "Hooligans"
+    },
+    "107-I-Rissa": {
+        "de": "Schl\u00e4gerei",
+        "fr": "Bagarre",
+        "it": "Rissa"
+    },
+    "108-I-Danno-alla-propriet": {
+        "de": "Sachbesch\u00e4digung",
+        "fr": "D\u00e9gradation de biens",
+        "it": "Danno alla propriet\u00e0"
+    },
+    "109-I-Graffito": {
+        "de": "Sprayerei Farbanschlag",
+        "fr": "Graffiti",
+        "it": "Graffito"
+    },
+    "110-I-Ubriachezza": {
+        "de": "Trunkenheit",
+        "fr": "Ivresse",
+        "it": "Ubriachezza"
+    },
+    "111-I-Nomadi": {
+        "de": "Fahrende",
+        "fr": "Gens du voyage",
+        "it": "Nomadi"
+    },
+    "112-I-Occupazione-abusiva": {
+        "de": "Hausbesetzung",
+        "fr": "Occupation ill\u00e9gale",
+        "it": "Occupazione abusiva"
+    },
+    "113-I-Visione-pubblica": {
+        "de": "Public Viewing",
+        "fr": "Visionnage public",
+        "it": "Visione pubblica"
+    },
+    "114-I-Evento-sportivo": {
+        "de": "Sportveranstaltung",
+        "fr": "Ev\u00e9nement sportif",
+        "it": "Evento sportivo"
+    },
+    "115-I-Barricate": {
+        "de": "Barrikaden",
+        "fr": "Barricades",
+        "it": "Barricate"
+    },
+    "116-I-Sequestro-di-persona": {
+        "de": "Geiselnahme",
+        "fr": "Prise d'otages",
+        "it": "Sequestro di persona"
+    },
+    "117-I-Ricatto": {
+        "de": "Erpressung",
+        "fr": "Chantage",
+        "it": "Ricatto"
+    },
+    "118-I-Dirottamento-aereo": {
+        "de": "Flugzeugentf\u00fchrung",
+        "fr": "D\u00e9tournement d'avion",
+        "it": "Dirottamento aereo"
+    },
+    "119-I-Rapimento": {
+        "de": "Entf\u00fchrung",
+        "fr": "Enl\u00e8vement",
+        "it": "Rapimento"
+    },
+    "120-I-Sparatoria": {
+        "de": "Schiesserei",
+        "fr": "Fusillade",
+        "it": "Sparatoria"
+    },
+    "121-I-AMOK": {
+        "de": "AMOK",
+        "fr": "AMOK",
+        "it": "AMOK"
+    },
+    "122-I-Attentato-terroristico": {
+        "de": "Terroranschlag",
+        "fr": "Attentat terroriste",
+        "it": "Attentato terroristico"
+    },
+    "123-I-Attentato-dinamitardo": {
+        "de": "Bombenanschlag",
+        "fr": "Attentat \u00e0 la bombe",
+        "it": "Attentato dinamitardo"
+    },
+    "124-I-Panico-di-massa": {
+        "de": "Massenpanik",
+        "fr": "Effet de panique",
+        "it": "Panico di massa"
+    },
+    "125-I-Attentato-incendiario": {
+        "de": "Brandanschlag",
+        "fr": "Incendie criminel",
+        "it": "Attentato incendiario"
+    },
+    "126-I-Sabotaggio": {
+        "de": "Sabotage",
+        "fr": "Sabotage",
+        "it": "Sabotaggio"
+    },
+    "127-I-Bombe": {
+        "de": "Bomben",
+        "fr": "Bombes",
+        "it": "Bombe"
+    },
+    "128-I-Minaccia-delle-mine": {
+        "de": "Bedrohung durch Minen",
+        "fr": "Menace de mines",
+        "it": "Minaccia delle mine"
+    },
+    "135-I-Squadra-P": {
+        "de": "Trupp P",
+        "fr": "Patrouille P",
+        "it": "Squadra P"
+    },
+    "136-I-Gruppo-P": {
+        "de": "Grupp P",
+        "fr": "Groupe P",
+        "it": "Gruppo P"
+    },
+    "137-I-Sezione-P": {
+        "de": "Zug P",
+        "fr": "Section P",
+        "it": "Sezione P"
+    },
+    "138-I-Capogruppo-P": {
+        "de": "Gruppenf\u00fchrer P",
+        "fr": "Chef de groupe P",
+        "it": "Capogruppo P"
+    },
+    "139-I-Ufficiale-caposezione-P": {
+        "de": "Offizier_Zugf\u00fchrer P",
+        "fr": "Officier Chef de section P",
+        "it": "Ufficiale caposezione P"
+    },
+    "140-I-Capointervento-P": {
+        "de": "Einsatzleiter P",
+        "fr": "Chef d'intervention P",
+        "it": "Capointervento P"
+    },
+    "141-I-Squadra-CP": {
+        "de": "Trupp FW",
+        "fr": "Patrouille SP",
+        "it": "Squadra CP"
+    },
+    "142-I-Gruppo-CP": {
+        "de": "Gruppe FW",
+        "fr": "Groupe SP",
+        "it": "Gruppo CP"
+    },
+    "143-I-Sezione-CP": {
+        "de": "Zug FW",
+        "fr": "Section SP",
+        "it": "Sezione CP"
+    },
+    "144-I-Capogruppo-CP": {
+        "de": "Gruppenf\u00fchrer FW",
+        "fr": "Chef de groupe SP",
+        "it": "Capogruppo CP"
+    },
+    "145-I-Ufficiale-caposezione-CP": {
+        "de": "Offizier Zugf\u00fchrer FW",
+        "fr": "Officier Chef de section SP",
+        "it": "Ufficiale caposezione CP"
+    },
+    "146-I-Capointervento-CP": {
+        "de": "Einsatzleiter FW",
+        "fr": "Chef d'intervention SP",
+        "it": "Capointervento CP"
+    },
+    "147-I-Squadra-San": {
+        "de": "Trupp San",
+        "fr": "Patrouille San",
+        "it": "Squadra San"
+    },
+    "148-I-Gruppo-San": {
+        "de": "Gruppe San",
+        "fr": "Groupe San",
+        "it": "Gruppo San"
+    },
+    "149-I-Squadra": {
+        "de": "Trupp ",
+        "fr": "Patrouille",
+        "it": "Squadra"
+    },
+    "150-I-Gruppo": {
+        "de": "Gruppe ",
+        "fr": "Groupe",
+        "it": "Gruppo"
+    },
+    "151-I-Sezione": {
+        "de": "Zug ",
+        "fr": "Section",
+        "it": "Sezione"
+    },
+    "152-I-Compagnia": {
+        "de": "Kompanie",
+        "fr": "Compagnie",
+        "it": "Compagnia"
+    },
+    "153-I-Bataillone": {
+        "de": "Bataillon",
+        "fr": "Bataillon",
+        "it": "Bataillone"
+    },
+    "154-I-Capogruppo": {
+        "de": "Gruppenf\u00fchrer",
+        "fr": "Chef de groupe",
+        "it": "Capogruppo"
+    },
+    "155-I-Ufficiale-caposezione": {
+        "de": "Offizier Zugf\u00fchrer",
+        "fr": "Officier Chef de section",
+        "it": "Ufficiale caposezione"
+    },
+    "156-I-Capointervento": {
+        "de": "Einsatzleiter",
+        "fr": "Chef d'intervention",
+        "it": "Capointervento"
+    },
+    "157-I-Intervento-pianificato": {
+        "de": "Beabsichtigter Einsatz",
+        "fr": "Engagement pr\u00e9vu",
+        "it": "Intervento pianificato"
+    },
+    "158-I-Ricognizione-pianificata": {
+        "de": "Beabsichtigte Erkundung",
+        "fr": "Reconnaissance pr\u00e9vue",
+        "it": "Ricognizione pianificata"
+    },
+    "159-I-Intervento-eseguito": {
+        "de": "Durchgef\u00fchrter Einsatz",
+        "fr": "Engagement ex\u00e9cut\u00e9",
+        "it": "Intervento eseguito"
+    },
+    "160-I-Ricognizione-eseguita": {
+        "de": "Durchgef\u00fchrte Erkundung",
+        "fr": "Reconnaissance ex\u00e9cut\u00e9e",
+        "it": "Ricognizione eseguita"
+    },
+    "161-I-Osservare": {
+        "de": "Beobachten",
+        "fr": "Observer",
+        "it": "Osservare"
+    },
+    "162-I-Perquisire": {
+        "de": "Durchsuchen",
+        "fr": "Fouiller",
+        "it": "Perquisire"
+    },
+    "163-I-Spostamento-motorizzato": {
+        "de": "Motorisierte Verschiebung",
+        "fr": "Mouvement motoris\u00e9",
+        "it": "Spostamento motorizzato"
+    },
+    "164-I-Postazione-di-decontaminazione-ABC": {
+        "de": "ABC Dekontaminationstelle",
+        "fr": "Poste de d\u00e9contamination ABC",
+        "it": "Postazione di decontaminazione ABC"
+    },
+    "165-I-Automobile": {
+        "de": "Motorfahrzeug",
+        "fr": "V\u00e9hicule l\u00e9ger",
+        "it": "Automobile"
+    },
+    "166-I-Autocarro": {
+        "de": "Lastwagen",
+        "fr": "Poids-lourd",
+        "it": "Autocarro"
+    },
+    "167-I-Veicoli-per-il-transporto": {
+        "de": "Transportfahrzeug",
+        "fr": "V\u00e9hicule de transport",
+        "it": "Veicoli per il transporto"
+    },
+    "168-I-Ambulanza": {
+        "de": "Ambulanz",
+        "fr": "Ambulance",
+        "it": "Ambulanza"
+    },
+    "169-I-Elicottero": {
+        "de": "Helikopter",
+        "fr": "H\u00e9licopt\u00e8re",
+        "it": "Elicottero"
+    },
+    "170-I-Autobotte": {
+        "de": "Tankl\u00f6schfahrzeug",
+        "fr": "Fourgon tonne-pompe",
+        "it": "Autobotte"
+    },
+    "171-I-Lanciaacqua": {
+        "de": "Wasserwerfer",
+        "fr": "Canon \u00e0 eau",
+        "it": "Lanciaacqua"
+    },
+    "172-I-Elevatore-a-navicella": {
+        "de": "Hubrettungsfahrzeug",
+        "fr": "El\u00e9vateur \u00e0 nacelle",
+        "it": "Elevatore a navicella"
+    },
+    "173-I-Scala-motorizzata": {
+        "de": "Autodrehleiter",
+        "fr": "Echelle pivotante a\u00e9rienne",
+        "it": "Scala motorizzata"
+    },
+    "174a-I-Autostrada": {
+        "de": "Autobahn",
+        "fr": "Autoroute",
+        "it": "Autostrada"
+    },
+    "174b-I-Autostrada": {
+        "de": "Autobahn",
+        "fr": "Autoroute",
+        "it": "Autostrada"
+    },
+    "174c-I-Autostrada": {
+        "de": "Autobahn",
+        "fr": "Autoroute",
+        "it": "Autostrada"
+    },
+    "174d-I-Autostrada": {
+        "de": "Autobahn",
+        "fr": "Autoroute",
+        "it": "Autostrada"
+    },
+    "175-I-Divieto-di-navigazione": {
+        "de": "Schiffahrt Verbot",
+        "fr": "Interdiction de naviguer",
+        "it": "Divieto di navigazione"
+    },
+    "176-I-Divieto-di-sorvolo": {
+        "de": "\u00dcberflugverbot",
+        "fr": "Interdiction de survoler",
+        "it": "Divieto di sorvolo"
+    },
+    "177-I-Punto-di-raccolta-d-urgenza": {
+        "de": "Notfalltreffpunkt",
+        "fr": "Point de rassemblement d'urgence",
+        "it": "Punto di raccolta d'urgenza"
+    }
+}

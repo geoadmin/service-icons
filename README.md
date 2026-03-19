@@ -20,6 +20,7 @@
 - [Docker](#docker)
 - [Maintenance](#maintenance)
   - [Convert Symbols from svg to png](#convert-symbols-from-svg-to-png)
+  - [Additional requirements for new symbol sets](#additional-requirements-for-new-symbol-sets)
 - [Deployment](#deployment)
   - [Deployment configuration](#deployment-configuration)
 
@@ -174,6 +175,11 @@ Here is an example of such a convertion
 pipenv run python scripts/svg2png.py --help
 ```pipenv run python scripts/svg2png.py -I ./tmp/new-icons -O ./static/images/babs2 -W 48 -H 48
 ```
+
+### Additional requirements for new symbol sets
+
+- No special characters, umlauts or spaces in the filenames, such as e.g. `, `, `'` and the like. Only allowed exception is `-`. So all special characters will be replaced by `-` and umlauts will be mapped, e.g. `ö` to `oe`, `Ö` to `OE` and so on.
+- The symbol set provider should provide us with a list (e.g. Excel) that includes a column with the filename (including the `.svg` extension) of each icon and another column with the text, that we show in the mouseover tooltip when hovering over that specific icon. We need those columns for all the supported languages.
 
 ## Deployment
 
