@@ -20,7 +20,14 @@ COLORABLE_ICON_SETS = ['default']
 
 UNLISTED_ICON_SETS = split_and_clean_string(os.environ.get('UNLISTED_ICON_SETS', ''))
 
-ICON_SET_LANGUAGE = {'babs-v2-de': 'de', 'babs-v2-fr': 'fr', 'babs-v2-it': 'it'}
+ICON_SET_LANGUAGE = {
+    'babs-v2-de': 'de',
+    'babs-v2-fr': 'fr',
+    'babs-v2-it': 'it',
+    'babs-v3-de': 'de',
+    'babs-v3-fr': 'fr',
+    'babs-v3-it': 'it'
+}
 DEFAULT_COLOR = {"r": '255', "g": '0', "b": '0'}
 DEFAULT_ICON_SIZE = 48
 TRAP_HTTP_EXCEPTIONS = True
