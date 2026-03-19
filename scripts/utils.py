@@ -1,62 +1,22 @@
 import re
+import unicodedata
+
+# Define the German-specific mapping once
+GERMAN_UMLAUTS_MAPPING = str.maketrans({
+    'ä': 'ae', 'ö': 'oe', 'ü': 'ue', 'Ä': 'Ae', 'Ö': 'Oe', 'Ü': 'Ue', 'ß': 'ss'
+})
 
 
 def normalize_special_characters(text):
-    """Maps special characters and common European accents to their ASCII equivalents."""
-    mapping = {
-        'ä': 'ae',
-        'ö': 'oe',
-        'ü': 'ue',
-        'Ä': 'Ae',
-        'Ö': 'Oe',
-        'Ü': 'Ue',
-        'ß': 'ss',
-        'é': 'e',
-        'è': 'e',
-        'ê': 'e',
-        'ë': 'e',
-        'à': 'a',
-        'â': 'a',
-        'á': 'a',
-        'ã': 'a',
-        'ò': 'o',
-        'ô': 'o',
-        'ó': 'o',
-        'õ': 'o',
-        'ù': 'u',
-        'û': 'u',
-        'ú': 'u',
-        'ì': 'i',
-        'î': 'i',
-        'í': 'i',
-        'ï': 'i',
-        'ç': 'c',
-        'ñ': 'n',
-        'É': 'E',
-        'È': 'E',
-        'Ê': 'E',
-        'Ë': 'E',
-        'À': 'A',
-        'Â': 'A',
-        'Á': 'A',
-        'Ã': 'A',
-        'Ò': 'O',
-        'Ô': 'O',
-        'Ó': 'O',
-        'Õ': 'O',
-        'Ù': 'U',
-        'Û': 'U',
-        'Ú': 'U',
-        'Ì': 'I',
-        'Î': 'I',
-        'Í': 'I',
-        'Ï': 'I',
-        'Ç': 'C',
-        'Ñ': 'N'
-    }
-    for char, replacement in mapping.items():
-        text = text.replace(char, replacement)
-    return text
+    # Step 1: handle the german umlauts specifically (make sure, ö will be oe and so on.)
+    text = text.translate(GERMAN_UMLAUTS_MAPPING)
+
+    # Step 2: Decompose remaining accents (é -> e + ´)
+    # NFKD separates the base character from the "combining" accent mark
+    text = unicodedata.normalize('NFKD', text)
+
+    # Filter out the combining marks (the accents) and rejoin
+    return "".join(c for c in text if not unicodedata.combining(c))
 
 
 def sanitize_name(text):
@@ -68,5 +28,7 @@ def sanitize_name(text):
     clean_name = normalize_special_characters(text)
     # Replace non-allowed chars with hyphens
     clean_name = re.sub(r'[^a-zA-Z0-9-]+', '-', clean_name)
+    # prevent multiple subsequent hyphens, such as -- for example. Replace with a single -
+    clean_name = re.sub(r'-+', '-', clean_name)
     # Strip leading/trailing hyphens and spaces
     return clean_name.strip('-')
